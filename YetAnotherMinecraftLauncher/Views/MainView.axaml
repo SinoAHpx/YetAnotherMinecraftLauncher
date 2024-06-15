@@ -3,14 +3,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:YetAnotherMinecraftLauncher.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:controls1="clr-namespace:YetAnotherMinecraftLauncher.Views.Controls"
+             mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.MainView"
              x:DataType="vm:MainViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
-  </Design.DataContext>
-
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<Design.DataContext>
+		<vm:MainViewModel />
+	</Design.DataContext>
+	<Grid RowDefinitions="2*,2*,6*">
+		<controls1:InteractiveItem
+            Title="AHpx"
+            Avatar="avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png"
+            Subtitle="Microsoft"/>
+		<controls1:InteractiveItem
+            Grid.Row="1"
+            Title="1.8.9"
+            Avatar="avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp"
+            Subtitle="Vanilla"/>
+	</Grid>
 </UserControl>
