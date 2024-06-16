@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:controls="clr-namespace:YetAnotherMinecraftLauncher.Views.Controls"
+             xmlns:controls1="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.AccountsView">
 	<Grid RowDefinitions="1.5*, 8*">
@@ -18,5 +20,21 @@
 			</Button>
 			<TextBlock Foreground="Gray" Text="4 Accounts"/>
 		</StackPanel>
+		<ScrollViewer Grid.Row="1">
+			<ItemsControl>
+				<controls:SelectiveItem/>
+				<controls:SelectiveItem/>
+				<controls:SelectiveItem/>
+				<controls:SelectiveItem/>
+				<controls:SelectiveItem/>
+			</ItemsControl>
+		</ScrollViewer>
+		<controls1:FloatingButton Grid.Row="1" Margin="20"
+                                  HorizontalAlignment="Right"
+								  Width="60" Height="60" Background="#586EBC"
+                                  VerticalAlignment="Bottom">
+			<avalonia:MaterialIcon Kind="Add"/>
+		</controls1:FloatingButton>
+
 	</Grid>
 </UserControl>
