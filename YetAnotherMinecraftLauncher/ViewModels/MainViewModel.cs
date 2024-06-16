@@ -5,6 +5,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Views;
+using YetAnotherMinecraftLauncher.Views.Controls;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
 
@@ -132,7 +133,7 @@ public class MainViewModel : ViewModelBase
 
         #endregion
 
-        //some mocking values for diagnosing
+        //todo: some mocking values for diagnosing
         #region Version
 
         VersionType = "Vanilla";
@@ -151,6 +152,8 @@ public class MainViewModel : ViewModelBase
 
         #endregion
 
+        #region MessageBus receiver
+
         MessageBus.Current.Listen<string>(nameof(AccountsView)).Subscribe(o =>
         {
             if (o.Contains("Return"))
@@ -158,5 +161,18 @@ public class MainViewModel : ViewModelBase
                 MainViewIndex = 0;
             }
         });
+
+        MessageBus.Current.Listen<SelectiveItem>().Subscribe(s =>
+        {
+            AccountAvatar = (Bitmap)s.Avatar;
+            AccountName = s.Title;
+            AccountType = s.Subtitle;
+            AccountActionCommand = AccountActionCommand = ReactiveCommand.Create(InteractAccount);
+
+            MainViewIndex = 0;
+        });
+
+        #endregion
+
     }
 }

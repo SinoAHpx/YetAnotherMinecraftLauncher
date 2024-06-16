@@ -5,6 +5,7 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:controls="clr-namespace:YetAnotherMinecraftLauncher.Views.Controls"
              xmlns:controls1="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.AccountsView">
 	<Grid RowDefinitions="1.5*, 8*">
@@ -28,11 +29,12 @@
 		</ScrollViewer>
 		<controls1:FloatingButton Grid.Row="1" Margin="20"
                                   HorizontalAlignment="Right"
-								  Width="60" Height="60" Background="#586EBC"
-								  Command="{Binding AddAccountActionCommand}"
+                                  Width="60" Height="60" Background="#586EBC"
+                                  Command="{Binding AddAccountActionCommand}"
                                   VerticalAlignment="Bottom">
 			<avalonia:MaterialIcon Kind="Add"/>
 		</controls1:FloatingButton>
 
 	</Grid>
+
 </UserControl>

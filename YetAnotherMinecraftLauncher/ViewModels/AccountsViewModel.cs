@@ -38,17 +38,23 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         public void AddAccount()
         {
-            //mocking values
-            AccountsList.Add(new SelectiveItem
+            //todo: mocking values
+            var item = new SelectiveItem
             {
                 Avatar = new Bitmap(AssetLoader.Open(
                     new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png"))),
                 Title = $"Steve{AccountsList.Count + 1}",
-                Subtitle = "Online",
-                SelectAction = ReactiveCommand.Create(() => { }),
-                RemoveAction = ReactiveCommand.Create(() => { })
+                Subtitle = "Online"
+            };
+            item.SelectAction = ReactiveCommand.Create(() =>
+            {
+                MessageBus.Current.SendMessage(item);
             });
-            ;
+            item.RemoveAction = ReactiveCommand.Create(() =>
+            {
+                AccountsList.Remove(item);
+            });
+            AccountsList.Add(item);
         }
 
         #endregion
