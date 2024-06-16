@@ -6,7 +6,7 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="YetAnotherMinecraftLauncher.Views.Controls.SelectiveItem">
-	<controls:Card Name="Card" Padding="0" CornerRadius="10" Margin="10">
+	<controls:Card Name="Card" Padding="0" CornerRadius="10" Margin="10" Height="100">
 		<Grid ColumnDefinitions="3*,7*">
 			<controls:Card CornerRadius="10,0,0,10">
 				<controls:Card.Background>
@@ -28,14 +28,14 @@
 					<Button CornerRadius="5"
                             Width="100" Height="40"
                             Foreground="#BC1C1C"
-                            Margin="-10"
+                            Margin="-10,-10,0,-5"
                             Command="{Binding RemoveAction}"
                             Classes="Flat"
                             Content="REMOVE"/>
 					<Button CornerRadius="5"
                             Width="100" Height="40"
                             Foreground="#586EBC"
-                            Margin="-10"
+                            Margin="0,-10,-10,-5"
                             Command="{Binding SelectAction}"
                             Classes="Flat"
                             Content="SELECT"/>
