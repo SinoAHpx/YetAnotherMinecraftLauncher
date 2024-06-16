@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="YetAnotherMinecraftLauncher.Views.Controls.SelectiveItem">
+	<controls:Card Name="Card" Padding="0" CornerRadius="10" Margin="10">
+		<Grid ColumnDefinitions="3*,7*">
+			<controls:Card CornerRadius="10,0,0,10">
+				<controls:Card.Background>
+					<ImageBrush Stretch="UniformToFill" Source="{Binding Avatar}" />
+				</controls:Card.Background>
+			</controls:Card>
+
+			<Grid Grid.Column="1" RowDefinitions="3*,3*,4*" Margin="10">
+				<TextBlock FontSize="20" FontWeight="Bold"
+                           ToolTip.Tip="{Binding Title}"
+                           Text="{Binding Title}" />
+
+				<TextBlock Grid.Row="1" Foreground="Gray"  FontSize="16" Text="{Binding Subtitle}" />
+
+				<StackPanel Orientation="Horizontal"
+                            Grid.Row="2"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom" >
+					<Button CornerRadius="50"
+                            Width="40" Height="40"
+                            Foreground="#BC1C1C"
+                            Margin="-10"
+                            Command="{Binding RemoveAction}"
+                            Classes="Flat"
+                            Content="REMOVE"/>
+					<Button CornerRadius="50"
+                            Width="40" Height="40"
+                            Foreground="#586EBC"
+                            Margin="-10"
+                            Command="{Binding SelectAction}"
+                            Classes="Flat"
+                            Content="SELECT"/>
+
+				</StackPanel>
+			</Grid>
+		</Grid>
+	</controls:Card>
+</UserControl>
