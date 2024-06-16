@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:controls1="clr-namespace:YetAnotherMinecraftLauncher.Views.Controls"
+             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.MainView"
              x:DataType="vm:MainViewModel">
@@ -23,6 +24,40 @@
             Avatar="{Binding AccountAvatar}"
             Subtitle="{Binding AccountType}"/>
 
-		<TextBlock Grid.Row="2" Text="{Binding VersionName}"></TextBlock>
+
+		<!-- Expansive Section -->
+		<Grid RowDefinitions="9*,2*" Grid.Row="2" Margin="10,0,10,75">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1">
+				<Button Foreground="white"
+                        Background="#586EBC"
+                        Width="40" Height="40"
+                        Margin="0,0,5,0"
+                        CornerRadius="100">
+					<avalonia:MaterialIcon Kind="Account" />
+				</Button>
+
+				<Button Classes="circle">
+					<avalonia:MaterialIcon Kind="Download" />
+				</Button>
+
+				<Button Foreground="white"
+                        Background="#586EBC"
+                        Width="40" Height="40"
+                        CornerRadius="100">
+					<avalonia:MaterialIcon Kind="Settings" />
+				</Button>
+
+			</StackPanel>
+		</Grid>
+
+		<!-- Launch Button -->
+		<Button Grid.Row="2" Content="Launch"
+                Foreground="white" Background="#586EBC"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Margin="10"
+                assists:ButtonAssist.ClickFeedbackColor="White"
+                CornerRadius="10"
+                Width="160" Height="60" />
 	</Grid>
 </UserControl>
