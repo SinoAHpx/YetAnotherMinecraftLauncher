@@ -14,13 +14,15 @@
 	</Design.DataContext>
 	<Grid RowDefinitions="2*,2*,6*">
 		<controls1:InteractiveItem
-            Title="AHpx"
-            Avatar="avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png"
-            Subtitle="Microsoft"/>
+            Title="{Binding VersionName}"
+            Avatar="{Binding VersionAvatar}"
+            Subtitle="{Binding VersionType}"/>
 		<controls1:InteractiveItem
             Grid.Row="1"
-            Title="1.8.9"
-            Avatar="avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp"
-            Subtitle="Vanilla"/>
+            Title="{Binding AccountName}"
+            Avatar="{Binding AccountAvatar}"
+            Subtitle="{Binding AccountType}"/>
+
+		<TextBlock Grid.Row="2" Text="{Binding VersionName}"></TextBlock>
 	</Grid>
 </UserControl>

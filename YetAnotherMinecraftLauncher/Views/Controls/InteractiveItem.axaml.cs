@@ -10,7 +10,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         public InteractiveItem()
         {
             InitializeComponent();
-            DataContext = this;
+            Card.DataContext = this;
         }
 
         public static readonly StyledProperty<string> TitleProperty =

@@ -6,7 +6,7 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="YetAnotherMinecraftLauncher.Views.Controls.InteractiveItem">
-	<controls:Card Padding="0" CornerRadius="10" Margin="10">
+	<controls:Card Name="Card" Padding="0" CornerRadius="10" Margin="10">
 		<Grid ColumnDefinitions="3*,7*">
 			<controls:Card CornerRadius="10,0,0,10">
 				<controls:Card.Background>
