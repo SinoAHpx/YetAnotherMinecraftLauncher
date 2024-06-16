@@ -2,7 +2,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.AccountsView">
-	<TextBlock Text="HI" FontSize="72"/>
+	<Grid RowDefinitions="1.5*, 8*">
+		<StackPanel Margin="10">
+			<Button Command="{Binding ReturnActionCommand}" HorizontalAlignment="Left" Classes="Flat">
+				<StackPanel Orientation="Horizontal">
+					<avalonia:MaterialIcon Kind="ChevronLeft"
+                                           Width="30" Height="30"
+                                           VerticalAlignment="Center"/>
+					<TextBlock Text="Accounts" FontSize="30"
+                               VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+			<TextBlock Foreground="Gray" Text="4 Accounts"/>
+		</StackPanel>
+	</Grid>
 </UserControl>

@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Views;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
 
@@ -149,6 +150,13 @@ public class MainViewModel : ViewModelBase
             new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png")));
 
         #endregion
-    }
 
+        MessageBus.Current.Listen<string>(nameof(AccountsView)).Subscribe(o =>
+        {
+            if (o.Contains("Return"))
+            {
+                MainViewIndex = 0;
+            }
+        });
+    }
 }

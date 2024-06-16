@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using YetAnotherMinecraftLauncher.ViewModels;
 
 namespace YetAnotherMinecraftLauncher.Views
 {
@@ -7,6 +8,8 @@ namespace YetAnotherMinecraftLauncher.Views
         public AccountsView()
         {
             InitializeComponent();
+
+            DataContext = new AccountsViewModel();
         }
     }
 }
