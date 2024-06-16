@@ -78,13 +78,45 @@ public class MainViewModel : ViewModelBase
     }
 
     #endregion
+
+    #region Expansive Section
+
+    public ReactiveCommand<Unit, Unit> SettingActionCommand { get; set; }
+
+    public ReactiveCommand<Unit, Unit> DownloadActionCommand { get; set; }
+
+    public ReactiveCommand<Unit, Unit> LaunchActionCommand { get; set; }
+
+    public void InteractSetting()
+    {
+
+    }
+
+    public void InteractDownload()
+    {
+
+    }
+
+    public void InteractLaunch()
+    {
+
+    }
+
+    #endregion
+
     public MainViewModel()
     {
+        #region Register commands
+
         VersionActionCommand = ReactiveCommand.Create(InteractVersion);
         AccountActionCommand = ReactiveCommand.Create(InteractAccount);
+        SettingActionCommand = ReactiveCommand.Create(InteractSetting);
+        DownloadActionCommand = ReactiveCommand.Create(InteractDownload);
+        LaunchActionCommand = ReactiveCommand.Create(InteractLaunch);
+
+        #endregion
 
         //some mocking values for diagnosing
-
         #region Version
 
         VersionType = "Vanilla";
