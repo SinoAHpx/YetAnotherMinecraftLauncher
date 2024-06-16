@@ -18,10 +18,13 @@
                                VerticalAlignment="Center"/>
 				</StackPanel>
 			</Button>
-			<TextBlock Foreground="Gray" Text="4 Accounts"/>
+			<TextBlock Foreground="Gray" Margin="45,0,10,0">
+				<Run Text="{Binding #AccountsItemsControl.ItemCount}"/>
+				<Run Text="Accounts"/>
+			</TextBlock>
 		</StackPanel>
 		<ScrollViewer Grid.Row="1">
-			<ItemsControl ItemsSource="{Binding AccountsList}"/>
+			<ItemsControl Name="AccountsItemsControl" ItemsSource="{Binding AccountsList}"/>
 		</ScrollViewer>
 		<controls1:FloatingButton Grid.Row="1" Margin="20"
                                   HorizontalAlignment="Right"
