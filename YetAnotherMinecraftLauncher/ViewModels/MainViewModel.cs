@@ -9,6 +9,14 @@ namespace YetAnotherMinecraftLauncher.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
+    private int _mainViewIndex;
+
+    public int MainViewIndex
+    {
+        get => _mainViewIndex;
+        set => this.RaiseAndSetIfChanged(ref _mainViewIndex, value);
+    }
+
     #region Account
 
     private Bitmap _accountAvatar;
@@ -36,11 +44,6 @@ public class MainViewModel : ViewModelBase
     }
 
     public ReactiveCommand<Unit, Unit> AccountActionCommand { get; set; }
-
-    public void InteractAccount()
-    {
-
-    }
 
     #endregion
 
@@ -72,11 +75,6 @@ public class MainViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> VersionActionCommand { get; set; }
 
-    public void InteractVersion()
-    {
-
-    }
-
     #endregion
 
     #region Expansive Section
@@ -87,14 +85,31 @@ public class MainViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> LaunchActionCommand { get; set; }
 
+    #endregion
+
+    #region Actual logics
+
+    public void InteractAccount()
+    {
+        //MainViewIndex = 2;
+        MainViewIndex = 1;
+    }
+
+
+    public void InteractVersion()
+    {
+        MainViewIndex = 1;
+    }
+
+
     public void InteractSetting()
     {
-
+        MainViewIndex = 3;
     }
 
     public void InteractDownload()
     {
-
+        MainViewIndex = 4;
     }
 
     public void InteractLaunch()
