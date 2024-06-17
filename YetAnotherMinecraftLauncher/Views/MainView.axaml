@@ -15,7 +15,7 @@
 	<Design.DataContext>
 		<vm:MainViewModel />
 	</Design.DataContext>
-	<dialogHostAvalonia:DialogHost>
+	<dialogHostAvalonia:DialogHost CloseOnClickAway="True">
 		<dialogHostAvalonia:DialogHost.Content>
 			<Carousel SelectedIndex="{Binding MainViewIndex}">
 				<Carousel.PageTransition >

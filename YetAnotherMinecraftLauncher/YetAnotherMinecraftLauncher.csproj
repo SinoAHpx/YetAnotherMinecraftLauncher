@@ -28,8 +28,4 @@
     <PackageReference Include="Material.Avalonia.Dialogs" Version="3.6.0" />
     <PackageReference Include="Material.Icons.Avalonia" Version="2.1.9" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Controls\Dialogs\" />
-  </ItemGroup>
 </Project>

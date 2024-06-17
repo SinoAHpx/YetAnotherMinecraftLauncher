@@ -8,9 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using DialogHostAvalonia;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Views;
 using YetAnotherMinecraftLauncher.Views.Controls;
+using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 
 namespace YetAnotherMinecraftLauncher.ViewModels
 {
@@ -50,9 +52,22 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             {
                 MessageBus.Current.SendMessage(item);
             });
-            item.RemoveAction = ReactiveCommand.Create(() =>
+            item.RemoveAction = ReactiveCommand.Create(async () =>
             {
-                AccountsList.Remove(item);
+                var dialog = new ConfirmDialog
+                {
+                    Message = "Deletion cannot be undone",
+                    CancelActionCommand = ReactiveCommand.Create(() =>
+                    {
+                        DialogHost.Close(null);
+                    }),
+                    ConfirmActionCommand = ReactiveCommand.Create(() =>
+                    {
+                        AccountsList.Remove(item);
+                        DialogHost.Close(null);
+                    })
+                };
+                await DialogHost.Show(dialog);
             });
             AccountsList.Add(item);
         }
