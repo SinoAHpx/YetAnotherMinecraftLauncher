@@ -3,13 +3,13 @@ using YetAnotherMinecraftLauncher.ViewModels;
 
 namespace YetAnotherMinecraftLauncher.Views
 {
-    public partial class SettingsView : UserControl
+    public partial class VersionsView : UserControl
     {
-        public SettingsView()
+        public VersionsView()
         {
             InitializeComponent();
 
-            DataContext = new SettingsViewModel();
+            DataContext = new VersionsViewModel();
         }
     }
 }

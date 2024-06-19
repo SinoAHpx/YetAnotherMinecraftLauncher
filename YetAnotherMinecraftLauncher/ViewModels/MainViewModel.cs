@@ -100,16 +100,14 @@ public class MainViewModel : ViewModelBase
 
     public void InteractVersion()
     {
-        MainViewIndex = 1;
+        MainViewIndex = 2;
     }
-
-
-    public void InteractSetting()
+    public void InteractDownload()
     {
         MainViewIndex = 3;
     }
 
-    public void InteractDownload()
+    public void InteractSetting()
     {
         MainViewIndex = 4;
     }
@@ -154,7 +152,7 @@ public class MainViewModel : ViewModelBase
 
         #region MessageBus receiver
 
-        MessageBus.Current.Listen<string>(nameof(AccountsView)).Subscribe(o =>
+        MessageBus.Current.Listen<string>().Subscribe(o =>
         {
             if (o.Contains("Return"))
             {

@@ -35,7 +35,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         //ReturnActionCommand
         public void ReturnToHome()
         {
-            MessageBus.Current.SendMessage(nameof(ReturnToHome), nameof(AccountsView));
+            MessageBus.Current.SendMessage(nameof(ReturnToHome));
         }
 
         public void AddAccount()

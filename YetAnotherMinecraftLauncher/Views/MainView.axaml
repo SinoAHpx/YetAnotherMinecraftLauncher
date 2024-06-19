@@ -24,7 +24,7 @@
 					</CompositePageTransition>
 				</Carousel.PageTransition>
 				<Carousel.Items>
-					<!--MainView representation-->
+					<!--0: MainView representation-->
 					<Grid RowDefinitions="2*,2*,6*">
 						<controls1:InteractiveItem
                             Title="{Binding VersionName}"
@@ -63,7 +63,14 @@
                                 CornerRadius="10"
                                 Width="160" Height="60" />
 					</Grid>
-					<views:AccountsView/>
+					<!--1-->
+                    <views:AccountsView/>
+                    <!--2-->
+					<views:VersionsView/>
+                    <!--3-->
+					<views:DownloaderView/>
+                    <!--4-->
+					<views:SettingsView/>
 				</Carousel.Items>
 			</Carousel>
 		</dialogHostAvalonia:DialogHost.Content>

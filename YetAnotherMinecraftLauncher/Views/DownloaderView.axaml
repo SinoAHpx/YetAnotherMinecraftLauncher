@@ -4,23 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d"  d:DesignWidth="350" d:DesignHeight="550"
-             x:Class="YetAnotherMinecraftLauncher.Views.SettingsView">
-	<Grid RowDefinitions="1*, 9*">
-		<StackPanel Margin="10">
-			<Button Command="{Binding ReturnActionCommand}" HorizontalAlignment="Left" Classes="Flat">
-				<StackPanel Orientation="Horizontal">
-					<avalonia:MaterialIcon Kind="ChevronLeft"
+             mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
+             x:Class="YetAnotherMinecraftLauncher.Views.DownloaderView">
+	<Grid RowDefinitions="1.5*, 8*">
+        <StackPanel Margin="10">
+            <Button Command="{Binding ReturnActionCommand}" HorizontalAlignment="Left" Classes="Flat">
+                <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="ChevronLeft"
                                            Width="30" Height="30"
                                            VerticalAlignment="Center"/>
-					<TextBlock Text="Settings" FontSize="30"
+                    <TextBlock Text="Downloader" FontSize="30"
                                VerticalAlignment="Center"/>
-				</StackPanel>
-			</Button>
-		</StackPanel>
-		<ScrollViewer Grid.Row="1">
-
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1">
         </ScrollViewer>
-	</Grid>
-
+    </Grid>
 </UserControl>
