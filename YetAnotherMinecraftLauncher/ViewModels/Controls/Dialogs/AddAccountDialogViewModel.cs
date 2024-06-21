@@ -3,6 +3,8 @@ using System.Reactive;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DialogHostAvalonia;
+using Manganese.Process;
+using ModuleLauncher.NET.Authentications;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Views.Controls;
 
@@ -45,7 +47,12 @@ public class AddAccountDialogViewModel : ViewModelBase
 
     public void AddMicrosoftUser()
     {
-
+        var msAuthenticator = new MicrosoftAuthenticator
+        {
+            ClientId = "831dc94c-7e4f-4ef6-b2e7-8fc1ec498111",
+            RedirectUrl = "yaml://authms"
+        };
+        msAuthenticator.LoginUrl.OpenUrl();
     }
 
     #endregion

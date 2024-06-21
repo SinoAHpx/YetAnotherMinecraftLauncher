@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherMinecraftLauncher
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherMinecraftLauncher.Desktop", "YetAnotherMinecraftLauncher.Desktop\YetAnotherMinecraftLauncher.Desktop.csproj", "{0C57C19F-346C-4735-AB74-B0A76713A155}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherMinecraftLauncher.Debugy", "YetAnotherMinecraftLauncher.Debuggy\YetAnotherMinecraftLauncher.Debugy.csproj", "{CF1454F7-C767-4677-96FC-201E83E4A988}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0C57C19F-346C-4735-AB74-B0A76713A155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C57C19F-346C-4735-AB74-B0A76713A155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C57C19F-346C-4735-AB74-B0A76713A155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF1454F7-C767-4677-96FC-201E83E4A988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF1454F7-C767-4677-96FC-201E83E4A988}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF1454F7-C767-4677-96FC-201E83E4A988}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF1454F7-C767-4677-96FC-201E83E4A988}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

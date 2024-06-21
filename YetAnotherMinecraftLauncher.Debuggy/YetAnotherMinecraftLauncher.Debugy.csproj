@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YetAnotherMinecraftLauncher.Desktop\YetAnotherMinecraftLauncher.Desktop.csproj" />
+    <ProjectReference Include="..\YetAnotherMinecraftLauncher\YetAnotherMinecraftLauncher.csproj" />
+  </ItemGroup>
+
+</Project>
