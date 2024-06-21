@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using YetAnotherMinecraftLauncher.ViewModels.Controls.Dialogs;
 
 namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
 {
@@ -8,7 +9,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
         {
             InitializeComponent();
 
-            Grid.DataContext = this;
+            DataContext = new AddAccountDialogViewModel();
         }
     }
 }

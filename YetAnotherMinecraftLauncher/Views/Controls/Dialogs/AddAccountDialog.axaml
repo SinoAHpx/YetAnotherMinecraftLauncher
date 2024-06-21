@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="YetAnotherMinecraftLauncher.Views.Controls.Dialogs.AddAccountDialog">
     <Grid Name="Grid" RowDefinitions="1*, 9*" Margin="10" MinHeight="80" MinWidth="120">
@@ -10,12 +11,48 @@
                    FontWeight="Bold"
                    Text="Add an account"/>
         <StackPanel Grid.Row="1">
-			<TextBox assists:TextFieldAssist.Label="wad"
-                     Theme="{StaticResource OutlineTextBox}" 
-                     VerticalAlignment="Top"
-                     Foreground="#586EBC"
-                     TextWrapping="NoWrap"/>
-            <Button Foreground="#586EBC" HorizontalAlignment="Right" Margin="0,10,0,0" Theme="{StaticResource MaterialOutlineButton}" Content="Add"/>
+			<ComboBox VerticalAlignment="Top"
+                      assists:ComboBoxAssist.Label="Authenticator"
+                      Foreground="#586EBC"
+                      Theme="{StaticResource MaterialOutlineComboBox}">
+				<ComboBoxItem Name="ComboBoxItem_Microsoft">
+                    <StackPanel Orientation="Horizontal">
+						<avalonia:MaterialIcon Kind="Microsoft"/>
+                        <TextBlock Text=" Microsoft"/>
+                    </StackPanel>
+                </ComboBoxItem>
+				<ComboBoxItem Name="ComboBoxItem_Offline">
+                    <StackPanel Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="Offline"/>
+                        <TextBlock Text=" Offline"/>
+                    </StackPanel>
+				</ComboBoxItem>
+            </ComboBox>
+            <StackPanel IsVisible="{Binding #ComboBoxItem_Offline.IsSelected}">
+                <TextBox Text="{Binding OfflineUsername}"
+                         assists:TextFieldAssist.Label="Offline username"
+                         Theme="{StaticResource OutlineTextBox}"
+                         VerticalAlignment="Top"
+                         Foreground="#586EBC"
+                         TextWrapping="NoWrap"/>
+                <Button Command="{Binding AddOfflineUserCommand}"
+                        Foreground="#586EBC"
+                        HorizontalAlignment="Right"
+                        Margin="0,10,0,0"
+                        Theme="{StaticResource MaterialOutlineButton}"
+                        Content="Add"/>
+			</StackPanel>
+			<StackPanel IsVisible="{Binding #ComboBoxItem_Microsoft.IsSelected}">
+				<Button Command="{Binding AddMicrosoftUserCommand}"
+                        Foreground="#586EBC"
+                        Margin="0,10,0,0"
+                        Theme="{StaticResource MaterialOutlineButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="Microsoft"/>
+                        <TextBlock Text="Sign in with Microsoft"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
 		</StackPanel>
 	</Grid>
 </UserControl>

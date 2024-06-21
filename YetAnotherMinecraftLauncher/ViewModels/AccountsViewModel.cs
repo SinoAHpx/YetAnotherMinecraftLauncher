@@ -40,22 +40,18 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         public async void AddAccount()
         {
-            //todo: mocking values
             var accountAddingDialog = new AddAccountDialog();
-            await DialogHost.Show(accountAddingDialog);
 
-            var item = new SelectiveItem
+            if (await DialogHost.Show(accountAddingDialog) is not SelectiveItem authResult)
             {
-                // Avatar = new Bitmap(AssetLoader.Open(
-                //     new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png"))),
-                // Title = $"Steve{AccountsList.Count + 1}",
-                // Subtitle = "Online"
-            };
-            item.SelectAction = ReactiveCommand.Create(() =>
+                return;
+            }
+
+            authResult.SelectAction = ReactiveCommand.Create(() =>
             {
-                MessageBus.Current.SendMessage(item);
+                MessageBus.Current.SendMessage(authResult);
             });
-            item.RemoveAction = ReactiveCommand.Create(async () =>
+            authResult.RemoveAction = ReactiveCommand.Create(async () =>
             {
                 var dialog = new ConfirmDialog
                 {
@@ -66,13 +62,13 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                     }),
                     ConfirmActionCommand = ReactiveCommand.Create(() =>
                     {
-                        AccountsList.Remove(item);
+                        AccountsList.Remove(authResult);
                         DialogHost.Close(null);
                     })
                 };
                 await DialogHost.Show(dialog);
             });
-            AccountsList.Add(item);
+            AccountsList.Add(authResult);
         }
 
         #endregion
