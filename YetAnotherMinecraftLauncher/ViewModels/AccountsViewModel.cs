@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -38,15 +38,18 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             MessageBus.Current.SendMessage(nameof(ReturnToHome));
         }
 
-        public void AddAccount()
+        public async void AddAccount()
         {
             //todo: mocking values
+            var accountAddingDialog = new AddAccountDialog();
+            await DialogHost.Show(accountAddingDialog);
+
             var item = new SelectiveItem
             {
-                Avatar = new Bitmap(AssetLoader.Open(
-                    new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png"))),
-                Title = $"Steve{AccountsList.Count + 1}",
-                Subtitle = "Online"
+                // Avatar = new Bitmap(AssetLoader.Open(
+                //     new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png"))),
+                // Title = $"Steve{AccountsList.Count + 1}",
+                // Subtitle = "Online"
             };
             item.SelectAction = ReactiveCommand.Create(() =>
             {

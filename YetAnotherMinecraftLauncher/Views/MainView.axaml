@@ -55,11 +55,9 @@
 						<Button Grid.Row="2"
                                 Content="Launch"
                                 Command="{Binding LaunchActionCommand}"
-                                Foreground="white" Background="#586EBC"
                                 VerticalAlignment="Bottom"
                                 HorizontalAlignment="Right"
                                 Margin="10"
-                                assists:ButtonAssist.ClickFeedbackColor="White"
                                 CornerRadius="10"
                                 Width="160" Height="60" />
 					</Grid>

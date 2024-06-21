@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="YetAnotherMinecraftLauncher.Views.Controls.Dialogs.AddAccountDialog">
+    <Grid Name="Grid" RowDefinitions="1*, 9*" Margin="10" MinHeight="80" MinWidth="120">
+        <TextBlock FontSize="26"
+                   FontWeight="Bold"
+                   Text="Add an account"/>
+        <StackPanel Grid.Row="1">
+			<TextBox assists:TextFieldAssist.Label="wad"
+                     Theme="{StaticResource OutlineTextBox}" 
+                     VerticalAlignment="Top"
+                     Foreground="#586EBC"
+                     TextWrapping="NoWrap"/>
+            <Button Foreground="#586EBC" HorizontalAlignment="Right" Margin="0,10,0,0" Theme="{StaticResource MaterialOutlineButton}" Content="Add"/>
+		</StackPanel>
+	</Grid>
+</UserControl>

@@ -29,7 +29,7 @@
 		</ScrollViewer>
 		<controls1:FloatingButton Grid.Row="1" Margin="20"
                                   HorizontalAlignment="Right"
-                                  Width="60" Height="60" Background="#586EBC"
+                                  Width="60" Height="60"
                                   Command="{Binding AddAccountActionCommand}"
                                   VerticalAlignment="Bottom">
 			<avalonia:MaterialIcon Kind="Add"/>
