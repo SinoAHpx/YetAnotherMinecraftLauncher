@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
+using System.IO;
+using System.Linq;
 using System.Reactive;
+using System.Runtime.InteropServices;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using Material.Colors;
 using Material.Styles;
 using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
 using ModuleLauncher.NET.Models.Launcher;
+using ModuleLauncher.NET.Utilities;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
@@ -21,9 +27,9 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         #region Minecraft Settings
 
-        private ObservableCollection<MinecraftJava>? _javaExecutables;
+        private ObservableCollection<MinecraftJava> _javaExecutables = [];
 
-        public ObservableCollection<MinecraftJava>? JavaExecutables
+        public ObservableCollection<MinecraftJava> JavaExecutables
         {
             get => _javaExecutables;
             set => this.RaiseAndSetIfChanged(ref _javaExecutables, value);
@@ -131,14 +137,37 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             MessageBus.Current.SendMessage(nameof(ReturnToHome));
         }
 
-        public void BrowseJava()
+        public async void BrowseJava()
         {
+            var storageProvider = TopLevel.GetTopLevel(LifetimeUtils.GetMainWindow())!.StorageProvider;
+            var pickResult = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+            {
+                Title = "Browse java executable file",
+                AllowMultiple = false,
+                FileTypeFilter = new[]
+                {
+                    new FilePickerFileType("Java executable file")
+                    {
+                        Patterns = ["javaw.exe","java.exe","javaw","java"]
+                    }
+                }
+                
+            });
+            if (pickResult.Count < 1)
+            {
+                return;
+            }
+            var javaPath = pickResult.Single().Path.AbsolutePath;
 
+            JavaExecutables.Add(new MinecraftJava()
+            {
+                Executable = new FileInfo(javaPath),
+            });
         }
 
         public void RemoveJava(int index)
         {
-            JavaExecutables?.RemoveAt(index);
+            JavaExecutables.RemoveAt(index);
         }
 
         public void AutoMemory()
@@ -158,7 +187,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             AutoMemoryCommand = ReactiveCommand.Create(AutoMemory);
 
             #endregion
-
+            
             #region Theme changers
 
             var theme = Application.Current!.LocateMaterialTheme<MaterialTheme>();

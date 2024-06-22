@@ -33,6 +33,9 @@ xmlns:assists="using:Material.Styles.Assists"
                               Name="ComboBox_JavaExecutables"
                               Theme="{StaticResource MaterialOutlineComboBox}"
                               assists:ComboBoxAssist.Label="Java Executable">
+                        <ToolTip.Tip>
+                            <TextBlock Text="This is not a selection but a display, java executable files will be chosen automatically."/>
+                        </ToolTip.Tip>
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Executable.FullName}"/>
