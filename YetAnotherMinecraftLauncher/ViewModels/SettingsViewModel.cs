@@ -144,20 +144,20 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             {
                 Title = "Browse java executable file",
                 AllowMultiple = false,
-                FileTypeFilter = new[]
-                {
-                    new FilePickerFileType("Java executable file")
-                    {
-                        Patterns = ["javaw.exe","java.exe","javaw","java"]
-                    }
-                }
+                // FileTypeFilter = new[]
+                // {
+                //     new FilePickerFileType("Java executable file")
+                //     {
+                //         Patterns = ["javaw.exe","java.exe","javaw","java"]
+                //     }
+                // }
                 
             });
             if (pickResult.Count < 1)
             {
                 return;
             }
-            var javaPath = pickResult.Single().Path.AbsolutePath;
+            var javaPath = pickResult.Single().Path.LocalPath;
 
             JavaExecutables.Add(new MinecraftJava()
             {
