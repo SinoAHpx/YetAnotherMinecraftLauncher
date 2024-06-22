@@ -1,7 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 using System.Reactive;
+using Avalonia;
+using Material.Colors;
+using Material.Styles;
+using Material.Styles.Themes;
+using Material.Styles.Themes.Base;
 using ModuleLauncher.NET.Models.Launcher;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
 
 namespace YetAnotherMinecraftLauncher.ViewModels
@@ -10,7 +19,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
     {
         public ReactiveCommand<Unit, Unit> ReturnActionCommand { get; set; }
 
-        #region Settings
+        #region Minecraft Settings
 
         private ObservableCollection<MinecraftJava>? _javaExecutables;
 
@@ -68,6 +77,52 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         #endregion
 
+        #region Launcher Settings
+
+        private List<string> _colors =
+        [
+            "Red",
+            "Pink",
+            "Purple",
+            "DeepPurple",
+            "Indigo",
+            "Blue",
+            "LightBlue",
+            "Cyan",
+            "Teal",
+            "Green",
+            "LightGreen",
+            "Lime",
+            "Yellow",
+            "Amber",
+            "Orange",
+            "Brown"
+        ];
+
+        public List<string> Colors
+        {
+            get => _colors;
+            set => this.RaiseAndSetIfChanged(ref _colors, value);
+        }
+
+        private int _colorIndex;
+
+        public int ColorIndex
+        {
+            get => _colorIndex;
+            set => this.RaiseAndSetIfChanged(ref _colorIndex, value);
+        }
+
+        private bool _isDarkTheme = true;
+
+        public bool IsDarkTheme
+        {
+            get => _isDarkTheme;
+            set => this.RaiseAndSetIfChanged(ref _isDarkTheme, value);
+        }
+
+        #endregion
+
         #region Logic
 
         //ReturnActionCommand
@@ -101,6 +156,21 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             RemoveJavaCommand = ReactiveCommand.Create<int>(RemoveJava);
             BrowseJavaCommand = ReactiveCommand.Create(BrowseJava);
             AutoMemoryCommand = ReactiveCommand.Create(AutoMemory);
+
+            #endregion
+
+            #region Theme changers
+
+            var theme = Application.Current!.LocateMaterialTheme<MaterialTheme>();
+            this.WhenAnyValue(v => v.ColorIndex).Subscribe(s =>
+            {
+                theme.PrimaryColor = Colors[s].MapPrimaryColor();
+            });
+
+            this.WhenAnyValue(v => v.IsDarkTheme).Subscribe(i =>
+            {
+                theme.BaseTheme = i ? BaseThemeMode.Dark : BaseThemeMode.Light;
+            });
 
             #endregion
         }

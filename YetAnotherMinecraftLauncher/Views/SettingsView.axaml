@@ -103,24 +103,12 @@ xmlns:assists="using:Material.Styles.Assists"
                         </ComboBox>
                         <ComboBox Theme="{StaticResource MaterialOutlineComboBox}"
                                   assists:ComboBoxAssist.Label="Color Theme"
-                                  SelectedIndex="0"
-                                  Margin="0,0,0,10">
-                            <ComboBoxItem Content="Red"/>
-                            <ComboBoxItem Content="Pink"/>
-                            <ComboBoxItem Content="Purple"/>
-                            <ComboBoxItem Content="MediumPurple"/>
-                            <ComboBoxItem Content="Indigo"/>
-                            <ComboBoxItem Content="Blue"/>
-                            <ComboBoxItem Content="LightBlue"/>
-                            <ComboBoxItem Content="Cyan"/>
-                            <ComboBoxItem Content="Teal"/>
-                            <ComboBoxItem Content="Green"/>
-                            <ComboBoxItem Content="LightGreen"/>
-                            <ComboBoxItem Content="Lime"/>
-                            <ComboBoxItem Content="Yellow"/>
-                            <ComboBoxItem Content="Orange"/>
-                            <ComboBoxItem Content="Brown"/>
-                        </ComboBox>
+                                  ItemsSource="{Binding Colors}"
+                                  SelectedIndex="{Binding ColorIndex}"
+                                  Margin="0,0,0,10"/>
+                        <CheckBox Content="Dark Theme" 
+                                  IsChecked="{Binding IsDarkTheme}"
+                                  HorizontalAlignment="Right"/>
                     </StackPanel>
                 </Expander>
             </StackPanel>
