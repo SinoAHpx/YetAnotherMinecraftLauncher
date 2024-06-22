@@ -6,7 +6,7 @@
              x:Class="YetAnotherMinecraftLauncher.App"
              RequestedThemeVariant="Default">
 	<Application.Styles >
-        <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Indigo" SecondaryColor="Lime" />
+        <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Red" SecondaryColor="Lime" />
 		<avalonia:MaterialIconStyles />
 		<dialogHostAvalonia:DialogHostStyles />
 		<Style Selector="Button.circle">

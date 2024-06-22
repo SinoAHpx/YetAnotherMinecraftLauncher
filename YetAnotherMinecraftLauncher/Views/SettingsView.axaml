@@ -3,7 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"xmlns:assists="using:Material.Styles.Assists"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+xmlns:assists="using:Material.Styles.Assists"
              mc:Ignorable="d"  d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.SettingsView">
 	<Grid RowDefinitions="1*, 9*">
@@ -19,7 +20,12 @@
 			</Button>
 		</StackPanel>
 		<ScrollViewer Grid.Row="1">
-            <TextBox Text="AWDAWD" TextWrapping="NoWrap" AcceptsReturn="False" VerticalAlignment="Top"/>
+			<TextBox Text="AWDAWD" TextWrapping="NoWrap" AcceptsReturn="False" VerticalAlignment="Top">
+				<TextBox.Resources>
+                    <SolidColorBrush x:Key="MaterialTextBoxBorderBrush" Color="Blue" />
+                    <SolidColorBrush x:Key="MaterialPrimaryMidBrush" Color="Blue" />
+                </TextBox.Resources>
+            </TextBox>
         </ScrollViewer>
 	</Grid>
 
