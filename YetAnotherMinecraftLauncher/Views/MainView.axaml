@@ -47,7 +47,7 @@
 									<avalonia:MaterialIcon Kind="Download" />
 								</Button>
 								<Button Command="{Binding SettingActionCommand}" Classes="circle">
-									<avalonia:MaterialIcon Kind="Settings" />
+                                    <avalonia:MaterialIcon Kind="Settings" />
 								</Button>
 							</StackPanel>
 						</Grid>
@@ -57,6 +57,7 @@
                                 Command="{Binding LaunchActionCommand}"
                                 VerticalAlignment="Bottom"
                                 HorizontalAlignment="Right"
+								Foreground="White"
                                 Margin="10"
                                 CornerRadius="10"
                                 Width="160" Height="60" />

@@ -5,9 +5,13 @@
              xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 xmlns:assists="using:Material.Styles.Assists"
-             mc:Ignorable="d"  d:DesignWidth="350" d:DesignHeight="550"
+             xmlns:viewModels="clr-namespace:YetAnotherMinecraftLauncher.ViewModels"
+             mc:Ignorable="d"  d:DesignWidth="350" d:DesignHeight="1550"
              x:Class="YetAnotherMinecraftLauncher.Views.SettingsView">
-	<Grid RowDefinitions="1*, 9*">
+    <Design.DataContext>
+        <viewModels:SettingsViewModel/>
+    </Design.DataContext>
+    <Grid RowDefinitions="1*, 9*">
 		<StackPanel Margin="10">
 			<Button Command="{Binding ReturnActionCommand}" HorizontalAlignment="Left" Classes="Flat">
 				<StackPanel Orientation="Horizontal">
@@ -19,13 +23,107 @@ xmlns:assists="using:Material.Styles.Assists"
 				</StackPanel>
 			</Button>
 		</StackPanel>
-		<ScrollViewer Grid.Row="1">
-			<TextBox Text="AWDAWD" TextWrapping="NoWrap" AcceptsReturn="False" VerticalAlignment="Top">
-				<TextBox.Resources>
-                    <SolidColorBrush x:Key="MaterialTextBoxBorderBrush" Color="Blue" />
-                    <SolidColorBrush x:Key="MaterialPrimaryMidBrush" Color="Blue" />
-                </TextBox.Resources>
-            </TextBox>
+		<ScrollViewer Grid.Row="1" Margin="0,0,0,10">
+            <StackPanel Margin="10">
+                <Expander Header="Minecraft Settings" 
+                          IsExpanded="True"
+                          Margin="0,0,0,10">
+			        <StackPanel Margin="10">
+                    <ComboBox ItemsSource="{Binding JavaExecutables}"
+                              Name="ComboBox_JavaExecutables"
+                              Theme="{StaticResource MaterialOutlineComboBox}"
+                              assists:ComboBoxAssist.Label="Java Executable">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Executable.FullName}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+				    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Command="{Binding RemoveJavaCommand}"
+                                CommandParameter="{Binding #ComboBox_JavaExecutables.SelectedIndex}"
+                                Content="Remove"  Width="100"
+                                Theme="{StaticResource MaterialOutlineButton}"
+                                HorizontalAlignment="Right"
+                                Margin="0,10,10,0"/>
+                        <Button Command="{Binding BrowseJavaCommand}"
+                                Content="Add"  Width="100"
+                                Theme="{StaticResource MaterialOutlineButton}"
+                                HorizontalAlignment="Right"
+                                Margin="0,10,0,0"/>
+                    </StackPanel>
+                    
+
+                    <TextBox Text="{Binding AllocatedMemorySize}"
+                             Theme="{StaticResource OutlineTextBox}"
+                             assists:TextFieldAssist.Label="Allocated Memory Size"
+                             Margin="0,10,0,0"/>
+                    <Button Command="{Binding AutoMemoryCommand}"
+                            Content="Auto" Width="100"
+                            Theme="{StaticResource MaterialOutlineButton}"
+                            HorizontalAlignment="Right"
+                            Margin="0,10,0,0"/>
+
+                    <Grid ColumnDefinitions="*,*" Margin="0,10,0,0">
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding WindowHeight}"
+                                 Margin="0,0,5,0"
+                                 Theme="{StaticResource OutlineTextBox}"
+                                 IsEnabled="{Binding !#CheckBox_Fullscreen.IsChecked}"
+                                 assists:TextFieldAssist.Label="Window Height"/>
+                        <TextBox Grid.Column="1" 
+                                 Text="{Binding WindowWidth}"
+                                 Margin="5,0,0,0"
+                                 Theme="{StaticResource OutlineTextBox}"
+                                 IsEnabled="{Binding !#CheckBox_Fullscreen.IsChecked}"
+                                 assists:TextFieldAssist.Label="Window Width"/>
+                    </Grid>
+                    <CheckBox Content="Enable Full Screen" 
+                              IsChecked="{Binding IsFullscreen}"
+                              HorizontalAlignment="Right"
+                              Name="CheckBox_Fullscreen"
+                              Margin="0,10,0,0"/>
+
+                    <TextBox Text="{Binding DirectlyJoinServer}"
+                             Theme="{StaticResource OutlineTextBox}"
+                             assists:TextFieldAssist.Label="Directly Join Server"
+                             Margin="0,10,0,0"/>
+                </StackPanel>
+                </Expander>
+                <Expander Header="Launcher Settings" IsExpanded="True">
+                    <StackPanel Margin="10">
+                        <ComboBox Theme="{StaticResource MaterialOutlineComboBox}"
+                                  assists:ComboBoxAssist.Label="After Launch"
+                                  SelectedIndex="0"
+                                  Margin="0,0,0,10">
+                            <ComboBoxItem Content="Keep launcher"/>
+                            <ComboBoxItem Content="Hide launcher"/>
+                            <ComboBoxItem Content="Close launcher"/>
+                        </ComboBox>
+                        <ComboBox Theme="{StaticResource MaterialOutlineComboBox}"
+                                  assists:ComboBoxAssist.Label="Color Theme"
+                                  SelectedIndex="0"
+                                  Margin="0,0,0,10">
+                            <ComboBoxItem Content="Red"/>
+                            <ComboBoxItem Content="Pink"/>
+                            <ComboBoxItem Content="Purple"/>
+                            <ComboBoxItem Content="MediumPurple"/>
+                            <ComboBoxItem Content="Indigo"/>
+                            <ComboBoxItem Content="Blue"/>
+                            <ComboBoxItem Content="LightBlue"/>
+                            <ComboBoxItem Content="Cyan"/>
+                            <ComboBoxItem Content="Teal"/>
+                            <ComboBoxItem Content="Green"/>
+                            <ComboBoxItem Content="LightGreen"/>
+                            <ComboBoxItem Content="Lime"/>
+                            <ComboBoxItem Content="Yellow"/>
+                            <ComboBoxItem Content="Orange"/>
+                            <ComboBoxItem Content="Brown"/>
+                        </ComboBox>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
         </ScrollViewer>
 	</Grid>
 
