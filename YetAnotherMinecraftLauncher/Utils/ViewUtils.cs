@@ -9,7 +9,7 @@ using YetAnotherMinecraftLauncher.Views.Controls;
 
 namespace YetAnotherMinecraftLauncher.Utils
 {
-    internal static class ViewModelUtils
+    internal static class ViewUtils
     {
         public static PrimaryColor MapPrimaryColor(this string color)
         {
