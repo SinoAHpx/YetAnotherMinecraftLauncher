@@ -5,10 +5,12 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using DynamicData.Binding;
 using Material.Colors;
 using Material.Styles;
 using Material.Styles.Themes;
@@ -201,6 +203,32 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                 theme.BaseTheme = i ? BaseThemeMode.Dark : BaseThemeMode.Light;
             });
 
+            #endregion
+
+            #region Configuration
+
+            //we'd have a configurator here, so the code could be more maintainable
+            this.WhenAnyValue(x1 => x1.AllocatedMemorySize, 
+                    x2 => x2.JavaExecutables, 
+                    x3 => x3.WindowHeight,
+                    x4 => x4.WindowWidth,
+                    x5 => x5.IsFullscreen,
+                    x6 => x6.DirectlyJoinServer,
+                    (x1, x2, x3, x4, x5, x6) => new
+                    {
+                        MemorySize = x1,
+                        Javas = x2,
+                        WindowHeight = x3,
+                        WindowWidth = x4,
+                        IsFullscreen = x5,
+                        DirectlyJoinServer = x6
+                    })
+                .Subscribe(t =>
+            {
+                
+            });
+
+            
             #endregion
         }
     }
