@@ -11,6 +11,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using DynamicData.Binding;
+using Manganese.Text;
 using Material.Colors;
 using Material.Styles;
 using Material.Styles.Themes;
@@ -207,28 +208,47 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
             #region Configuration
 
+            var configText = ConfigUtils.ReadConfigAsync();
+            if (configText is not null)
+            {
+                WindowWidth = configText.Fetch("WindowWidth");
+                WindowHeight = configText.Fetch("WindowHeight");
+                IsFullscreen = bool.Parse(configText.Fetch("IsFullscreen")!);
+                JavaExecutables = new ObservableCollection<MinecraftJava>(configText.FetchJToken("Javas").Select(x =>
+                    new MinecraftJava
+                    {
+                        Executable = new FileInfo(x.Fetch("ExecutableFile")),
+                        Version = 0
+                    }));
+                AllocatedMemorySize = configText.Fetch("MemorySize");
+                DirectlyJoinServer = configText.Fetch("DirectlyJoinServer");
+            }
+
             //we'd have a configurator here, so the code could be more maintainable
-            this.WhenAnyValue(x1 => x1.AllocatedMemorySize, 
-                    x2 => x2.JavaExecutables, 
+            this.WhenAnyValue(x1 => x1.AllocatedMemorySize,
+                    x2 => x2.JavaExecutables.Count,
                     x3 => x3.WindowHeight,
                     x4 => x4.WindowWidth,
                     x5 => x5.IsFullscreen,
                     x6 => x6.DirectlyJoinServer,
-                    (x1, x2, x3, x4, x5, x6) => new
+                    (x1, _, x3, x4, x5, x6) => new
                     {
                         MemorySize = x1,
-                        Javas = x2,
+                        Javas = JavaExecutables.Select(x =>
+                            new
+                            {
+                                ExecutableFile = x.Executable?.FullName, x.Version
+                            }),
                         WindowHeight = x3,
                         WindowWidth = x4,
                         IsFullscreen = x5,
                         DirectlyJoinServer = x6
                     })
-                .Subscribe(t =>
-            {
-                
-            });
+                .Subscribe(async t =>
+                {
+                    await t.WriteConfigAsync();
+                });
 
-            
             #endregion
         }
     }
