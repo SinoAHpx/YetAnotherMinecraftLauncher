@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Manganese.IO;
 using Manganese.Text;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace YetAnotherMinecraftLauncher.Utils;
@@ -20,23 +21,23 @@ public static class ConfigUtils
         }
     }
 
+    // here we have 2 different configs,
+    // one is MinecraftSettings and other is LauncherSettings
     public static async Task WriteConfigAsync<T>(this T type)
     {
-        // var configText = await ConfigFile.ReadAllTextAsync();
-        // var configJObject = JObject.Parse(configText);
+        var jsonText = type.ToJsonString();
 
-        var jsonString = type.ToJsonString();
-        await ConfigFile.WriteAllTextAsync(jsonString);
+        await ConfigFile.WriteAllTextAsync(jsonText);
     }
 
-    public static string? ReadConfigAsync()
+    /// <summary>
+    /// this did nothing but just to read the raw json string
+    /// </summary>
+    /// <returns></returns>
+    public static string? ReadConfig()
     {
         var configText = ConfigFile.ReadAllText();
-        if (configText == string.Empty)
-        {
-            return null;
-        }
 
-        return configText;
+        return configText == string.Empty ? null : configText;
     }
 }

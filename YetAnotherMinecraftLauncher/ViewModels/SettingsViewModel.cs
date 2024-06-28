@@ -1,26 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using DynamicData.Binding;
 using Manganese.Text;
-using Material.Colors;
-using Material.Styles;
 using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
 using ModuleLauncher.NET.Models.Launcher;
-using ModuleLauncher.NET.Utilities;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Utils;
-using YetAnotherMinecraftLauncher.Views;
 
 namespace YetAnotherMinecraftLauncher.ViewModels
 {
@@ -47,7 +40,17 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         public string AllocatedMemorySize
         {
             get => _allocatedMemorySize;
-            set => this.RaiseAndSetIfChanged(ref _allocatedMemorySize, value);
+            set
+            {
+                if (value.IsInt32())
+                {
+                    this.RaiseAndSetIfChanged(ref _allocatedMemorySize, value);
+                }
+                else
+                {
+                    throw new ArgumentException("Memory size must be an integer.");
+                }
+            }
         }
 
         public ReactiveCommand<Unit, Unit> AutoMemoryCommand { get; set; }
@@ -57,15 +60,37 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         public string WindowHeight
         {
             get => _windowHeight;
-            set => this.RaiseAndSetIfChanged(ref _windowHeight, value);
+            set
+            {
+                if (value.IsInt32())
+                {
+                    this.RaiseAndSetIfChanged(ref _windowHeight, value);
+                }
+                else
+                {
+                    throw new ArgumentException("Window height must be an integer.");
+                }
+            }
         }
 
         private string _windowWidth = "854";
 
+        
+
         public string WindowWidth
         {
             get => _windowWidth;
-            set => this.RaiseAndSetIfChanged(ref _windowWidth, value);
+            set
+            {
+                if (value.IsInt32())
+                {
+                    this.RaiseAndSetIfChanged(ref _windowWidth, value);
+                }
+                else
+                {
+                    throw new ArgumentException("Window width must be an integer.");
+                }
+            }
         }
 
         private bool _isFullscreen;
@@ -208,7 +233,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
             #region Configuration
 
-            var configText = ConfigUtils.ReadConfigAsync();
+            var configText = ConfigUtils.ReadConfig();
             if (configText is not null)
             {
                 WindowWidth = configText.Fetch("WindowWidth");
@@ -222,6 +247,11 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                     }));
                 AllocatedMemorySize = configText.Fetch("MemorySize");
                 DirectlyJoinServer = configText.Fetch("DirectlyJoinServer");
+
+                //todo: replace with the latest Manganese
+                IsDarkTheme = bool.Parse(configText.Fetch("IsDarkTheme"));
+                ColorIndex = configText.Fetch("Color").ToInt32();
+
             }
 
             //we'd have a configurator here, so the code could be more maintainable
@@ -231,18 +261,23 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                     x4 => x4.WindowWidth,
                     x5 => x5.IsFullscreen,
                     x6 => x6.DirectlyJoinServer,
-                    (x1, _, x3, x4, x5, x6) => new
+                    x7 => x7.ColorIndex,
+                    x8 => x8.IsDarkTheme,
+                    (x1, _, x3, x4, x5, x6, x7, x8) => new
                     {
                         MemorySize = x1,
                         Javas = JavaExecutables.Select(x =>
                             new
                             {
-                                ExecutableFile = x.Executable?.FullName, x.Version
+                                ExecutableFile = x.Executable?.FullName,
+                                x.Version
                             }),
                         WindowHeight = x3,
                         WindowWidth = x4,
                         IsFullscreen = x5,
-                        DirectlyJoinServer = x6
+                        DirectlyJoinServer = x6,
+                        Color = x7,
+                        IsDarkTheme = x8
                     })
                 .Subscribe(async t =>
                 {
