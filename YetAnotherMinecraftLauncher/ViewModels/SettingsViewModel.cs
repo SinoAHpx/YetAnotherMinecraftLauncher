@@ -13,6 +13,7 @@ using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
 using ModuleLauncher.NET.Models.Launcher;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Models;
 using YetAnotherMinecraftLauncher.Utils;
 
 namespace YetAnotherMinecraftLauncher.ViewModels
@@ -37,60 +38,32 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         private string _allocatedMemorySize;
 
+        [Number]
         public string AllocatedMemorySize
         {
             get => _allocatedMemorySize;
-            set
-            {
-                if (value.IsInt32())
-                {
-                    this.RaiseAndSetIfChanged(ref _allocatedMemorySize, value);
-                }
-                else
-                {
-                    throw new ArgumentException("Memory size must be an integer.");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _allocatedMemorySize, value);
         }
 
         public ReactiveCommand<Unit, Unit> AutoMemoryCommand { get; set; }
 
         private string _windowHeight = "480";
 
+        [Number]
         public string WindowHeight
         {
             get => _windowHeight;
-            set
-            {
-                if (value.IsInt32())
-                {
-                    this.RaiseAndSetIfChanged(ref _windowHeight, value);
-                }
-                else
-                {
-                    throw new ArgumentException("Window height must be an integer.");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _windowHeight, value);
         }
 
         private string _windowWidth = "854";
 
-        
 
+        [Number]
         public string WindowWidth
         {
             get => _windowWidth;
-            set
-            {
-                if (value.IsInt32())
-                {
-                    this.RaiseAndSetIfChanged(ref _windowWidth, value);
-                }
-                else
-                {
-                    throw new ArgumentException("Window width must be an integer.");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _windowWidth, value);
         }
 
         private bool _isFullscreen;
@@ -141,10 +114,20 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         private int _colorIndex;
 
+        [Number]
         public int ColorIndex
         {
             get => _colorIndex;
             set => this.RaiseAndSetIfChanged(ref _colorIndex, value);
+        }
+
+        private int _afterLaunchAction = 0;
+
+        [Number]
+        public int AfterLaunchAction
+        {
+            get => _afterLaunchAction;
+            set => this.RaiseAndSetIfChanged(ref _afterLaunchAction, value);
         }
 
         private bool _isDarkTheme = true;
@@ -250,8 +233,10 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
                 //todo: replace with the latest Manganese
                 IsDarkTheme = bool.Parse(configText.Fetch("IsDarkTheme"));
-                ColorIndex = configText.Fetch("Color").ToInt32();
 
+                //this should not be any problem since the value comes from a combo box
+                ColorIndex = configText.Fetch("Color").ToInt32();
+                AfterLaunchAction = configText.Fetch("AfterLaunchAction").ToInt32();
             }
 
             //we'd have a configurator here, so the code could be more maintainable
@@ -263,7 +248,8 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                     x6 => x6.DirectlyJoinServer,
                     x7 => x7.ColorIndex,
                     x8 => x8.IsDarkTheme,
-                    (x1, _, x3, x4, x5, x6, x7, x8) => new
+                    x9 => x9.AfterLaunchAction,
+                    (x1, _, x3, x4, x5, x6, x7, x8,x9) => new
                     {
                         MemorySize = x1,
                         Javas = JavaExecutables.Select(x =>
@@ -277,7 +263,8 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                         IsFullscreen = x5,
                         DirectlyJoinServer = x6,
                         Color = x7,
-                        IsDarkTheme = x8
+                        IsDarkTheme = x8,
+                        AfterLaunchAction = x9
                     })
                 .Subscribe(async t =>
                 {
