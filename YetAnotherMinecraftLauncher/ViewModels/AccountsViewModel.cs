@@ -18,7 +18,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 {
     internal class AccountsViewModel : ViewModelBase
     {
-        public ReactiveCommand<Unit, Unit> ReturnActionCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> ReturnCommand { get; set; }
 
         private ObservableCollection<SelectiveItem> _accountsList = [];
 
@@ -28,11 +28,11 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             set => this.RaiseAndSetIfChanged(ref _accountsList, value);
         }
 
-        public ReactiveCommand<Unit, Unit> AddAccountActionCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> AddAccountCommand { get; set; }
 
         #region Actual logics
 
-        //ReturnActionCommand
+        //ReturnCommand
         public void ReturnToHome()
         {
             MessageBus.Current.SendMessage(nameof(ReturnToHome));
@@ -77,8 +77,8 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         {
             #region Register commands
 
-            ReturnActionCommand = ReactiveCommand.Create(ReturnToHome);
-            AddAccountActionCommand = ReactiveCommand.Create(AddAccount);
+            ReturnCommand = ReactiveCommand.Create(ReturnToHome);
+            AddAccountCommand = ReactiveCommand.Create(AddAccount);
 
             #endregion
         }

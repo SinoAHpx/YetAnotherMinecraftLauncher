@@ -5,11 +5,11 @@ namespace YetAnotherMinecraftLauncher.ViewModels;
 
 public class DownloaderViewModel : ViewModelBase
 {
-    public ReactiveCommand<Unit, Unit> ReturnActionCommand { get; set; }
+    public ReactiveCommand<Unit, Unit> ReturnCommand { get; set; }
 
     #region Logic
 
-    //ReturnActionCommand
+    //ReturnCommand
     public void ReturnToHome()
     {
         MessageBus.Current.SendMessage(nameof(ReturnToHome));
@@ -21,7 +21,7 @@ public class DownloaderViewModel : ViewModelBase
     {
         #region Register commands
 
-        ReturnActionCommand = ReactiveCommand.Create(ReturnToHome);
+        ReturnCommand = ReactiveCommand.Create(ReturnToHome);
 
         #endregion
     }

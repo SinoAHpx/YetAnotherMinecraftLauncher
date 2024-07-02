@@ -20,7 +20,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 {
     internal class SettingsViewModel : ViewModelBase
     {
-        public ReactiveCommand<Unit, Unit> ReturnActionCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> ReturnCommand { get; set; }
 
         #region Minecraft Settings
 
@@ -142,7 +142,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         #region Logic
 
-        //ReturnActionCommand
+        //ReturnCommand
         public void ReturnToHome()
         {
             MessageBus.Current.SendMessage(nameof(ReturnToHome));
@@ -192,7 +192,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         {
             #region Register commands
 
-            ReturnActionCommand = ReactiveCommand.Create(ReturnToHome);
+            ReturnCommand = ReactiveCommand.Create(ReturnToHome);
             RemoveJavaCommand = ReactiveCommand.Create<int>(RemoveJava);
             BrowseJavaCommand = ReactiveCommand.Create(BrowseJava);
             AutoMemoryCommand = ReactiveCommand.Create(AutoMemory);
