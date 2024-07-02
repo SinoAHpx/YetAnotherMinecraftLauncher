@@ -13,6 +13,9 @@ public class MainViewModel : ViewModelBase
 {
     private int _mainViewIndex;
 
+    /// <summary>
+    /// 0: MainView 1: AccountsView 2: VersionsView 3: DownloaderView 4: SettingsView
+    /// </summary>
     public int MainViewIndex
     {
         get => _mainViewIndex;
@@ -157,6 +160,11 @@ public class MainViewModel : ViewModelBase
             if (o.Contains("Return"))
             {
                 MainViewIndex = 0;
+            }
+
+            if (o.Contains("Download"))
+            {
+                MainViewIndex = 3;
             }
         });
 

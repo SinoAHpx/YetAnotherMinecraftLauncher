@@ -20,14 +20,18 @@ public class VersionsViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _versionsList, value);
     }
 
-    
-
+    public ReactiveCommand<Unit, Unit> DownloadVersionCommand { get; set; }
     #region Logic
 
     //ReturnCommand
     public void ReturnToHome()
     {
         MessageBus.Current.SendMessage(nameof(ReturnToHome));
+    }
+
+    public void DownloadVersion()
+    {
+        MessageBus.Current.SendMessage(nameof(DownloadVersion));
     }
 
     #endregion
@@ -37,6 +41,7 @@ public class VersionsViewModel : ViewModelBase
         #region Register commands
 
         ReturnCommand = ReactiveCommand.Create(ReturnToHome);
+        DownloadVersionCommand = ReactiveCommand.Create(DownloadVersion);
 
         #endregion
 
