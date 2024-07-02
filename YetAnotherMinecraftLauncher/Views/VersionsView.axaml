@@ -7,16 +7,27 @@
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.VersionsView">
 	<Grid RowDefinitions="1.5*, 8*">
-        <StackPanel Margin="10">
-            <Button Command="{Binding ReturnActionCommand}" HorizontalAlignment="Left" Classes="Flat">
-                <StackPanel Orientation="Horizontal">
-                    <avalonia:MaterialIcon Kind="ChevronLeft"
+		<StackPanel Margin="10">
+			<Button Command="{Binding ReturnCommand}" HorizontalAlignment="Left" Classes="Flat">
+				<StackPanel Orientation="Horizontal">
+					<avalonia:MaterialIcon Kind="ChevronLeft"
                                            Width="30" Height="30"
                                            VerticalAlignment="Center"/>
-                    <TextBlock Text="Versions" FontSize="30"
+					<TextBlock Text="Versions" FontSize="30"
                                VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-        </StackPanel>
+				</StackPanel>
+			</Button>
+            <ScrollViewer Grid.Row="1">
+                <ItemsControl Name="AccountsItemsControl" ItemsSource="{Binding AccountsList}"/>
+            </ScrollViewer>
+            
+		</StackPanel>
+        <controls:FloatingButton Grid.Row="1" Margin="20"
+                                 HorizontalAlignment="Right"
+                                 Width="60" Height="60"
+                                 Command="{Binding DownloadVersionCommand}"
+                                 VerticalAlignment="Bottom">
+            <avalonia:MaterialIcon Kind="Download"/>
+        </controls:FloatingButton>
     </Grid>
 </UserControl>

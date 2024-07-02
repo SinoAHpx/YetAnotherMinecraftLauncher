@@ -10,7 +10,7 @@
              x:Class="YetAnotherMinecraftLauncher.Views.AccountsView">
 	<Grid RowDefinitions="1.5*, 8*">
 		<StackPanel Margin="10">
-			<Button Command="{Binding ReturnActionCommand}" HorizontalAlignment="Left" Classes="Flat">
+			<Button Command="{Binding ReturnCommand}" HorizontalAlignment="Left" Classes="Flat">
 				<StackPanel Orientation="Horizontal">
 					<avalonia:MaterialIcon Kind="ChevronLeft"
                                            Width="30" Height="30"
@@ -30,7 +30,7 @@
 		<controls1:FloatingButton Grid.Row="1" Margin="20"
                                   HorizontalAlignment="Right"
                                   Width="60" Height="60"
-                                  Command="{Binding AddAccountActionCommand}"
+                                  Command="{Binding AddAccountCommand}"
                                   VerticalAlignment="Bottom">
 			<avalonia:MaterialIcon Kind="Add"/>
 		</controls1:FloatingButton>

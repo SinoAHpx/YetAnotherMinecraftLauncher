@@ -13,7 +13,7 @@ xmlns:assists="using:Material.Styles.Assists"
     </Design.DataContext>
     <Grid RowDefinitions="1*, 9*">
 		<StackPanel Margin="10">
-			<Button Command="{Binding ReturnActionCommand}" HorizontalAlignment="Left" Classes="Flat">
+			<Button Command="{Binding ReturnCommand}" HorizontalAlignment="Left" Classes="Flat">
 				<StackPanel Orientation="Horizontal">
 					<avalonia:MaterialIcon Kind="ChevronLeft"
                                            Width="30" Height="30"
