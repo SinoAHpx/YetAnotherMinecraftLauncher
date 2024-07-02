@@ -1,11 +1,26 @@
-﻿using ReactiveUI;
+﻿using System;
+using ReactiveUI;
+using System.Collections.ObjectModel;
 using System.Reactive;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using YetAnotherMinecraftLauncher.Views.Controls;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
 
 public class VersionsViewModel : ViewModelBase
 {
     public ReactiveCommand<Unit, Unit> ReturnCommand { get; set; }
+
+    private ObservableCollection<SelectiveItem> _versionsList = [];
+
+    public ObservableCollection<SelectiveItem> VersionsList
+    {
+        get => _versionsList;
+        set => this.RaiseAndSetIfChanged(ref _versionsList, value);
+    }
+
+    
 
     #region Logic
 
@@ -24,5 +39,18 @@ public class VersionsViewModel : ViewModelBase
         ReturnCommand = ReactiveCommand.Create(ReturnToHome);
 
         #endregion
+
+        //this is some mocking values
+
+        for (int i = 0; i < 10; i++)
+        {
+            VersionsList.Add(new SelectiveItem
+            {
+                Avatar = new Bitmap(AssetLoader.Open(
+                    new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp"))),
+                Title = $"Version: {i}",
+                Subtitle = $"Vanilla - {i * 10} hours"
+            });
+        }
     }
 }

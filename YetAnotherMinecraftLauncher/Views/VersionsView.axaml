@@ -16,12 +16,12 @@
 					<TextBlock Text="Versions" FontSize="30"
                                VerticalAlignment="Center"/>
 				</StackPanel>
+
 			</Button>
-            <ScrollViewer Grid.Row="1">
-                <ItemsControl Name="AccountsItemsControl" ItemsSource="{Binding AccountsList}"/>
-            </ScrollViewer>
-            
 		</StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl Name="VersionsItemsControl" ItemsSource="{Binding VersionsList}"/>
+        </ScrollViewer>
         <controls:FloatingButton Grid.Row="1" Margin="20"
                                  HorizontalAlignment="Right"
                                  Width="60" Height="60"

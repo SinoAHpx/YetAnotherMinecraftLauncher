@@ -25,7 +25,7 @@
 			</TextBlock>
 		</StackPanel>
 		<ScrollViewer Grid.Row="1">
-			<ItemsControl Name="AccountsItemsControl" ItemsSource="{Binding AccountsList}"/>
+			<ItemsControl Name="AccountsItemsControl" ItemsSource="{Binding VersionsList}"/>
 		</ScrollViewer>
 		<controls1:FloatingButton Grid.Row="1" Margin="20"
                                   HorizontalAlignment="Right"
