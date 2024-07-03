@@ -18,6 +18,10 @@
 				</StackPanel>
 
 			</Button>
+            <TextBlock Foreground="Gray" Margin="45,0,10,0">
+                <Run Text="{Binding #VersionsItemsControl.ItemCount}"/>
+                <Run Text="Versions"/>
+            </TextBlock>
 		</StackPanel>
         <ScrollViewer Grid.Row="1">
             <ItemsControl Name="VersionsItemsControl" ItemsSource="{Binding VersionsList}"/>

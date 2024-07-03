@@ -138,6 +138,16 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isDarkTheme, value);
         }
 
+        private string _customMinecraftDirectory;
+
+        public string CustomMinecraftDirectory
+        {
+            get => _customMinecraftDirectory;
+            set => this.RaiseAndSetIfChanged(ref _customMinecraftDirectory, value);
+        }
+
+        public ReactiveCommand<Unit, Unit> BrowseMinecraftDirectoryCommand { get; set; }
+
         #endregion
 
         #region Logic
@@ -186,6 +196,12 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         }
 
+
+        private void BrowseMinecraftDirectory()
+        {
+
+        }
+
         #endregion
 
         public SettingsViewModel()
@@ -196,6 +212,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             RemoveJavaCommand = ReactiveCommand.Create<int>(RemoveJava);
             BrowseJavaCommand = ReactiveCommand.Create(BrowseJava);
             AutoMemoryCommand = ReactiveCommand.Create(AutoMemory);
+            BrowseMinecraftDirectoryCommand = ReactiveCommand.Create(BrowseMinecraftDirectory);
 
             #endregion
             
@@ -273,5 +290,6 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
             #endregion
         }
+
     }
 }

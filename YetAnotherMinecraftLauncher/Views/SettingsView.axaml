@@ -112,6 +112,25 @@ xmlns:assists="using:Material.Styles.Assists"
                         <CheckBox Content="Dark Theme" 
                                   IsChecked="{Binding IsDarkTheme}"
                                   HorizontalAlignment="Right"/>
+
+						<ComboBox Theme="{StaticResource MaterialOutlineComboBox}"
+                                  assists:ComboBoxAssist.Label="Minecraft Directory"
+                                  SelectedIndex="{Binding AfterLaunchAction}"
+                                  Margin="0,0,0,10">
+                            <ComboBoxItem Content="Default (./.minecraft)" IsSelected="True"/>
+                            <ComboBoxItem Name="ComboBoxItem_CustomMinecraftDir" Content="Custom"/>
+                        </ComboBox>
+                        <StackPanel IsVisible="{Binding #ComboBoxItem_CustomMinecraftDir.IsSelected}">
+                            <TextBox Text="{Binding CustomMinecraftDirectory}"
+                                     Theme="{StaticResource OutlineTextBox}"
+                                     assists:TextFieldAssist.Label="Minecraft Directory"
+                                     Margin="0,10,0,0"/>
+                            <Button Command="{Binding BrowseMinecraftDirectoryCommand}"
+                                    Content="Browse" Width="100"
+                                    Theme="{StaticResource MaterialOutlineButton}"
+                                    HorizontalAlignment="Right"
+                                    Margin="0,10,0,0"/>
+                        </StackPanel>
                     </StackPanel>
                 </Expander>
             </StackPanel>
