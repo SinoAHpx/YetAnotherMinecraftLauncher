@@ -38,4 +38,8 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Controls\Dialogs\AddAccountDialog.axaml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Controls\DownloadableItem.axaml" />
+  </ItemGroup>
 </Project>

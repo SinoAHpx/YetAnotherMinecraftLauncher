@@ -3,8 +3,10 @@ using System.IO;
 using System.Threading.Tasks;
 using Manganese.IO;
 using Manganese.Text;
+using ModuleLauncher.NET.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ReactiveUI;
 
 namespace YetAnotherMinecraftLauncher.Utils;
 
@@ -19,6 +21,8 @@ public static class ConfigUtils
         {
             using var _ = ConfigFile.Create();
         }
+        ConfigText = ConfigFile.ReadAllText();
+
     }
 
     // here we have 2 different configs,
@@ -30,14 +34,27 @@ public static class ConfigUtils
         await ConfigFile.WriteAllTextAsync(jsonText);
     }
 
-    /// <summary>
-    /// this did nothing but just to read the raw json string
-    /// </summary>
-    /// <returns></returns>
-    public static string? ReadConfig()
-    {
-        var configText = ConfigFile.ReadAllText();
+    public static string ConfigText;
 
-        return configText == string.Empty ? null : configText;
+    public static string? ReadConfig(string key)
+    {
+        
+        ConfigFile
+            .WhenAnyValue(x => x.LastWriteTime)
+            .Subscribe(s => ConfigText = ConfigFile.ReadAllText());
+
+        var configStr = ConfigText.Fetch(key);
+        return configStr;
+    }
+
+
+
+    public static string MinecraftDirectory { get; set; }
+
+    private static MinecraftResolver? _minecraftResolver;
+
+    public static MinecraftResolver GetMinecraftResolver()
+    {
+        return _minecraftResolver ??= new MinecraftResolver(MinecraftDirectory);
     }
 }

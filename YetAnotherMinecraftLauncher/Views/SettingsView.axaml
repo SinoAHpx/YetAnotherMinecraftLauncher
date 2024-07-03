@@ -115,7 +115,7 @@ xmlns:assists="using:Material.Styles.Assists"
 
 						<ComboBox Theme="{StaticResource MaterialOutlineComboBox}"
                                   assists:ComboBoxAssist.Label="Minecraft Directory"
-                                  SelectedIndex="{Binding AfterLaunchAction}"
+                                  SelectedIndex="{Binding MinecraftDirectoryType}"
                                   Margin="0,0,0,10">
                             <ComboBoxItem Content="Default (./.minecraft)" IsSelected="True"/>
                             <ComboBoxItem Name="ComboBoxItem_CustomMinecraftDir" Content="Custom"/>

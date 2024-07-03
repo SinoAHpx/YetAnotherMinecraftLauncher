@@ -17,8 +17,14 @@
                                VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <CheckBox IsChecked="{Binding ShowRelease}" Content="Release" Margin="10,0,0,0"/>
+                <CheckBox IsChecked="{Binding ShowSnapshot}" Content="Snapshot" Margin="10,0,0,0"/>
+                <CheckBox IsChecked="{Binding ShowAncient}" Content="Ancient" Margin="10,0,0,0"/>
+			</StackPanel>
         </StackPanel>
         <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding DownloadableVersions}" />
         </ScrollViewer>
     </Grid>
 </UserControl>
