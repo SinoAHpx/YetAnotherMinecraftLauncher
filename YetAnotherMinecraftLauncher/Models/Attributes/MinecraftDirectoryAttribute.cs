@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Manganese.Text;
 
 namespace YetAnotherMinecraftLauncher.Models.Attributes
 {
@@ -12,7 +13,16 @@ namespace YetAnotherMinecraftLauncher.Models.Attributes
     {
         public override bool IsValid(object? value)
         {
-            return value is string path && Directory.Exists(path);
+            if (value is string path)
+            {
+                if (path.IsNullOrEmpty())
+                {
+                    return true;
+                }
+                return Directory.Exists(path);
+            }
+
+            return false;
         }
     }
 }

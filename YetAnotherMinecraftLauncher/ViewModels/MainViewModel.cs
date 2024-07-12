@@ -3,9 +3,13 @@ using System.Reactive;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using DialogHostAvalonia;
+using Material.Dialog.Views;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
 using YetAnotherMinecraftLauncher.Views.Controls;
+using AlertDialog = YetAnotherMinecraftLauncher.Views.Controls.Dialogs.AlertDialog;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
 
@@ -117,7 +121,18 @@ public class MainViewModel : ViewModelBase
 
     public void InteractLaunch()
     {
-
+        if (!ConfigUtils.CheckConfig())
+        {
+            DialogHost.Show(new AlertDialog()
+            {
+                Message = "Certain configs are not properly set.",
+                DismissActionCommand = ReactiveCommand.Create(() =>
+                {
+                    DialogHost.Close(null);
+                    InteractSetting();
+                })
+            });
+        }
     }
 
     #endregion

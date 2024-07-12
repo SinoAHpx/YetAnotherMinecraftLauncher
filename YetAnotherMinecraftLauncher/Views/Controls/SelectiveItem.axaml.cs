@@ -15,7 +15,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<string> TitleProperty =
-            AvaloniaProperty.Register<InteractiveItem, string>(nameof(Title));
+            AvaloniaProperty.Register<SelectiveItem, string>(nameof(Title));
 
 
         public string Title
@@ -25,7 +25,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<string> SubtitleProperty =
-            AvaloniaProperty.Register<InteractiveItem, string>(nameof(Subtitle));
+            AvaloniaProperty.Register<SelectiveItem, string>(nameof(Subtitle));
 
 
         public string Subtitle
@@ -35,7 +35,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<IImageBrushSource> AvatarProperty =
-            AvaloniaProperty.Register<InteractiveItem, IImageBrushSource>(nameof(Avatar));
+            AvaloniaProperty.Register<SelectiveItem, IImageBrushSource>(nameof(Avatar));
 
         public IImageBrushSource Avatar
         {
@@ -44,7 +44,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<ICommand> SelectActionProperty =
-            AvaloniaProperty.Register<InteractiveItem, ICommand>(nameof(SelectAction));
+            AvaloniaProperty.Register<SelectiveItem, ICommand>(nameof(SelectAction));
 
         public ICommand SelectAction
         {
@@ -53,7 +53,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<ICommand> RemoveActionProperty =
-            AvaloniaProperty.Register<InteractiveItem, ICommand>(nameof(RemoveAction));
+            AvaloniaProperty.Register<SelectiveItem, ICommand>(nameof(RemoveAction));
 
         public ICommand RemoveAction
         {

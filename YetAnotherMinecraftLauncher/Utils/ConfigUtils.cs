@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Manganese.IO;
 using Manganese.Text;
@@ -7,6 +9,7 @@ using ModuleLauncher.NET.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.ViewModels;
 
 namespace YetAnotherMinecraftLauncher.Utils;
 
@@ -47,7 +50,26 @@ public static class ConfigUtils
         return configStr;
     }
 
+    public static bool CheckConfig()
+    {
+        var type = typeof(SettingsViewModel);
+        var properties = type.GetProperties();
+        foreach (var propertyInfo in properties)
+        {
+            foreach (var customAttribute in propertyInfo.GetCustomAttributes())
+            {
+                if (customAttribute is ValidationAttribute validation)
+                {
+                    if (!validation.IsValid(ReadConfig(propertyInfo.Name)))
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
 
+        return true;
+    }
 
     public static string MinecraftDirectory { get; set; }
 

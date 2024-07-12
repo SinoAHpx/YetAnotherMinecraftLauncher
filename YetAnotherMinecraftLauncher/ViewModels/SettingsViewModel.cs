@@ -8,6 +8,8 @@ using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using Manganese.Number;
+using Manganese.Process;
 using Manganese.Text;
 using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
@@ -50,7 +52,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         private string _windowHeight = "480";
 
-        [Number]
+        [WindowHeight]
         public string WindowHeight
         {
             get => _windowHeight;
@@ -60,7 +62,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         private string _windowWidth = "854";
 
 
-        [Number]
+        [WindowWidth]
         public string WindowWidth
         {
             get => _windowWidth;
@@ -175,19 +177,19 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             {
                 Title = "Browse java executable file",
                 AllowMultiple = false,
-                FileTypeFilter = new[]
-                {
+                FileTypeFilter =
+                [
                     new FilePickerFileType("Java executable file")
                     {
-                        Patterns = ["javaw.exe","java.exe","javaw","java"]
+                        Patterns = ["javaw.exe", "java.exe", "javaw", "java"]
                     }
-                }
-                
+                ]
             });
             if (pickResult.Count < 1)
             {
                 return;
             }
+
             var javaPath = pickResult.Single().Path.LocalPath;
 
             JavaExecutables.Add(new MinecraftJava()
@@ -203,7 +205,20 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         public void AutoMemory()
         {
-
+            var memorySize = ProcessAtom.GetComputerMemorySize().MegabytesToGigabytes();
+            AllocatedMemorySize = memorySize switch
+            {
+                <= 4 => "512",
+                >= 4 and <= 7 => "1024",
+                >= 7 and <= 15 => "2048",
+                >= 16 and <= 31 => "4096",
+                >= 31 and <= 63 => "8192",
+                >= 63 and <= 127 => "16384",
+                >= 127 and <= 255 => "32768",
+                >= 255 and <= 511 => "65536",
+                >= 511 => "131072",
+                _ => "131072"
+            };
         }
 
 
@@ -245,70 +260,67 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
             if (ConfigUtils.ConfigText != string.Empty && ConfigUtils.ConfigText is not null)
             {
-                WindowWidth = ConfigUtils.ReadConfig("WindowWidth");
-                WindowHeight = ConfigUtils.ReadConfig("WindowHeight");
-                IsFullscreen = bool.Parse(ConfigUtils.ReadConfig("IsFullscreen")!);
-                JavaExecutables = new ObservableCollection<MinecraftJava>(ConfigUtils.ConfigText.FetchJToken("Javas").Select(x =>
+                WindowWidth = ConfigUtils.ReadConfig(nameof(WindowWidth));
+                WindowHeight = ConfigUtils.ReadConfig(nameof(WindowHeight));
+                IsFullscreen = bool.Parse(ConfigUtils.ReadConfig(nameof(IsFullscreen))!);
+                JavaExecutables = new ObservableCollection<MinecraftJava>(ConfigUtils.ConfigText.FetchJToken(nameof(JavaExecutables)).Select(x =>
                     new MinecraftJava
                     {
-                        Executable = new FileInfo(x.Fetch("ExecutableFile")),
+                        Executable = new FileInfo(x.Fetch("Executable")),
                         Version = 0
                     }));
-                AllocatedMemorySize = ConfigUtils.ReadConfig("MemorySize");
-                DirectlyJoinServer = ConfigUtils.ReadConfig("DirectlyJoinServer");
-
-                //todo: replace with the latest Manganese
-                IsDarkTheme = bool.Parse(ConfigUtils.ReadConfig("IsDarkTheme"));
-
-                //this should not be any problem since the value comes from a combo box
-                ColorIndex = ConfigUtils.ReadConfig("Color").ToInt32();
-                AfterLaunchAction = ConfigUtils.ReadConfig("AfterLaunchAction").ToInt32();
-                CustomMinecraftDirectory = ConfigUtils.ReadConfig("CustomMinecraftDirectory");
-                MinecraftDirectoryType = ConfigUtils.ReadConfig("MinecraftDirectoryType").ToInt32();
+                AllocatedMemorySize = ConfigUtils.ReadConfig(nameof(AllocatedMemorySize));
+                DirectlyJoinServer = ConfigUtils.ReadConfig(nameof(DirectlyJoinServer));
+                IsDarkTheme = ConfigUtils.ReadConfig(nameof(IsDarkTheme)).ToBool();
+                ColorIndex = ConfigUtils.ReadConfig(nameof(ColorIndex)).ToInt32();
+                AfterLaunchAction = ConfigUtils.ReadConfig(nameof(AfterLaunchAction)).ToInt32();
+                CustomMinecraftDirectory = ConfigUtils.ReadConfig(nameof(CustomMinecraftDirectory));
+                MinecraftDirectoryType = ConfigUtils.ReadConfig(nameof(MinecraftDirectoryType)).ToInt32();
             }
 
 
 
             //we'd have a configurator here, so the code could be more maintainable
-             this.WhenAnyValue(x1 => x1.AllocatedMemorySize,
-                     x2 => x2.JavaExecutables.Count,
-                     x3 => x3.WindowHeight,
-                     x4 => x4.WindowWidth,
-                     x5 => x5.IsFullscreen,
-                     x6 => x6.DirectlyJoinServer,
-                     x7 => x7.ColorIndex,
-                     x8 => x8.IsDarkTheme,
-                     x9 => x9.AfterLaunchAction,
-                     x10 => x10.CustomMinecraftDirectory,
-                     x11 => x11.MinecraftDirectoryType,
-                     (x1, _, x3, x4, x5, x6, x7, x8,x9, x10,x11) => new
-                     {
-                         MemorySize = x1,
-                         Javas = JavaExecutables.Select(x =>
-                             new
-                             {
-                                 ExecutableFile = x.Executable?.FullName,
-                                 x.Version
-                             }),
-                         WindowHeight = x3,
-                         WindowWidth = x4,
-                         IsFullscreen = x5,
-                         DirectlyJoinServer = x6,
-                         Color = x7,
-                         IsDarkTheme = x8,
-                         AfterLaunchAction = x9,
-                         CustomMinecraftDirectory = x10,
-                         MinecraftDirectoryType = x11,
-                     })
-                 .Subscribe(async t =>
-                 {
-                     if (t.CustomMinecraftDirectory != null)
-                     {
+            this.WhenAnyValue(x1 => x1.AllocatedMemorySize,
+                    x2 => x2.JavaExecutables.Count,
+                    x3 => x3.WindowHeight,
+                    x4 => x4.WindowWidth,
+                    x5 => x5.IsFullscreen,
+                    x6 => x6.DirectlyJoinServer,
+                    x7 => x7.ColorIndex,
+                    x8 => x8.IsDarkTheme,
+                    x9 => x9.AfterLaunchAction,
+                    x10 => x10.CustomMinecraftDirectory,
+                    x11 => x11.MinecraftDirectoryType,
+                    (x1, _, x3, x4, x5, x6, x7, x8, x9, x10, x11) => new
+                    {
+                        AllocatedMemorySize = x1,
+                        JavaExecutables = JavaExecutables.Select(x =>
+                            new
+                            {
+                                Executable = x.Executable?.FullName,
+                                x.Version
+                            }),
+                        WindowHeight = x3,
+                        WindowWidth = x4,
+                        IsFullscreen = x5,
+                        DirectlyJoinServer = x6,
+                        ColorIndex = x7,
+                        IsDarkTheme = x8,
+                        AfterLaunchAction = x9,
+                        CustomMinecraftDirectory = x10,
+                        MinecraftDirectoryType = x11,
+                    })
+                .Subscribe(async t =>
+                {
+                    if (t.CustomMinecraftDirectory != null)
+                    {
                         ConfigUtils.MinecraftDirectory = t.CustomMinecraftDirectory;
-                     
-                     }
-                     await t.WriteConfigAsync();
-                 });
+
+                    }
+
+                    await t.WriteConfigAsync();
+                });
 
             #endregion
         }

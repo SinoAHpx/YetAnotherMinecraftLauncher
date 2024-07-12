@@ -15,7 +15,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<string> TitleProperty =
-            AvaloniaProperty.Register<InteractiveItem, string>(nameof(Title));
+            AvaloniaProperty.Register<DownloadableItem, string>(nameof(Title));
 
 
         public string Title
@@ -25,7 +25,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<string> SubtitleProperty =
-            AvaloniaProperty.Register<InteractiveItem, string>(nameof(Subtitle));
+            AvaloniaProperty.Register<DownloadableItem, string>(nameof(Subtitle));
 
 
         public string Subtitle
@@ -35,7 +35,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<IImageBrushSource> AvatarProperty =
-            AvaloniaProperty.Register<InteractiveItem, IImageBrushSource>(nameof(Avatar));
+            AvaloniaProperty.Register<DownloadableItem, IImageBrushSource>(nameof(Avatar));
 
         public IImageBrushSource Avatar
         {
@@ -44,7 +44,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<ICommand> DownloadActionProperty =
-            AvaloniaProperty.Register<InteractiveItem, ICommand>(nameof(DownloadAction));
+            AvaloniaProperty.Register<DownloadableItem, ICommand>(nameof(DownloadAction));
 
         public ICommand DownloadAction
         {
