@@ -44,9 +44,9 @@ namespace YetAnotherMinecraftLauncher.Views.Controls
         }
 
         public static readonly StyledProperty<ICommand> DownloadActionProperty =
-            AvaloniaProperty.Register<InteractiveItem, ICommand>(nameof(SelectAction));
+            AvaloniaProperty.Register<InteractiveItem, ICommand>(nameof(DownloadAction));
 
-        public ICommand SelectAction
+        public ICommand DownloadAction
         {
             get => GetValue(DownloadActionProperty);
             set => SetValue(DownloadActionProperty, value);

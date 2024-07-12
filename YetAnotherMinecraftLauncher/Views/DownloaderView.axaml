@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.DownloaderView">
-	<Grid RowDefinitions="1.5*, 8*">
+	<Grid RowDefinitions="2.5*, 7.5*">
         <StackPanel Margin="10">
             <Button Command="{Binding ReturnCommand}" HorizontalAlignment="Left" Classes="Flat">
                 <StackPanel Orientation="Horizontal">
@@ -17,13 +18,17 @@
                                VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
+            <TextBox Text="{Binding SearchTerm}"
+                     Theme="{StaticResource OutlineTextBox}"
+                     assists:TextFieldAssist.Label="Search"
+                     Margin="0,0,0,10"/>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <CheckBox IsChecked="{Binding ShowRelease}" Content="Release" Margin="10,0,0,0"/>
                 <CheckBox IsChecked="{Binding ShowSnapshot}" Content="Snapshot" Margin="10,0,0,0"/>
                 <CheckBox IsChecked="{Binding ShowAncient}" Content="Ancient" Margin="10,0,0,0"/>
 			</StackPanel>
         </StackPanel>
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" Margin="0,0,0,10">
             <ItemsControl ItemsSource="{Binding DownloadableVersions}" />
         </ScrollViewer>
     </Grid>
