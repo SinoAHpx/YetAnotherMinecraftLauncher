@@ -13,6 +13,8 @@ using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using DialogHostAvalonia;
+using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
 
@@ -62,6 +64,18 @@ public class DownloaderViewModel : ViewModelBase
         MessageBus.Current.SendMessage(nameof(ReturnToHome));
     }
 
+    public void DownloadVersion(string id)
+    {
+        DialogHost.Show(new AlertDialog
+        {
+            Message = $"The version to be downloaded is: {id}",
+            DismissActionCommand = ReactiveCommand.Create(() =>
+            {
+                DialogHost.Close(null);
+            })
+        });
+    }
+
     #endregion
 
     public DownloaderViewModel()
@@ -94,7 +108,8 @@ public class DownloaderViewModel : ViewModelBase
                             MinecraftJsonType.Snapshot => "Snapshot",
                             MinecraftJsonType.OldAlpha or MinecraftJsonType.OldBeta => "Ancient"
                         },
-                        Avatar = avatar
+                        Avatar = avatar,
+                        DownloadAction = ReactiveCommand.Create(() => DownloadVersion(minecraft.Id))
                     });
                 }
             });

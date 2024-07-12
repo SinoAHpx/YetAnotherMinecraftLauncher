@@ -25,9 +25,9 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom" >
                     <Button CornerRadius="5"
-                            Width="100" Height="40"
+                            Width="120" Height="40"
                             Foreground="#3f51b5"
-                            Margin="0,-10,-10,-5"
+                            Margin="0,-10,-5,-5"
                             Command="{Binding DownloadAction}"
                             Classes="Flat"
                             Content="DOWNLOAD"/>
