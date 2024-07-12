@@ -11,6 +11,8 @@ using ModuleLauncher.NET.Models.Resources;
 using ModuleLauncher.NET.Utilities;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views.Controls;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
 
@@ -74,10 +76,13 @@ public class DownloaderViewModel : ViewModelBase
 
         Task.Run(async () =>
         {
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            await Task.Delay(TimeSpan.FromSeconds(2));
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 var minecrafts = await DownloaderUtils.GetRemoteMinecraftsAsync();
+                var avatar = new Bitmap(AssetLoader.Open(
+                    new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
+
                 foreach (var minecraft in minecrafts)
                 {
                     DownloadableVersions.Add(new DownloadableItem
@@ -89,12 +94,10 @@ public class DownloaderViewModel : ViewModelBase
                             MinecraftJsonType.Snapshot => "Snapshot",
                             MinecraftJsonType.OldAlpha or MinecraftJsonType.OldBeta => "Ancient"
                         },
-
+                        Avatar = avatar
                     });
                 }
             });
-
-
         });
 
         #endregion
@@ -130,7 +133,6 @@ public class DownloaderViewModel : ViewModelBase
                 }
                 else
                 {
-
                     foreach (var item in DownloadableVersions)
                     {
                         item.IsVisible = (item.Subtitle switch
