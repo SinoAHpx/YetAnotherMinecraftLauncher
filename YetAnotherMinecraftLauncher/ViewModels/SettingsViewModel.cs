@@ -14,6 +14,7 @@ using Material.Styles.Themes.Base;
 using ModuleLauncher.NET.Models.Launcher;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models;
+using YetAnotherMinecraftLauncher.Models.Attributes;
 using YetAnotherMinecraftLauncher.Utils;
 
 namespace YetAnotherMinecraftLauncher.ViewModels
@@ -140,6 +141,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         private string _customMinecraftDirectory;
 
+        [MinecraftDirectory]
         public string CustomMinecraftDirectory
         {
             get => _customMinecraftDirectory;

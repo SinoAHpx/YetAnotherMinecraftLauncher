@@ -4,7 +4,10 @@ using System.Linq;
 using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Avalonia.Threading;
 using Manganese.Array;
+using ModuleLauncher.NET.Models.Resources;
 using ModuleLauncher.NET.Utilities;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views.Controls;
@@ -69,20 +72,34 @@ public class DownloaderViewModel : ViewModelBase
 
         #region Grab versions
 
-        
+        Task.Run(async () =>
+        {
+            await Task.Delay(TimeSpan.FromSeconds(3));
+            await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                var minecrafts = await DownloaderUtils.GetRemoteMinecraftsAsync();
+                foreach (var minecraft in minecrafts)
+                {
+                    DownloadableVersions.Add(new DownloadableItem
+                    {
+                        Title = minecraft.Id,
+                        Subtitle = minecraft.Type switch
+                        {
+                            MinecraftJsonType.Release => "Release",
+                            MinecraftJsonType.Snapshot => "Snapshot",
+                            MinecraftJsonType.OldAlpha or MinecraftJsonType.OldBeta => "Ancient"
+                        },
+
+                    });
+                }
+            });
+
+
+        });
 
         #endregion
 
-        //mocking
-        for (int i = 0; i < 100; i++)
-        {
-            DownloadableVersions.Add(new DownloadableItem
-            {
-                Title = $"Minecraft {i}",
-                Subtitle = (new[] {"Release", "Snapshot", "Ancient"}).Random(),
-                DownloadAction = ReactiveCommand.Create(() => {}) 
-            });
-        }
+
 
         #region Filters
 
@@ -122,7 +139,7 @@ public class DownloaderViewModel : ViewModelBase
                             "Snapshot" => x.Snapshot,
                             "Ancient" => x.Anciet,
                             _ => item.IsVisible
-                        }) && item.Title.Contains(x.SearchTerm);
+                        }) && item.Title.ToLower().Contains(x.SearchTerm.ToLower());
                     }
                 }
 
@@ -134,4 +151,9 @@ public class DownloaderViewModel : ViewModelBase
 
 
     }
+
+    #region Sundry
+
+
+    #endregion
 }

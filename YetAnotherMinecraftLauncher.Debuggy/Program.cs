@@ -1,6 +1,10 @@
 ﻿using Manganese.Array;
 using Manganese.Process;
 using ModuleLauncher.NET.Authentications;
+using System;
+using ModuleLauncher.NET.Models.Resources;
+using ModuleLauncher.NET.Resources;
+using ModuleLauncher.NET.Utilities;
 
 namespace YetAnotherMinecraftLauncher.Debugy
 {
@@ -8,9 +12,8 @@ namespace YetAnotherMinecraftLauncher.Debugy
     {
         static void Main(string[] args)
         {
-            var ms = new MicrosoftAuthenticator();
-            Console.WriteLine(ms.LoginUrl);
-            ms.LoginUrl.OpenUrl();
+            var resolver = new MinecraftResolver();
+            
         }
     }
 }

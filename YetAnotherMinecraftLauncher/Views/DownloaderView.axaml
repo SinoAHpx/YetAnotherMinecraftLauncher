@@ -5,9 +5,13 @@
              xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:converters="clr-namespace:YetAnotherMinecraftLauncher.Models.Converters"
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.DownloaderView">
-	<Grid RowDefinitions="2.5*, 7.5*">
+    <UserControl.Resources>
+		<converters:ItemCountToVisibilityConverter x:Key="ItemCountToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid RowDefinitions="2.5*, 7.5*">
         <StackPanel Margin="10">
             <Button Command="{Binding ReturnCommand}" HorizontalAlignment="Left" Classes="Flat">
                 <StackPanel Orientation="Horizontal">
@@ -29,7 +33,8 @@
 			</StackPanel>
         </StackPanel>
         <ScrollViewer Grid.Row="1" Margin="0,0,0,10">
-            <ItemsControl ItemsSource="{Binding DownloadableVersions}" />
+            <ItemsControl Name="ItemsControl_DownloadableVersions" ItemsSource="{Binding DownloadableVersions}" />
         </ScrollViewer>
+        <ProgressBar IsVisible="{Binding #ItemsControl_DownloadableVersions.ItemCount, Converter={StaticResource ItemCountToVisibilityConverter}}" Grid.Row="1" Classes="circular" IsIndeterminate="True" Width="80" Height="80"/>
     </Grid>
 </UserControl>

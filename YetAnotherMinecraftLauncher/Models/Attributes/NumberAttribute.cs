@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Manganese.Text;
 
-namespace YetAnotherMinecraftLauncher.Models
+namespace YetAnotherMinecraftLauncher.Models.Attributes
 {
     internal class NumberAttribute : ValidationAttribute
     {
