@@ -55,9 +55,9 @@ public class VersionsViewModel : ViewModelBase
         MessageBus.Current.SendMessage(item, "Versions");
     }
 
-    public void RemoveVersion(SelectiveItem item)
+    public async void RemoveVersion(SelectiveItem item)
     {
-        if (new ConfirmDialog().ShowDialog("Are you sure about removing this account?"))
+        if (await new ConfirmDialog().ShowDialogAsync("Are you sure about removing this account?"))
         {
             VersionsList.Remove(item);
         }

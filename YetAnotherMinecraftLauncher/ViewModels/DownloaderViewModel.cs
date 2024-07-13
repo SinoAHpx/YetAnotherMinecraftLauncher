@@ -70,6 +70,7 @@ public class DownloaderViewModel : ViewModelBase
 
     public void DownloadVersion(string id)
     {
+        //todo: this is mocking
         DialogHost.Show(new AlertDialog
         {
             Message = $"The version to be downloaded is: {id}",

@@ -16,6 +16,10 @@ namespace YetAnotherMinecraftLauncher.Models.Attributes
         {
             if (value is string rawSize)
             {
+                if (!rawSize.IsInt32())
+                {
+                    return false;
+                }
                 var bounds = LifetimeUtils.GetMainWindow()?.Screens.Primary?.Bounds;
 
                 if (bounds != null)
@@ -31,6 +35,7 @@ namespace YetAnotherMinecraftLauncher.Models.Attributes
 
                 return rawSize.IsInt32();
 
+
             }
             return false;
 
@@ -43,6 +48,11 @@ namespace YetAnotherMinecraftLauncher.Models.Attributes
         {
             if (value is string rawSize)
             {
+                if (!rawSize.IsInt32())
+                {
+                    return false;
+                }
+
                 var bounds = LifetimeUtils.GetMainWindow()?.Screens.Primary?.Bounds;
 
                 if (bounds != null)

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
@@ -44,7 +45,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
         public static readonly StyledProperty<string> MessageProperty =
             AvaloniaProperty.Register<ConfirmDialog, string>(nameof(Message));
 
-        public bool ShowDialog(string message)
+        public async Task<bool> ShowDialogAsync(string message)
         {
             Message = message;
             var result = false;
@@ -59,7 +60,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
                 DialogHost.Close(null);
             });
 
-            DialogHost.Show(this);
+            await DialogHost.Show(this);
 
             return result;
         }

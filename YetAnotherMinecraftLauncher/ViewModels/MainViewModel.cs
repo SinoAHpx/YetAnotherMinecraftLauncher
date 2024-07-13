@@ -127,17 +127,12 @@ public class MainViewModel : ViewModelBase
     {
         if (!ConfigUtils.CheckConfig())
         {
-            DialogHost.Show(new AlertDialog()
-            {
-                Message = "Certain configs are not properly set.",
-                DismissActionCommand = ReactiveCommand.Create(() =>
-                {
-                    DialogHost.Close(null);
-                    InteractSetting();
-                })
-            });
+            await new AlertDialog().ShowDialogAsync("Certain configs are not properly set.");
+            InteractSetting();
+            return;
         }
 
+        //todo: this is pilot-only codes, needs more tweaks
         var resolver = ConfigUtils.GetMinecraftResolver();
         var mc = resolver.GetMinecraft(VersionName);
         var process = await mc

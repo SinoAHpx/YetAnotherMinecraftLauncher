@@ -1,6 +1,9 @@
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using System.Windows.Input;
+using DialogHostAvalonia;
+using ReactiveUI;
 
 namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
 {
@@ -30,5 +33,13 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
 
         public static readonly StyledProperty<string> MessageProperty =
             AvaloniaProperty.Register<AlertDialog, string>(nameof(Message));
+
+        public async Task ShowDialogAsync(string message)
+        {
+            Message = message;
+            DismissActionCommand = ReactiveCommand.Create(() => DialogHost.Close(null));
+
+            await DialogHost.Show(this);
+        }
     }
 }

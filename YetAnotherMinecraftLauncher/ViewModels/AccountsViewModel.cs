@@ -51,23 +51,9 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             {
                 MessageBus.Current.SendMessage(authResult, "Accounts");
             });
-            //todo: refactor this
             authResult.RemoveAction = ReactiveCommand.Create(async () =>
             {
-                var dialog = new ConfirmDialog
-                {
-                    Message = "Deletion cannot be undone",
-                    CancelActionCommand = ReactiveCommand.Create(() =>
-                    {
-                        DialogHost.Close(null);
-                    }),
-                    ConfirmActionCommand = ReactiveCommand.Create(() =>
-                    {
-                        AccountsList.Remove(authResult);
-                        DialogHost.Close(null);
-                    })
-                };
-                await DialogHost.Show(dialog);
+                await new ConfirmDialog().ShowDialogAsync("Deletion cannot be undone");
             });
             AccountsList.Add(authResult);
         }
