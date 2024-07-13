@@ -330,6 +330,15 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                     await t.WriteConfigAsync();
                 });
 
+            this.WhenAnyValue(x => x.CustomMinecraftDirectory,
+                    y => y.MinecraftDirectoryType,
+                    (x, y) => new { CustomMinecraftDirectory = x, MinecraftDirectoryType = y })
+                .Subscribe(x =>
+                {
+                    //actually we don't 
+                    MessageBus.Current.SendMessage(x.CustomMinecraftDirectory, "UpdateVersions");
+                });
+
             #endregion
         }
 

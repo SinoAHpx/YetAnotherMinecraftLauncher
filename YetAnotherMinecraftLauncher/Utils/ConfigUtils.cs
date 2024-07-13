@@ -75,8 +75,17 @@ public static class ConfigUtils
     public static MinecraftResolver GetMinecraftResolver()
     {
         var minecraftDirectoryType = ReadConfig("MinecraftDirectoryType")!.ToInt32();
-        return minecraftDirectoryType == 0
+        var resolver = minecraftDirectoryType == 0
             ? new MinecraftResolver(".minecraft")
             : new MinecraftResolver(ReadConfig("CustomMinecraftDirectory"));
+
+        Directory.CreateDirectory(resolver.RootPath.CombinePath("versions"));
+
+        if (!Directory.Exists(resolver.RootPath))
+        {
+            Directory.CreateDirectory(resolver.RootPath);
+        }
+
+        return resolver;
     }
 }
