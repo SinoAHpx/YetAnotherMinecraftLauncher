@@ -222,9 +222,23 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         }
 
 
-        private void BrowseMinecraftDirectory()
+        private async void BrowseMinecraftDirectory()
         {
+            var storageProvider = TopLevel.GetTopLevel(LifetimeUtils.GetMainWindow())!.StorageProvider;
 
+            var pickResult = await storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
+            {
+                Title = "Browse java executable file",
+                AllowMultiple = false,
+            });
+            if (pickResult.Count < 1)
+            {
+                return;
+            }
+
+            var mcDir = pickResult.Single().Path.LocalPath;
+
+            CustomMinecraftDirectory = mcDir;
         }
 
         #endregion
@@ -316,7 +330,6 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                     if (t.CustomMinecraftDirectory != null)
                     {
                         ConfigUtils.MinecraftDirectory = t.CustomMinecraftDirectory;
-
                     }
 
                     await t.WriteConfigAsync();
