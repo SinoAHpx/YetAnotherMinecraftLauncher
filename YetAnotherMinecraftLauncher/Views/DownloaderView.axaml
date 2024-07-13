@@ -9,7 +9,7 @@
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.DownloaderView">
     <UserControl.Resources>
-		<converters:ItemCountToVisibilityConverter x:Key="ItemCountToVisibilityConverter"/>
+		<converters:ZeroToVisibilityConverter x:Key="ItemCountToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid RowDefinitions="2.5*, 7.5*">
         <StackPanel Margin="10">
