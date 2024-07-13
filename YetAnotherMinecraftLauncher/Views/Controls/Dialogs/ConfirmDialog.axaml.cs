@@ -2,6 +2,8 @@ using System;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
+using DialogHostAvalonia;
+using ReactiveUI;
 
 namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
 {
@@ -41,5 +43,25 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
 
         public static readonly StyledProperty<string> MessageProperty =
             AvaloniaProperty.Register<ConfirmDialog, string>(nameof(Message));
+
+        public bool ShowDialog(string message)
+        {
+            Message = message;
+            var result = false;
+            ConfirmActionCommand = ReactiveCommand.Create(() =>
+            {
+                result = true;
+                DialogHost.Close(null);
+            });
+            CancelActionCommand = ReactiveCommand.Create(() =>
+            {
+                result = false;
+                DialogHost.Close(null);
+            });
+
+            DialogHost.Show(this);
+
+            return result;
+        }
     }
 }

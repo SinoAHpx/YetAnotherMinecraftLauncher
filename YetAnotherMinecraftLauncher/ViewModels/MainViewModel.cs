@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Reactive;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DialogHostAvalonia;
+using Manganese.Process;
 using Material.Dialog.Views;
+using ModuleLauncher.NET.Models.Launcher;
+using ModuleLauncher.NET.Utilities;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
@@ -119,7 +123,7 @@ public class MainViewModel : ViewModelBase
         MainViewIndex = 4;
     }
 
-    public void InteractLaunch()
+    public async void InteractLaunch()
     {
         if (!ConfigUtils.CheckConfig())
         {
@@ -132,6 +136,28 @@ public class MainViewModel : ViewModelBase
                     InteractSetting();
                 })
             });
+        }
+
+        var resolver = ConfigUtils.GetMinecraftResolver();
+        var mc = resolver.GetMinecraft(VersionName);
+        var process = await mc
+            .WithJava(new MinecraftJava
+            {
+                Executable = new FileInfo("C:\\Program Files\\Eclipse Adoptium\\jre-17.0.11.9-hotspot\\bin\\javaw.exe"),
+                Version = 17
+            })
+            .WithJava(new MinecraftJava
+            {
+                Executable = new FileInfo(@"C:\Program Files\Eclipse Adoptium\jre-21.0.3.9-hotspot\bin\javaw.exe"),
+                Version = 21
+            })
+            .WithAuthentication("AHpx")
+            .WithLauncherName("YAML Pilot")
+            .LaunchAsync();
+
+        while (await process.ReadOutputLineAsync() is { } output)
+        {
+            Console.WriteLine(output);
         }
     }
 
@@ -150,10 +176,10 @@ public class MainViewModel : ViewModelBase
         #endregion
 
         //todo: some mocking values for diagnosing
-        #region Version
+        #region Version placement
 
-        VersionType = "Vanilla";
-        VersionName = "1.8.9";
+        // VersionType = "Vanilla";
+        VersionName = "Please Select";
         VersionAvatar = new(AssetLoader.Open(
             new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
 
@@ -161,8 +187,8 @@ public class MainViewModel : ViewModelBase
 
         #region Account
 
-        AccountType = "Microsoft";
-        AccountName = "AHpx";
+        // AccountType = "Microsoft";
+        AccountName = "Please Select";
         AccountAvatar = new(AssetLoader.Open(
             new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png")));
 
@@ -183,12 +209,21 @@ public class MainViewModel : ViewModelBase
             }
         });
 
-        MessageBus.Current.Listen<SelectiveItem>().Subscribe(s =>
+        MessageBus.Current.Listen<SelectiveItem>("Accounts").Subscribe(s =>
         {
             AccountAvatar = (Bitmap)s.Avatar;
             AccountName = s.Title;
             AccountType = s.Subtitle;
-            AccountActionCommand = AccountActionCommand = ReactiveCommand.Create(InteractAccount);
+            AccountActionCommand = ReactiveCommand.Create(InteractAccount);
+
+            MainViewIndex = 0;
+        });
+        MessageBus.Current.Listen<SelectiveItem>("Versions").Subscribe(s =>
+        {
+            VersionAvatar = (Bitmap)s.Avatar;
+            VersionName= s.Title;
+            VersionType= s.Subtitle;
+            VersionActionCommand = ReactiveCommand.Create(InteractVersion);
 
             MainViewIndex = 0;
         });

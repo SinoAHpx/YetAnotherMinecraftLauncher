@@ -49,8 +49,9 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
             authResult.SelectAction = ReactiveCommand.Create(() =>
             {
-                MessageBus.Current.SendMessage(authResult);
+                MessageBus.Current.SendMessage(authResult, "Accounts");
             });
+            //todo: refactor this
             authResult.RemoveAction = ReactiveCommand.Create(async () =>
             {
                 var dialog = new ConfirmDialog
