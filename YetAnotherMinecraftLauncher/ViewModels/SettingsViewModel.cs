@@ -327,11 +327,6 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                     })
                 .Subscribe(async t =>
                 {
-                    if (t.CustomMinecraftDirectory != null)
-                    {
-                        ConfigUtils.MinecraftDirectory = t.CustomMinecraftDirectory;
-                    }
-
                     await t.WriteConfigAsync();
                 });
 

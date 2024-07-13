@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Manganese.IO;
@@ -71,12 +72,11 @@ public static class ConfigUtils
         return true;
     }
 
-    public static string MinecraftDirectory { get; set; }
-
-    private static MinecraftResolver? _minecraftResolver;
-
     public static MinecraftResolver GetMinecraftResolver()
     {
-        return _minecraftResolver ??= new MinecraftResolver(MinecraftDirectory);
+        var minecraftDirectoryType = ReadConfig("MinecraftDirectoryType")!.ToInt32();
+        return minecraftDirectoryType == 0
+            ? new MinecraftResolver(".minecraft")
+            : new MinecraftResolver(ReadConfig("CustomMinecraftDirectory"));
     }
 }
