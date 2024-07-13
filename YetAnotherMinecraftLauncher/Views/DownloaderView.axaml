@@ -30,6 +30,9 @@
                 <CheckBox IsChecked="{Binding ShowRelease}" Content="Release" Margin="10,0,0,0"/>
                 <CheckBox IsChecked="{Binding ShowSnapshot}" Content="Snapshot" Margin="10,0,0,0"/>
                 <CheckBox IsChecked="{Binding ShowAncient}" Content="Ancient" Margin="10,0,0,0"/>
+				<Button Classes="circle flat" Margin="10,0,0,0" Command="{Binding RefreshVersionsCommand}">
+                    <avalonia:MaterialIcon Kind="Refresh"/>
+                </Button>
 			</StackPanel>
         </StackPanel>
         <ScrollViewer Grid.Row="1" Margin="0,0,0,20">

@@ -14,6 +14,7 @@ using YetAnotherMinecraftLauncher.Views.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DialogHostAvalonia;
+using Manganese.Text;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
@@ -21,6 +22,9 @@ namespace YetAnotherMinecraftLauncher.ViewModels;
 public class DownloaderViewModel : ViewModelBase
 {
     public ReactiveCommand<Unit, Unit> ReturnCommand { get; set; }
+
+    public ReactiveCommand<Unit, Unit> RefreshVersionsCommand { get; set; }
+
 
     private bool _showRelease = true;
 
@@ -76,6 +80,14 @@ public class DownloaderViewModel : ViewModelBase
         });
     }
 
+    private readonly string LocalVersionsManifestPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
+        .CombinePath("version_manifest.json");
+
+    public void RefreshVersions()
+    {
+        DownloaderUtils.RefreshLocalVersionsManifestAsync(LocalVersionsManifestPath);
+    }
+
     #endregion
 
     public DownloaderViewModel()
@@ -83,6 +95,7 @@ public class DownloaderViewModel : ViewModelBase
         #region Register commands
 
         ReturnCommand = ReactiveCommand.Create(ReturnToHome);
+        RefreshVersionsCommand = ReactiveCommand.Create(RefreshVersions);
 
         #endregion
 
@@ -90,10 +103,10 @@ public class DownloaderViewModel : ViewModelBase
 
         Task.Run(async () =>
         {
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            await Task.Delay(TimeSpan.FromSeconds(3));
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                var minecrafts = await DownloaderUtils.GetRemoteMinecraftsAsync();
+                var minecrafts = await DownloaderUtils.GetRemoteMinecraftsAsync(LocalVersionsManifestPath);
                 var avatar = new Bitmap(AssetLoader.Open(
                     new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
 
