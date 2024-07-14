@@ -193,26 +193,7 @@ public class MainViewModel : ViewModelBase
 
         #endregion
 
-        //todo: some mocking values for diagnosing
-        #region Version placement
-
-        // VersionType = "Vanilla";
-        VersionName = "Please Select";
-        VersionAvatar = new(AssetLoader.Open(
-            new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
-
-        #endregion
-
-        #region Account
-
-        // AccountType = "Microsoft";
-        AccountName = "Please Select";
-        AccountAvatar = new(AssetLoader.Open(
-            new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png")));
-
-        #endregion
-
-        #region MessageBus receiver
+        #region Navigation receivers
 
         MessageBus.Current.Listen<string>().Subscribe(o =>
         {
@@ -227,6 +208,12 @@ public class MainViewModel : ViewModelBase
             }
         });
 
+        #endregion
+
+        #region Accounts selection
+
+        OfDefaultAccount();
+
         MessageBus.Current.Listen<SelectiveItem>("Accounts").Subscribe(s =>
         {
             AccountAvatar = (Bitmap)s.Avatar;
@@ -236,17 +223,54 @@ public class MainViewModel : ViewModelBase
 
             MainViewIndex = 0;
         });
+        MessageBus.Current.Listen<SelectiveItem>("AccountRemoved").Subscribe(a =>
+        {
+            if (AccountName == a.Title)
+            {
+                OfDefaultAccount();
+            }
+        });
+
+
+        #endregion
+
+        #region Versions selection
+
+        OfDefaultVersion();
+
         MessageBus.Current.Listen<SelectiveItem>("Versions").Subscribe(s =>
         {
             VersionAvatar = (Bitmap)s.Avatar;
-            VersionName= s.Title;
-            VersionType= s.Subtitle;
+            VersionName = s.Title;
+            VersionType = s.Subtitle;
             VersionActionCommand = ReactiveCommand.Create(InteractVersion);
 
             MainViewIndex = 0;
         });
+        MessageBus.Current.Listen<SelectiveItem>("VersionRemoved").Subscribe(a =>
+        {
+            if (VersionName == a.Title)
+            {
+                OfDefaultVersion();
+            }
+        });
 
         #endregion
+    }
 
+    private void OfDefaultAccount()
+    {
+        AccountType = "";
+        AccountName = "Please Select";
+        AccountAvatar = new(AssetLoader.Open(
+            new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png")));
+    }
+
+    private void OfDefaultVersion()
+    {
+        VersionType = "";
+        VersionName = "Please Select";
+        VersionAvatar = new(AssetLoader.Open(
+            new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
     }
 }

@@ -60,7 +60,11 @@ public class VersionsViewModel : ViewModelBase
         if (await new ConfirmDialog().ShowDialogAsync("Removal will only involved with jar and json files, libraries and assets will be ignored. Are you sure about removing this account?"))
         {
             VersionsList.Remove(item);
-            
+            var resolver = ConfigUtils.GetMinecraftResolver();
+            var mc = resolver.GetMinecraft(item.Title);
+            mc.Tree.VersionRoot.Delete(true);
+
+            MessageBus.Current.SendMessage(item,"VersionRemoved");
         }
     }
 

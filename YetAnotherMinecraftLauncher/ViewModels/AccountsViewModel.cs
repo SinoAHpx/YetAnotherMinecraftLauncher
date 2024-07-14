@@ -38,6 +38,22 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             MessageBus.Current.SendMessage(nameof(ReturnToHome));
         }
 
+        public async void RemoveAccount(SelectiveItem item)
+        {
+            if (await new ConfirmDialog().ShowDialogAsync("Deletion cannot be undone"))
+            {
+                AccountsList.Remove(item);
+                //todo: concrete logic is not finished
+                MessageBus.Current.SendMessage(item, "AccountRemoved");
+            }
+
+        }
+
+        public void SelectAccount(SelectiveItem item)
+        {
+            MessageBus.Current.SendMessage(item, "Accounts");
+        }
+
         public async void AddAccount()
         {
             var accountAddingDialog = new AddAccountDialog();
@@ -46,14 +62,14 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             {
                 return;
             }
-
+            
             authResult.SelectAction = ReactiveCommand.Create(() =>
             {
-                MessageBus.Current.SendMessage(authResult, "Accounts");
+                SelectAccount(authResult);
             });
-            authResult.RemoveAction = ReactiveCommand.Create(async () =>
+            authResult.RemoveAction = ReactiveCommand.Create( () =>
             {
-                await new ConfirmDialog().ShowDialogAsync("Deletion cannot be undone");
+                RemoveAccount(authResult);
             });
             AccountsList.Add(authResult);
         }
