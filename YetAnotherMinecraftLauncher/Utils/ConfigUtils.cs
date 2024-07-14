@@ -72,20 +72,25 @@ public static class ConfigUtils
         return true;
     }
 
+    private static MinecraftResolver? _resolverCache;
+
     public static MinecraftResolver GetMinecraftResolver()
     {
+        if (_resolverCache != null)
+            return _resolverCache;
+
         var minecraftDirectoryType = ReadConfig("MinecraftDirectoryType")!.ToInt32();
-        var resolver = minecraftDirectoryType == 0
+        _resolverCache = minecraftDirectoryType == 0
             ? new MinecraftResolver(".minecraft")
             : new MinecraftResolver(ReadConfig("CustomMinecraftDirectory"));
 
-        Directory.CreateDirectory(resolver.RootPath.CombinePath("versions"));
+        Directory.CreateDirectory(_resolverCache.RootPath.CombinePath("versions"));
 
-        if (!Directory.Exists(resolver.RootPath))
+        if (!Directory.Exists(_resolverCache.RootPath))
         {
-            Directory.CreateDirectory(resolver.RootPath);
+            Directory.CreateDirectory(_resolverCache.RootPath);
         }
 
-        return resolver;
+        return _resolverCache;
     }
 }
