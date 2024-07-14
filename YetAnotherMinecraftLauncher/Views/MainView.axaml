@@ -53,14 +53,23 @@
 						</Grid>
 						<!-- Launch Button -->
 						<Button Grid.Row="2"
-                                Content="Launch"
                                 Command="{Binding LaunchActionCommand}"
                                 VerticalAlignment="Bottom"
                                 HorizontalAlignment="Right"
 								Foreground="White"
                                 Margin="10"
                                 CornerRadius="10"
-                                Width="160" Height="60" />
+                                Width="160" Height="60">
+							<StackPanel>
+                                <TextBlock Text="Launch"/>
+								<ProgressBar IsIndeterminate="True" Background="Transparent" IsVisible="{Binding OnLaunching}"/>
+                            </StackPanel>
+                        </Button>
+						<TextBlock Text="{Binding LaunchingOutput}" 
+								   Opacity="40"
+                                   Grid.Row="2" 
+                                   HorizontalAlignment="Left" 
+                                   VerticalAlignment="Bottom"/>
 					</Grid>
 					<!--1-->
                     <views:AccountsView/>

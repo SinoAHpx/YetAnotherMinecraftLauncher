@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reactive;
+using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -98,6 +99,22 @@ public class MainViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> LaunchActionCommand { get; set; }
 
+    private bool _onLaunching;
+
+    public bool OnLaunching
+    {
+        get => _onLaunching;
+        set => this.RaiseAndSetIfChanged(ref _onLaunching, value);
+    }
+
+    private string _launchingOutput;
+
+    public string LaunchingOutput
+    {
+        get => _launchingOutput;
+        set => this.RaiseAndSetIfChanged(ref _launchingOutput, value);
+    }
+
     #endregion
 
     #region Actual logics
@@ -125,6 +142,8 @@ public class MainViewModel : ViewModelBase
 
     public async void InteractLaunch()
     {
+        OnLaunching = true;
+
         if (!ConfigUtils.CheckConfig())
         {
             await new AlertDialog().ShowDialogAsync("Certain configs are not properly set.");
@@ -150,10 +169,14 @@ public class MainViewModel : ViewModelBase
             .WithLauncherName("YAML Pilot")
             .LaunchAsync();
 
+
         while (await process.ReadOutputLineAsync() is { } output)
         {
-            Console.WriteLine(output);
+            LaunchingOutput = output;
         }
+
+        OnLaunching = false;
+        LaunchingOutput = string.Empty; 
     }
 
     #endregion
