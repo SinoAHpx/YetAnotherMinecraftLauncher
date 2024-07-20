@@ -42,4 +42,8 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Controls\DownloadableItem.axaml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Controls\Dialogs\DownloadingDialog.axaml" />
+  </ItemGroup>
 </Project>

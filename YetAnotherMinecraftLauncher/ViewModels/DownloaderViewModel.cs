@@ -5,6 +5,7 @@ using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using Avalonia.Threading;
 using Manganese.Array;
 using ModuleLauncher.NET.Models.Resources;
@@ -68,17 +69,25 @@ public class DownloaderViewModel : ViewModelBase
         MessageBus.Current.SendMessage(nameof(ReturnToHome));
     }
 
-    public void DownloadVersion(string id)
+    public async void DownloadVersion(string id)
     {
-        //todo: this is mocking
-        DialogHost.Show(new AlertDialog
+        var dialog = new DownloadingDialog();
+        dialog.ShowDialogAsync(1000, () =>
         {
-            Message = $"The version to be downloaded is: {id}",
-            DismissActionCommand = ReactiveCommand.Create(() =>
-            {
-                DialogHost.Close(null);
-            })
+            DialogHost.Close(null);
         });
+        ;
+        for (int i = 0; i < 1000; i++)
+        {
+            await Task.Delay(10);
+            dialog.Update(i);
+        }
+
+        if (DialogHost.IsDialogOpen(null))
+        {
+            DialogHost.Close(null);
+
+        }
     }
 
     private readonly string LocalVersionsManifestPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)

@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="YetAnotherMinecraftLauncher.Views.Controls.Dialogs.DownloadingDialog">
+    <Grid Name="Grid" RowDefinitions="1*,8*,1*" Margin="10">
+        <TextBlock FontSize="26" Text="Downloading"/>
+        <ProgressBar Grid.Row="1" 
+                     Classes="Circular"
+                     Value="{Binding CurrentProgress}"
+                     Maximum="{Binding TotalProgress}"
+                     Width="100" Height="100"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center" 
+                     Margin="10"/>
+        <Grid RowDefinitions="*,*" Grid.Row="2">
+			<TextBlock HorizontalAlignment="Center">
+                <Run Text="{Binding CurrentProgress}"/>
+                <Run Text="/"/>
+                <Run Text="{Binding TotalProgress}"/>
+            </TextBlock>
+            <Button Grid.Row="1" 
+                    Command="{Binding CancelCommand}"
+                    HorizontalAlignment="Right" 
+                    Content="Cancel" Classes="Flat"/>
+		</Grid>
+    </Grid>
+</UserControl>
