@@ -114,10 +114,6 @@ public class DownloaderViewModel : ViewModelBase
 
 
         var progress = 1;
-        // downloader.DownloadFileCompleted += (_, _) =>
-        // {
-        //     
-        // };
         foreach (var downloadBatch in downloadBatches)
         {
             try
@@ -150,6 +146,7 @@ public class DownloaderViewModel : ViewModelBase
             
         }
 
+        Messenger.UpdateVersion();
         DialogHost.Close(null);
     }
 

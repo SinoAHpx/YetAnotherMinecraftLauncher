@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
@@ -15,7 +14,6 @@ using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
 using ModuleLauncher.NET.Models.Launcher;
 using ReactiveUI;
-using YetAnotherMinecraftLauncher.Models;
 using YetAnotherMinecraftLauncher.Models.Attributes;
 using YetAnotherMinecraftLauncher.Utils;
 
@@ -336,7 +334,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                 .Subscribe(x =>
                 {
                     //actually we don't 
-                    Messenger.UpdateVersion(x.CustomMinecraftDirectory);
+                    Messenger.UpdateVersion();
                 });
 
             #endregion

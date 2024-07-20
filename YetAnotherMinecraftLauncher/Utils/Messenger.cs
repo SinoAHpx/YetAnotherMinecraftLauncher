@@ -6,9 +6,9 @@ using ReactiveUI;
 /// </summary>
 public static class Messenger
 {
-    public static void UpdateVersion<T>(T message)
+    public static void UpdateVersion()
     {
-        MessageBus.Current.SendMessage(message, "UpdateVersions");
+        MessageBus.Current.SendMessage(string.Empty, "UpdateVersions");
     }
 
     public static void ReturnToHome()
