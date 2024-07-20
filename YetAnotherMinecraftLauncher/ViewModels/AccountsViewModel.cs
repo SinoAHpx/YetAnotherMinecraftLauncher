@@ -35,7 +35,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         //ReturnCommand
         public void ReturnToHome()
         {
-            MessageBus.Current.SendMessage(nameof(ReturnToHome));
+            Messenger.ReturnToHome();
         }
 
         public async void RemoveAccount(SelectiveItem item)
@@ -44,14 +44,14 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             {
                 AccountsList.Remove(item);
                 //todo: concrete logic is not finished
-                MessageBus.Current.SendMessage(item, "AccountRemoved");
+                Messenger.AccountRemoved(item);
             }
 
         }
 
         public void SelectAccount(SelectiveItem item)
         {
-            MessageBus.Current.SendMessage(item, "Accounts");
+            Messenger.AccountSelected(item);
         }
 
         public async void AddAccount()

@@ -214,7 +214,7 @@ public class MainViewModel : ViewModelBase
 
         OfDefaultAccount();
 
-        MessageBus.Current.Listen<SelectiveItem>("Accounts").Subscribe(s =>
+        MessageBus.Current.Listen<SelectiveItem>("AccountSelected").Subscribe(s =>
         {
             AccountAvatar = (Bitmap)s.Avatar;
             AccountName = s.Title;
@@ -238,7 +238,7 @@ public class MainViewModel : ViewModelBase
 
         OfDefaultVersion();
 
-        MessageBus.Current.Listen<SelectiveItem>("Versions").Subscribe(s =>
+        MessageBus.Current.Listen<SelectiveItem>("VersionSelected").Subscribe(s =>
         {
             VersionAvatar = (Bitmap)s.Avatar;
             VersionName = s.Title;

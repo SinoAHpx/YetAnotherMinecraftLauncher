@@ -74,7 +74,7 @@ public class DownloaderViewModel : ViewModelBase
     //ReturnCommand
     public void ReturnToHome()
     {
-        MessageBus.Current.SendMessage(nameof(ReturnToHome));
+        Messenger.ReturnToHome();
     }
 
     public async void DownloadVersion(RemoteMinecraftEntry remoteMinecraft)

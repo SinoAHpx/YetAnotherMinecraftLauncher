@@ -167,7 +167,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         //ReturnCommand
         public void ReturnToHome()
         {
-            MessageBus.Current.SendMessage(nameof(ReturnToHome));
+            Messenger.ReturnToHome();
         }
 
         public async void BrowseJava()
@@ -336,7 +336,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                 .Subscribe(x =>
                 {
                     //actually we don't 
-                    MessageBus.Current.SendMessage(x.CustomMinecraftDirectory, "UpdateVersions");
+                    Messenger.UpdateVersion(x.CustomMinecraftDirectory);
                 });
 
             #endregion

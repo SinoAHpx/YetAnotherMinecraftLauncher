@@ -42,7 +42,7 @@ public class VersionsViewModel : ViewModelBase
     //ReturnCommand
     public void ReturnToHome()
     {
-        MessageBus.Current.SendMessage(nameof(ReturnToHome));
+        Messenger.ReturnToHome();
     }
 
     public void DownloadVersion()
@@ -52,7 +52,7 @@ public class VersionsViewModel : ViewModelBase
 
     public void SelectVersion(SelectiveItem item)
     {
-        MessageBus.Current.SendMessage(item, "Versions");
+        Messenger.VersionSelected(item);
     }
 
     public async void RemoveVersion(SelectiveItem item)
@@ -64,7 +64,7 @@ public class VersionsViewModel : ViewModelBase
             var mc = resolver.GetMinecraft(item.Title);
             mc.Tree.VersionRoot.Delete(true);
 
-            MessageBus.Current.SendMessage(item,"VersionRemoved");
+            Messenger.VersionRemoved(item);
         }
     }
 
