@@ -34,5 +34,22 @@ namespace YetAnotherMinecraftLauncher.ViewModels.Controls.Dialogs
             get => _cancelCommand;
             set => this.RaiseAndSetIfChanged(ref _cancelCommand, value);
         }
+
+
+        private bool _isSingleFile;
+
+        public bool IsSingleFile
+        {
+            get => _isSingleFile;
+            set => this.RaiseAndSetIfChanged(ref _isSingleFile, value);
+        }
+
+        public DownloadingDialogViewModel()
+        {
+            this.WhenAnyValue(x => x.TotalProgress).Subscribe(x =>
+            {
+                IsSingleFile = x == 1;
+            });
+        }
     }
 }

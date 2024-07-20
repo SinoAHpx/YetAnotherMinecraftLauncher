@@ -15,6 +15,7 @@ using YetAnotherMinecraftLauncher.Views.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DialogHostAvalonia;
+using Downloader;
 using Manganese.Text;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 
@@ -69,25 +70,29 @@ public class DownloaderViewModel : ViewModelBase
         MessageBus.Current.SendMessage(nameof(ReturnToHome));
     }
 
-    public async void DownloadVersion(string id)
+    public async void DownloadVersion(RemoteMinecraftEntry remoteMinecraft)
     {
         var dialog = new DownloadingDialog();
-        dialog.ShowDialogAsync(1000, () =>
+        dialog.ShowDialogAsync(1, () =>
         {
             DialogHost.Close(null);
         });
-        ;
-        for (int i = 0; i < 1000; i++)
-        {
-            await Task.Delay(10);
-            dialog.Update(i);
-        }
 
-        if (DialogHost.IsDialogOpen(null))
+        var downloader = new DownloadService(new DownloadConfiguration());
+        var localMinecraft = await remoteMinecraft.ResolveLocalEntryAsync(ConfigUtils.GetMinecraftResolver());
+        downloader.DownloadFileCompleted += (_, _) =>
         {
-            DialogHost.Close(null);
-
-        }
+            dialog.Update(1);
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                if (DialogHost.IsDialogOpen(null))
+                {
+                    DialogHost.Close(null);
+                }
+            });
+            
+        };
+        await downloader.DownloadFileTaskAsync(localMinecraft.GetDownloadUrl(), localMinecraft.Tree.Jar.FullName);
     }
 
     private readonly string LocalVersionsManifestPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
@@ -132,7 +137,7 @@ public class DownloaderViewModel : ViewModelBase
                             MinecraftJsonType.OldAlpha or MinecraftJsonType.OldBeta => "Ancient"
                         },
                         Avatar = avatar,
-                        DownloadAction = ReactiveCommand.Create(() => DownloadVersion(minecraft.Id))
+                        DownloadAction = ReactiveCommand.Create(() => DownloadVersion(minecraft))
                     });
                 }
             });

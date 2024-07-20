@@ -10,6 +10,7 @@
                      Classes="Circular"
                      Value="{Binding CurrentProgress}"
                      Maximum="{Binding TotalProgress}"
+                     IsIndeterminate="{Binding IsSingleFile}"
                      Width="100" Height="100"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Center" 
