@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Avalonia.Threading;
@@ -16,7 +18,12 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DialogHostAvalonia;
 using Downloader;
+using DynamicData;
+using Manganese.IO;
 using Manganese.Text;
+using MoreLinq;
+using Polly;
+using Polly.Retry;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
@@ -72,27 +79,78 @@ public class DownloaderViewModel : ViewModelBase
 
     public async void DownloadVersion(RemoteMinecraftEntry remoteMinecraft)
     {
+        var cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = cancellationTokenSource.Token;
         var dialog = new DownloadingDialog();
-        dialog.ShowDialogAsync(1, () =>
+        dialog.ShowDialogAsync(() =>
         {
             DialogHost.Close(null);
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
         });
-
-        var downloader = new DownloadService(new DownloadConfiguration());
+        
         var localMinecraft = await remoteMinecraft.ResolveLocalEntryAsync(ConfigUtils.GetMinecraftResolver());
-        downloader.DownloadFileCompleted += (_, _) =>
+
+        var libraries = localMinecraft.GetLibraries();
+        var assets = await localMinecraft.GetAssetsAsync();
+
+        var downloadItems = new List<(string url, string path)>
         {
-            dialog.Update(1);
-            Dispatcher.UIThread.Invoke(() =>
-            {
-                if (DialogHost.IsDialogOpen(null))
-                {
-                    DialogHost.Close(null);
-                }
-            });
-            
+            libraries.Where(x => !x.ValidateChecksum()).Select(x => (x.GetDownloadUrl(), x.File.FullName)),
+            assets.Where(x => !x.ValidateChecksum()).Select(x => (x.GetDownloadUrl(), x.File.FullName))
         };
-        await downloader.DownloadFileTaskAsync(localMinecraft.GetDownloadUrl(), localMinecraft.Tree.Jar.FullName);
+        if (!localMinecraft.ValidateChecksum())
+        {
+            downloadItems.Add((localMinecraft.GetDownloadUrl(), localMinecraft.Tree.Jar.FullName));
+        }
+
+        if (downloadItems.Count == 0)
+        {
+            DialogHost.Close(null);
+            return;
+        }
+        var downloadBatches = downloadItems.Batch(10).ToList();
+        dialog.SetTotalProgress(downloadBatches.Count);
+
+
+        var progress = 1;
+        // downloader.DownloadFileCompleted += (_, _) =>
+        // {
+        //     
+        // };
+        foreach (var downloadBatch in downloadBatches)
+        {
+            try
+            {
+                await Parallel.ForEachAsync(downloadBatch, cancellationToken, async (tuple, token) =>
+                {
+                    var pipeline = new ResiliencePipelineBuilder()
+                        .AddRetry(new RetryStrategyOptions
+                        {
+                            ShouldHandle = new PredicateBuilder().Handle<Exception>(),
+                            Delay = TimeSpan.FromSeconds(3),
+                            MaxRetryAttempts = int.MaxValue,
+                            BackoffType = DelayBackoffType.Constant
+                        })
+                        .Build();
+
+                    await pipeline.ExecuteAsync(async (_) =>
+                    {
+                        var downloader = new DownloadService();
+                        Console.WriteLine($"{tuple.url}");
+                        await downloader.DownloadFileTaskAsync(tuple.url, tuple.path);
+                    }, token);
+                });
+                dialog.Update(progress++);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
+        }
+
+        DialogHost.Close(null);
     }
 
     private readonly string LocalVersionsManifestPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)

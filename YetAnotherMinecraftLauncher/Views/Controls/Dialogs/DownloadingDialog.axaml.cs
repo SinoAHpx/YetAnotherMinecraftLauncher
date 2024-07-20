@@ -32,6 +32,21 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
             return this;
         }
 
+        public async Task<DownloadingDialog> ShowDialogAsync(Action cancelAction)
+        {
+            _viewModel.TotalProgress = 0;
+            _viewModel.CurrentProgress = 0;
+            _viewModel.CancelCommand = ReactiveCommand.Create(cancelAction);
+            await DialogHost.Show(this);
+
+            return this;
+        }
+
+        public void SetTotalProgress(int totalProgress)
+        {
+            _viewModel.TotalProgress = totalProgress;
+        }
+
         public void Update(int currentProgress)
         {
             _viewModel.CurrentProgress = currentProgress;
