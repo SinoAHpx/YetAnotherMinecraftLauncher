@@ -24,6 +24,7 @@ using Manganese.Text;
 using MoreLinq;
 using Polly;
 using Polly.Retry;
+using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
@@ -74,7 +75,7 @@ public class DownloaderViewModel : ViewModelBase
     //ReturnCommand
     public void ReturnToHome()
     {
-        Messenger.ReturnToHome();
+        MessageBusRoutes.ReturnToHome.DriveTo();
     }
 
     public async void DownloadVersion(RemoteMinecraftEntry remoteMinecraft)
@@ -153,7 +154,7 @@ public class DownloaderViewModel : ViewModelBase
             
         }
 
-        Messenger.UpdateVersion();
+        MessageBusRoutes.UpdateVersions.DriveTo();
         DialogHost.Close(null);
     }
 

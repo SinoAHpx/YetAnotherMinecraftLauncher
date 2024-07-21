@@ -11,6 +11,7 @@ using Material.Dialog.Views;
 using ModuleLauncher.NET.Models.Launcher;
 using ModuleLauncher.NET.Utilities;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
 using YetAnotherMinecraftLauncher.Views.Controls;
@@ -195,17 +196,14 @@ public class MainViewModel : ViewModelBase
 
         #region Navigation receivers
 
-        MessageBus.Current.Listen<string>().Subscribe(o =>
+        MessageBusRoutes.ReturnToHome.Subscribe<string>(_ =>
         {
-            if (o.Contains("Return"))
-            {
-                MainViewIndex = 0;
-            }
+            MainViewIndex = 0;
+        });
 
-            if (o.Contains("Download"))
-            {
-                MainViewIndex = 3;
-            }
+        MessageBusRoutes.ToDownload.Subscribe<string>(_ =>
+        {
+            MainViewIndex = 3;
         });
 
         #endregion
@@ -214,7 +212,7 @@ public class MainViewModel : ViewModelBase
 
         OfDefaultAccount();
 
-        MessageBus.Current.Listen<SelectiveItem>("AccountSelected").Subscribe(s =>
+        MessageBusRoutes.SelectAccount.Subscribe<SelectiveItem>(s =>
         {
             AccountAvatar = (Bitmap)s.Avatar;
             AccountName = s.Title;
@@ -223,7 +221,7 @@ public class MainViewModel : ViewModelBase
 
             MainViewIndex = 0;
         });
-        MessageBus.Current.Listen<SelectiveItem>("AccountRemoved").Subscribe(a =>
+        MessageBusRoutes.RemoveAccount.Subscribe<SelectiveItem>(a =>
         {
             if (AccountName == a.Title)
             {
@@ -238,7 +236,7 @@ public class MainViewModel : ViewModelBase
 
         OfDefaultVersion();
 
-        MessageBus.Current.Listen<SelectiveItem>("VersionSelected").Subscribe(s =>
+        MessageBusRoutes.SelectVersion.Subscribe<SelectiveItem>(s =>
         {
             VersionAvatar = (Bitmap)s.Avatar;
             VersionName = s.Title;
@@ -247,7 +245,7 @@ public class MainViewModel : ViewModelBase
 
             MainViewIndex = 0;
         });
-        MessageBus.Current.Listen<SelectiveItem>("VersionRemoved").Subscribe(a =>
+        MessageBusRoutes.RemoveVersion.Subscribe<SelectiveItem>(a =>
         {
             if (VersionName == a.Title)
             {

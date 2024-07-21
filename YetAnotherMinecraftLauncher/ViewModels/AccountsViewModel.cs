@@ -10,6 +10,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DialogHostAvalonia;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Views;
 using YetAnotherMinecraftLauncher.Views.Controls;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
@@ -35,7 +36,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         //ReturnCommand
         public void ReturnToHome()
         {
-            Messenger.ReturnToHome();
+            MessageBusRoutes.ReturnToHome.DriveTo();
         }
 
         public async void RemoveAccount(SelectiveItem item)
@@ -44,14 +45,14 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             {
                 AccountsList.Remove(item);
                 //todo: concrete logic is not finished
-                Messenger.AccountRemoved(item);
+                MessageBusRoutes.RemoveAccount.DriveToWith(item);
             }
 
         }
 
         public void SelectAccount(SelectiveItem item)
         {
-            Messenger.AccountSelected(item);
+            MessageBusRoutes.SelectAccount.DriveToWith(item);
         }
 
         public async void AddAccount()

@@ -16,6 +16,7 @@ using Material.Styles.Themes.Base;
 using ModuleLauncher.NET.Models.Launcher;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Attributes;
+using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 
 namespace YetAnotherMinecraftLauncher.ViewModels
@@ -166,7 +167,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         //ReturnCommand
         public void ReturnToHome()
         {
-            Messenger.ReturnToHome();
+            MessageBusRoutes.ReturnToHome.DriveTo();
         }
 
         public async void BrowseJava()
@@ -344,7 +345,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                 .Subscribe(x =>
                 {
                     //actually we don't 
-                    Messenger.UpdateVersion();
+                    MessageBusRoutes.UpdateVersions.DriveTo();
                 });
 
             #endregion

@@ -9,6 +9,7 @@ using DialogHostAvalonia;
 using Manganese.Array;
 using Manganese.IO;
 using ModuleLauncher.NET.Utilities;
+using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views.Controls;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
@@ -42,17 +43,17 @@ public class VersionsViewModel : ViewModelBase
     //ReturnCommand
     public void ReturnToHome()
     {
-        Messenger.ReturnToHome();
+        MessageBusRoutes.ReturnToHome.DriveTo();
     }
 
     public void DownloadVersion()
     {
-        MessageBus.Current.SendMessage(nameof(DownloadVersion));
+        MessageBusRoutes.ToDownload.DriveTo();
     }
 
     public void SelectVersion(SelectiveItem item)
     {
-        Messenger.VersionSelected(item);
+        MessageBusRoutes.SelectVersion.DriveToWith(item);
     }
 
     public async void RemoveVersion(SelectiveItem item)
@@ -65,7 +66,7 @@ public class VersionsViewModel : ViewModelBase
             var mc = resolver!.GetMinecraft(item.Title);
             mc.Tree.VersionRoot.Delete(true);
 
-            Messenger.VersionRemoved(item);
+            MessageBusRoutes.RemoveVersion.DriveToWith(item);
         }
     }
 
@@ -84,7 +85,7 @@ public class VersionsViewModel : ViewModelBase
 
         UpdateVersions();
 
-        MessageBus.Current.Listen<string>("UpdateVersions").Subscribe(_ =>
+        MessageBusRoutes.UpdateVersions.Subscribe<string>(_ =>
         {
             UpdateVersions();
         });
