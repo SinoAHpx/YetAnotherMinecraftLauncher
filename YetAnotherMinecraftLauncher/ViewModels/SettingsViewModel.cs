@@ -7,6 +7,7 @@ using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using DynamicData.Binding;
 using Manganese.Number;
 using Manganese.Process;
 using Manganese.Text;

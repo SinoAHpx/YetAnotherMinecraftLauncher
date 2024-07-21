@@ -48,12 +48,16 @@ xmlns:assists="using:Material.Styles.Assists"
                     </ComboBox>
 
 				    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Command="{Binding RemoveJavaCommand}"
+						<Button Command="{Binding RemoveJavaCommand}"
                                 CommandParameter="{Binding #ComboBox_JavaExecutables.SelectedIndex}"
                                 Content="Remove"  Width="100"
                                 Theme="{StaticResource MaterialOutlineButton}"
                                 HorizontalAlignment="Right"
-                                Margin="0,10,10,0"/>
+                                Margin="0,10,10,0">
+                            <ToolTip.Tip>
+                                <TextBlock Text="Your executable file will not be deleted on file system."/>
+                            </ToolTip.Tip>
+                        </Button>
                         <Button Command="{Binding BrowseJavaCommand}"
                                 Content="Add"  Width="100"
                                 Theme="{StaticResource MaterialOutlineButton}"
