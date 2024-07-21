@@ -57,11 +57,12 @@ public class VersionsViewModel : ViewModelBase
 
     public async void RemoveVersion(SelectiveItem item)
     {
-        if (await new ConfirmDialog().ShowDialogAsync("Removal will only involved with jar and json files, libraries and assets will be ignored. Are you sure about removing this account?"))
+        if (await new ConfirmDialog().ShowDialogAsync("Removal will only involved with jar and json files, libraries and assets will be ignored. Are you sure about removing this version?"))
         {
-            VersionsList.Remove(item);
             var resolver = ConfigUtils.GetMinecraftResolver();
-            var mc = resolver.GetMinecraft(item.Title);
+
+            VersionsList.Remove(item);
+            var mc = resolver!.GetMinecraft(item.Title);
             mc.Tree.VersionRoot.Delete(true);
 
             Messenger.VersionRemoved(item);
@@ -119,6 +120,10 @@ public class VersionsViewModel : ViewModelBase
     {
         VersionsList.Clear();
         var resolver = ConfigUtils.GetMinecraftResolver();
+        if (resolver is null)
+        {
+            return;
+        }
         var minecrafts = resolver.GetMinecrafts();
         foreach (var minecraft in minecrafts)
         {

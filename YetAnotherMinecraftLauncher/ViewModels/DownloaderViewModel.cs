@@ -79,6 +79,14 @@ public class DownloaderViewModel : ViewModelBase
 
     public async void DownloadVersion(RemoteMinecraftEntry remoteMinecraft)
     {
+        var resolver = ConfigUtils.GetMinecraftResolver();
+        if (resolver is null)
+        {
+            await new AlertDialog().ShowDialogAsync("Maybe you should check your Minecraft directory is properly set?");
+            return;
+        }
+        var localMinecraft = await remoteMinecraft.ResolveLocalEntryAsync(resolver);
+
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
         var dialog = new DownloadingDialog();
@@ -89,7 +97,6 @@ public class DownloaderViewModel : ViewModelBase
             cancellationTokenSource.Dispose();
         });
         
-        var localMinecraft = await remoteMinecraft.ResolveLocalEntryAsync(ConfigUtils.GetMinecraftResolver());
 
         var libraries = localMinecraft.GetLibraries();
         var assets = await localMinecraft.GetAssetsAsync();

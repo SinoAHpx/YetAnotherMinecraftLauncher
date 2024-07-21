@@ -42,10 +42,14 @@ public static class ConfigUtils
 
     public static string? ReadConfig(string key)
     {
-        
         ConfigFile
             .WhenAnyValue(x => x.LastWriteTime)
             .Subscribe(s => ConfigText = ConfigFile.ReadAllText());
+
+        if (ConfigText.IsNullOrEmpty())
+        {
+            return null;
+        }
 
         var configStr = ConfigText.Fetch(key);
         return configStr;
@@ -74,15 +78,30 @@ public static class ConfigUtils
 
     private static MinecraftResolver? _resolverCache;
 
-    public static MinecraftResolver GetMinecraftResolver()
+    public static MinecraftResolver? GetMinecraftResolver()
     {
         if (_resolverCache != null)
             return _resolverCache;
 
-        var minecraftDirectoryType = ReadConfig("MinecraftDirectoryType")!.ToInt32();
-        _resolverCache = minecraftDirectoryType == 0
+        var minecraftDirectoryType = ReadConfig("MinecraftDirectoryType");
+        if (minecraftDirectoryType.IsNullOrEmpty())
+        {
+            return null;
+        }
+        var customMinecraftDirectory = ReadConfig("CustomMinecraftDirectory");
+        if (customMinecraftDirectory.IsNullOrEmpty())
+        {
+            return null;
+        }
+
+        if (!Directory.Exists(customMinecraftDirectory))
+        {
+            return null;
+        }
+
+        _resolverCache = minecraftDirectoryType.ToInt32() == 0
             ? new MinecraftResolver(".minecraft")
-            : new MinecraftResolver(ReadConfig("CustomMinecraftDirectory"));
+            : new MinecraftResolver(customMinecraftDirectory);
 
         Directory.CreateDirectory(_resolverCache.RootPath.CombinePath("versions"));
 

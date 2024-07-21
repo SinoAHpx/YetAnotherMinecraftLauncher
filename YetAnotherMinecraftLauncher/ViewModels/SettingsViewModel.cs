@@ -273,21 +273,25 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
             if (ConfigUtils.ConfigText != string.Empty && ConfigUtils.ConfigText is not null)
             {
+                //nvm null
                 WindowWidth = ConfigUtils.ReadConfig(nameof(WindowWidth));
                 WindowHeight = ConfigUtils.ReadConfig(nameof(WindowHeight));
-                IsFullscreen = bool.Parse(ConfigUtils.ReadConfig(nameof(IsFullscreen))!);
+                AllocatedMemorySize = ConfigUtils.ReadConfig(nameof(AllocatedMemorySize));
+                DirectlyJoinServer = ConfigUtils.ReadConfig(nameof(DirectlyJoinServer));
+
+                //no null accepted, usually this would not happen except config corrupted
+                CustomMinecraftDirectory = ConfigUtils.ReadConfig(nameof(CustomMinecraftDirectory));
+                IsFullscreen = ConfigUtils.ReadConfig(nameof(IsFullscreen)).ToBool();
                 JavaExecutables = new ObservableCollection<MinecraftJava>(ConfigUtils.ConfigText.FetchJToken(nameof(JavaExecutables)).Select(x =>
                     new MinecraftJava
                     {
                         Executable = new FileInfo(x.Fetch("Executable")),
                         Version = 0
                     }));
-                AllocatedMemorySize = ConfigUtils.ReadConfig(nameof(AllocatedMemorySize));
-                DirectlyJoinServer = ConfigUtils.ReadConfig(nameof(DirectlyJoinServer));
+                
                 IsDarkTheme = ConfigUtils.ReadConfig(nameof(IsDarkTheme)).ToBool();
                 ColorIndex = ConfigUtils.ReadConfig(nameof(ColorIndex)).ToInt32();
                 AfterLaunchAction = ConfigUtils.ReadConfig(nameof(AfterLaunchAction)).ToInt32();
-                CustomMinecraftDirectory = ConfigUtils.ReadConfig(nameof(CustomMinecraftDirectory));
                 MinecraftDirectoryType = ConfigUtils.ReadConfig(nameof(MinecraftDirectoryType)).ToInt32();
             }
 
