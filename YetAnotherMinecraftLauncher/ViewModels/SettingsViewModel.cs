@@ -274,25 +274,30 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             if (ConfigUtils.ConfigText != string.Empty && ConfigUtils.ConfigText is not null)
             {
                 //nvm null
-                WindowWidth = ConfigUtils.ReadConfig(nameof(WindowWidth));
-                WindowHeight = ConfigUtils.ReadConfig(nameof(WindowHeight));
-                AllocatedMemorySize = ConfigUtils.ReadConfig(nameof(AllocatedMemorySize));
-                DirectlyJoinServer = ConfigUtils.ReadConfig(nameof(DirectlyJoinServer));
+                WindowWidth = ConfigUtils.ReadConfig(nameof(WindowWidth)) ?? "";
+                WindowHeight = ConfigUtils.ReadConfig(nameof(WindowHeight)) ?? "";
+                AllocatedMemorySize = ConfigUtils.ReadConfig(nameof(AllocatedMemorySize)) ?? "";
+                DirectlyJoinServer = ConfigUtils.ReadConfig(nameof(DirectlyJoinServer)) ?? "";
 
                 //no null accepted, usually this would not happen except config corrupted
-                CustomMinecraftDirectory = ConfigUtils.ReadConfig(nameof(CustomMinecraftDirectory));
-                IsFullscreen = ConfigUtils.ReadConfig(nameof(IsFullscreen)).ToBool();
-                JavaExecutables = new ObservableCollection<MinecraftJava>(ConfigUtils.ConfigText.FetchJToken(nameof(JavaExecutables)).Select(x =>
-                    new MinecraftJava
-                    {
-                        Executable = new FileInfo(x.Fetch("Executable")),
-                        Version = 0
-                    }));
-                
-                IsDarkTheme = ConfigUtils.ReadConfig(nameof(IsDarkTheme)).ToBool();
-                ColorIndex = ConfigUtils.ReadConfig(nameof(ColorIndex)).ToInt32();
-                AfterLaunchAction = ConfigUtils.ReadConfig(nameof(AfterLaunchAction)).ToInt32();
-                MinecraftDirectoryType = ConfigUtils.ReadConfig(nameof(MinecraftDirectoryType)).ToInt32();
+                CustomMinecraftDirectory = ConfigUtils.ReadConfig(nameof(CustomMinecraftDirectory)) ?? "";
+                IsFullscreen = ConfigUtils.ReadConfig(nameof(IsFullscreen))?.ToBool() ?? false;
+                var javaJToken = ConfigUtils.ConfigText.FetchJToken(nameof(JavaExecutables));
+
+                //todo; java version is hard-coded here, should be changed
+                JavaExecutables = javaJToken != null
+                    ? new ObservableCollection<MinecraftJava>(javaJToken.Select(x =>
+                        new MinecraftJava
+                        {
+                            Executable = new FileInfo(x.Fetch("Executable")),
+                            Version = 0
+                        }))
+                    : [];
+
+                IsDarkTheme = ConfigUtils.ReadConfig(nameof(IsDarkTheme))?.ToBool() ?? false;
+                ColorIndex = ConfigUtils.ReadConfig(nameof(ColorIndex))?.ToInt32() ?? 0;
+                AfterLaunchAction = ConfigUtils.ReadConfig(nameof(AfterLaunchAction))?.ToInt32() ?? 0;
+                MinecraftDirectoryType = ConfigUtils.ReadConfig(nameof(MinecraftDirectoryType))?.ToInt32() ?? 0;
             }
 
 
