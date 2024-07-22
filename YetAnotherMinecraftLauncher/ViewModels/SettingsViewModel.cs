@@ -291,7 +291,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                         new MinecraftJava
                         {
                             Executable = new FileInfo(x.Fetch("Executable")),
-                            Version = 0
+                            Version = 21
                         }))
                     : [];
 

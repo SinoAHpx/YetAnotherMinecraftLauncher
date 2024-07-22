@@ -138,4 +138,36 @@ public static class ConfigUtils
             return [];
         }
     }
+
+    public static LauncherConfig? GetLauncherConfig()
+    {
+        if (ConfigText.IsNullOrEmpty())
+        {
+            return null;
+        }
+        if (!CheckConfig())
+        {
+            return null;
+        }
+
+        try
+        {
+            var config = new LauncherConfig
+            {
+                WindowWidth = ConfigText.Fetch("WindowWidth").ToInt32(),
+                WindowHeight = ConfigText.Fetch("WindowHeight").ToInt32(),
+                Fullscreen = ConfigText.Fetch("IsFullscreen").ToBool(),
+                DirectlyJoinServer = ConfigText.Fetch("DirectlyJoinServer"),
+                Javas = GetJavas(),
+                MaxMemorySize = ConfigText.Fetch("AllocatedMemorySize").ToInt32()
+            };
+
+            return config;
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
 }

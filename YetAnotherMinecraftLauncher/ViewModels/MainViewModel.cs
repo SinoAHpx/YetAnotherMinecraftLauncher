@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DialogHostAvalonia;
+using DynamicData;
 using Manganese.Process;
 using Manganese.Text;
 using Material.Dialog.Views;
+using ModuleLauncher.NET.Launcher;
 using ModuleLauncher.NET.Models.Launcher;
 using ModuleLauncher.NET.Utilities;
+using Polly;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
@@ -146,14 +151,20 @@ public class MainViewModel : ViewModelBase
     {
         OnLaunching = true;
 
-        if (!ConfigUtils.CheckConfig())
+        var launchConfig = ConfigUtils.GetLauncherConfig();
+        var resolver = ConfigUtils.GetMinecraftResolver();
+        var javas = ConfigUtils.GetJavas();
+
+
+        #region Check configs
+
+        if (launchConfig is null)
         {
             await new AlertDialog().ShowDialogAsync("Certain configs are not properly set.");
             InteractSetting();
             goto end;
         }
 
-        var resolver = ConfigUtils.GetMinecraftResolver();
         if (resolver is null)
         {
             await new AlertDialog().ShowDialogAsync("Certain configs are not properly set.");
@@ -162,7 +173,7 @@ public class MainViewModel : ViewModelBase
 
         }
 
-        if (VersionName.IsNullOrEmpty())
+        if (VersionName.IsNullOrEmpty() || VersionType.IsNullOrEmpty())
         {
             await new AlertDialog().ShowDialogAsync("Please select a version to launch.");
             InteractVersion();
@@ -171,13 +182,12 @@ public class MainViewModel : ViewModelBase
         }
 
         //todo: account selection is not completed
-        if (AccountName.IsNullOrEmpty())
+        if (AccountName.IsNullOrEmpty() || AccountType.IsNullOrEmpty())
         {
-            await new AlertDialog().ShowDialogAsync("Please select a version to launch.");
+            await new AlertDialog().ShowDialogAsync("Please select a account to launch.");
             InteractAccount();
             goto end;
         }
-        var javas = ConfigUtils.GetJavas();
         if (javas.Count == 0)
         {
             await new AlertDialog().ShowDialogAsync("Please add java executable files.");
@@ -185,14 +195,34 @@ public class MainViewModel : ViewModelBase
             goto end;
         }
 
-        //our preparation is done
+        #endregion
+
+
+        //todo: authentication segment is not finished
+        launchConfig.Authentication = AccountName;
+
         //todo: this could be wrong tho
         var minecraft = resolver.GetMinecraft(VersionName);
 
-        // minecraft
-        //     .WithAuthentication()
+        #region Resource completion
 
-        end:
+        await Utils.DownloaderUtils.DownloadAsync(minecraft);
+
+        #endregion
+
+        #region Launching
+
+        var launcher = new Launcher(resolver, launchConfig);
+        var process = await launcher.LaunchAsync(minecraft);
+
+        while (await process.ReadOutputLineAsync() is { } output)
+        {
+            LaunchingOutput = output;
+        }
+
+        #endregion
+
+    end:
         OnLaunching = false;
         LaunchingOutput = string.Empty; 
     }
