@@ -43,17 +43,17 @@ public class VersionsViewModel : ViewModelBase
     //ReturnCommand
     public void ReturnToHome()
     {
-        MessageBusRoutes.ReturnToHome.Knock();
+        MessengerRoutes.ReturnToHome.Knock();
     }
 
     public void DownloadVersion()
     {
-        MessageBusRoutes.ToDownload.Knock();
+        MessengerRoutes.ToDownload.Knock();
     }
 
     public void SelectVersion(SelectiveItem item)
     {
-        MessageBusRoutes.SelectVersion.DriveToWith(item);
+        MessengerRoutes.SelectVersion.KnockWithMessage(item);
     }
 
     public async void RemoveVersion(SelectiveItem item)
@@ -66,7 +66,7 @@ public class VersionsViewModel : ViewModelBase
             var mc = resolver!.GetMinecraft(item.Title);
             mc.Tree.VersionRoot.Delete(true);
 
-            MessageBusRoutes.RemoveVersion.DriveToWith(item);
+            MessengerRoutes.RemoveVersion.KnockWithMessage(item);
         }
     }
 
@@ -85,7 +85,7 @@ public class VersionsViewModel : ViewModelBase
 
         UpdateVersions();
 
-        MessageBusRoutes.UpdateVersions.Subscribe<string>(_ =>
+        MessengerRoutes.UpdateVersions.Subscribe<string>(_ =>
         {
             UpdateVersions();
         });

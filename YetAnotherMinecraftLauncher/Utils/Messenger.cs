@@ -8,42 +8,42 @@ using YetAnotherMinecraftLauncher.Models.Messages;
 /// </summary>
 public static class Messenger
 {
-    public static void Subscribe<T>(this MessageBusRoutes routes, Action<T> onNext)
+    public static void Subscribe<T>(this MessengerRoutes routes, Action<T> onNext)
     {
         MessageBus.Current.Listen<T>(routes.ToString()).Subscribe(onNext);
     }
 
 
-    public static void Knock(this MessageBusRoutes routes)
+    public static void Knock(this MessengerRoutes routes)
     {
         switch (routes)
         {
-            case MessageBusRoutes.ReturnToHome:
+            case MessengerRoutes.ReturnToHome:
                 ReturnToHome();
                 break;
-            case MessageBusRoutes.ToDownload:
+            case MessengerRoutes.ToDownload:
                 ToDownload();
                 break;
-            case MessageBusRoutes.UpdateVersions:
+            case MessengerRoutes.UpdateVersions:
                 UpdateVersion();
                 break;
         }
     }
 
-    public static void DriveToWith<T>(this MessageBusRoutes routes, T message)
+    public static void KnockWithMessage<T>(this MessengerRoutes routes, T message)
     {
         switch (routes)
         {
-            case MessageBusRoutes.RemoveAccount:
+            case MessengerRoutes.RemoveAccount:
                 RemoveAccount(message);
                 break;
-            case MessageBusRoutes.SelectAccount:
+            case MessengerRoutes.SelectAccount:
                 SelectAccount(message);
                 break;
-            case MessageBusRoutes.RemoveVersion:
+            case MessengerRoutes.RemoveVersion:
                 RemoveVersion(message);
                 break;
-            case MessageBusRoutes.SelectVersion:
+            case MessengerRoutes.SelectVersion:
                 SelectVersion(message);
                 break;
         }
@@ -51,36 +51,36 @@ public static class Messenger
 
     private static void UpdateVersion()
     {
-        MessageBus.Current.SendMessage("", MessageBusRoutes.UpdateVersions.ToString());
+        MessageBus.Current.SendMessage("", MessengerRoutes.UpdateVersions.ToString());
     }
 
     private static void ReturnToHome()
     {
-        MessageBus.Current.SendMessage("", MessageBusRoutes.ReturnToHome.ToString());
+        MessageBus.Current.SendMessage("", MessengerRoutes.ReturnToHome.ToString());
     }
 
     private static void ToDownload()
     {
-        MessageBus.Current.SendMessage("",MessageBusRoutes.ToDownload.ToString());
+        MessageBus.Current.SendMessage("",MessengerRoutes.ToDownload.ToString());
     }
 
     private static void RemoveAccount<T>(T message)
     {
-        MessageBus.Current.SendMessage(message, MessageBusRoutes.RemoveAccount.ToString());
+        MessageBus.Current.SendMessage(message, MessengerRoutes.RemoveAccount.ToString());
     }
 
     private static void SelectAccount<T>(T message)
     {
-        MessageBus.Current.SendMessage(message, MessageBusRoutes.SelectAccount.ToString());
+        MessageBus.Current.SendMessage(message, MessengerRoutes.SelectAccount.ToString());
     }
 
     private static void SelectVersion<T>(T message)
     {
-        MessageBus.Current.SendMessage(message, MessageBusRoutes.SelectAccount.ToString());
+        MessageBus.Current.SendMessage(message, MessengerRoutes.SelectVersion.ToString());
     }
 
     private static void RemoveVersion<T>(T message)
     {
-        MessageBus.Current.SendMessage(message, MessageBusRoutes.RemoveVersion.ToString());
+        MessageBus.Current.SendMessage(message, MessengerRoutes.RemoveVersion.ToString());
     }
 }

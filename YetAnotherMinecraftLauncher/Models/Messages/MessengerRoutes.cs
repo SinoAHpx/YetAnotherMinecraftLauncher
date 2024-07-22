@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YetAnotherMinecraftLauncher.Models.Messages
 {
-    public enum MessageBusRoutes
+    public enum MessengerRoutes
     {
         //navigation
         ReturnToHome,

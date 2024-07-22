@@ -213,12 +213,12 @@ public class MainViewModel : ViewModelBase
 
         #region Navigation receivers
 
-        MessageBusRoutes.ReturnToHome.Subscribe<string>(_ =>
+        MessengerRoutes.ReturnToHome.Subscribe<string>(_ =>
         {
             MainViewIndex = 0;
         });
 
-        MessageBusRoutes.ToDownload.Subscribe<string>(_ =>
+        MessengerRoutes.ToDownload.Subscribe<string>(_ =>
         {
             MainViewIndex = 3;
         });
@@ -229,8 +229,8 @@ public class MainViewModel : ViewModelBase
 
         OfDefaultAccount();
 
-        MessageBusRoutes.SelectAccount.Subscribe<SelectiveItem>(SelectAccount);
-        MessageBusRoutes.RemoveAccount.Subscribe<SelectiveItem>(a =>
+        MessengerRoutes.SelectAccount.Subscribe<SelectiveItem>(SelectAccount);
+        MessengerRoutes.RemoveAccount.Subscribe<SelectiveItem>(a =>
         {
             if (AccountName == a.Title)
             {
@@ -245,8 +245,8 @@ public class MainViewModel : ViewModelBase
 
         OfDefaultVersion();
 
-        MessageBusRoutes.SelectVersion.Subscribe<SelectiveItem>(SelectVersion);
-        MessageBusRoutes.RemoveVersion.Subscribe<SelectiveItem>(a =>
+        MessengerRoutes.SelectVersion.Subscribe<SelectiveItem>(SelectVersion);
+        MessengerRoutes.RemoveVersion.Subscribe<SelectiveItem>(a =>
         {
             if (VersionName == a.Title)
             {

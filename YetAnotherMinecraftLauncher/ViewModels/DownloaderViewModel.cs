@@ -75,7 +75,7 @@ public class DownloaderViewModel : ViewModelBase
     //ReturnCommand
     public void ReturnToHome()
     {
-        MessageBusRoutes.ReturnToHome.Knock();
+        MessengerRoutes.ReturnToHome.Knock();
     }
 
     public async void DownloadVersion(RemoteMinecraftEntry remoteMinecraft)
@@ -154,7 +154,7 @@ public class DownloaderViewModel : ViewModelBase
             
         }
 
-        MessageBusRoutes.UpdateVersions.Knock();
+        MessengerRoutes.UpdateVersions.Knock();
         DialogHost.Close(null);
     }
 
