@@ -36,7 +36,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         //ReturnCommand
         public void ReturnToHome()
         {
-            MessageBusRoutes.ReturnToHome.DriveTo();
+            MessageBusRoutes.ReturnToHome.Knock();
         }
 
         public async void RemoveAccount(SelectiveItem item)

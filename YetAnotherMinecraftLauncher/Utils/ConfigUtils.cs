@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Manganese.IO;
 using Manganese.Text;
+using ModuleLauncher.NET.Models.Launcher;
 using ModuleLauncher.NET.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -76,13 +78,9 @@ public static class ConfigUtils
         return true;
     }
 
-    private static MinecraftResolver? _resolverCache;
 
     public static MinecraftResolver? GetMinecraftResolver()
     {
-        if (_resolverCache != null)
-            return _resolverCache;
-
         var minecraftDirectoryType = ReadConfig("MinecraftDirectoryType");
         if (minecraftDirectoryType.IsNullOrEmpty())
         {
@@ -99,17 +97,45 @@ public static class ConfigUtils
             return null;
         }
 
-        _resolverCache = minecraftDirectoryType.ToInt32() == 0
+        var resolver = minecraftDirectoryType.ToInt32() == 0
             ? new MinecraftResolver(".minecraft")
             : new MinecraftResolver(customMinecraftDirectory);
 
-        Directory.CreateDirectory(_resolverCache.RootPath.CombinePath("versions"));
+        Directory.CreateDirectory(resolver.RootPath.CombinePath("versions"));
 
-        if (!Directory.Exists(_resolverCache.RootPath))
+        if (!Directory.Exists(resolver.RootPath))
         {
-            Directory.CreateDirectory(_resolverCache.RootPath);
+            Directory.CreateDirectory(resolver.RootPath);
         }
 
-        return _resolverCache;
+        return resolver;
+    }
+
+    /// <summary>
+    /// If error occurred, an empty list will be returned.
+    /// </summary>
+    /// <returns></returns>
+    public static List<MinecraftJava> GetJavas()
+    {
+        var rawTokens = ReadConfig("JavaExecutables");
+        if (rawTokens.IsNullOrEmpty())
+        {
+            return [];
+        }
+
+        try
+        {
+            var rawJavas = JArray.Parse(rawTokens);
+
+            return rawJavas.Select(r => new MinecraftJava
+            {
+                Executable = new FileInfo(r.Fetch("Executable")!),
+                Version = r.Fetch("Version")!.ToInt32()
+            }).ToList();
+        }
+        catch
+        {
+            return [];
+        }
     }
 }

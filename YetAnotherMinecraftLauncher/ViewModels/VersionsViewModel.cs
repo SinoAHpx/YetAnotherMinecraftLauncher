@@ -43,12 +43,12 @@ public class VersionsViewModel : ViewModelBase
     //ReturnCommand
     public void ReturnToHome()
     {
-        MessageBusRoutes.ReturnToHome.DriveTo();
+        MessageBusRoutes.ReturnToHome.Knock();
     }
 
     public void DownloadVersion()
     {
-        MessageBusRoutes.ToDownload.DriveTo();
+        MessageBusRoutes.ToDownload.Knock();
     }
 
     public void SelectVersion(SelectiveItem item)

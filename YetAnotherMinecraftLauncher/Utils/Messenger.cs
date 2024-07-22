@@ -6,7 +6,7 @@ using YetAnotherMinecraftLauncher.Models.Messages;
 /// <summary>
 /// MessageBus deliver
 /// </summary>
-public static class MessageBusDriver
+public static class Messenger
 {
     public static void Subscribe<T>(this MessageBusRoutes routes, Action<T> onNext)
     {
@@ -14,7 +14,7 @@ public static class MessageBusDriver
     }
 
 
-    public static void DriveTo(this MessageBusRoutes routes)
+    public static void Knock(this MessageBusRoutes routes)
     {
         switch (routes)
         {

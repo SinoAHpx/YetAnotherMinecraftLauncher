@@ -167,7 +167,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         //ReturnCommand
         public void ReturnToHome()
         {
-            MessageBusRoutes.ReturnToHome.DriveTo();
+            MessageBusRoutes.ReturnToHome.Knock();
         }
 
         public async void BrowseJava()
@@ -345,7 +345,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                 .Subscribe(x =>
                 {
                     //actually we don't 
-                    MessageBusRoutes.UpdateVersions.DriveTo();
+                    MessageBusRoutes.UpdateVersions.Knock();
                 });
 
             #endregion

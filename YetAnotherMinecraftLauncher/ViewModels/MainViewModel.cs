@@ -7,6 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DialogHostAvalonia;
 using Manganese.Process;
+using Manganese.Text;
 using Material.Dialog.Views;
 using ModuleLauncher.NET.Models.Launcher;
 using ModuleLauncher.NET.Utilities;
@@ -35,29 +36,29 @@ public class MainViewModel : ViewModelBase
     #region Account
 
     private Bitmap _accountAvatar;
-
+    
     public Bitmap AccountAvatar
     {
         get => _accountAvatar;
         set => this.RaiseAndSetIfChanged(ref _accountAvatar, value);
     }
-
+    
     private string _accountName;
-
+    
     public string AccountName
     {
         get => _accountName;
         set => this.RaiseAndSetIfChanged(ref _accountName, value);
     }
-
+    
     private string _accountType;
-
+    
     public string AccountType
     {
         get => _accountType;
         set => this.RaiseAndSetIfChanged(ref _accountType, value);
     }
-
+    
     public ReactiveCommand<Unit, Unit> AccountActionCommand { get; set; }
 
     #endregion
@@ -65,29 +66,29 @@ public class MainViewModel : ViewModelBase
     #region Version
 
     private Bitmap _versionAvatar;
-
+    
     public Bitmap VersionAvatar
     {
         get => _versionAvatar;
         set => this.RaiseAndSetIfChanged(ref _versionAvatar, value);
     }
-
+    
     private string _versionName;
-
+    
     public string VersionName
     {
         get => _versionName;
         set => this.RaiseAndSetIfChanged(ref _versionName, value);
     }
-
+    
     private string _versionType;
-
+    
     public string VersionType
     {
         get => _versionType;
         set => this.RaiseAndSetIfChanged(ref _versionType, value);
     }
-
+    
     public ReactiveCommand<Unit, Unit> VersionActionCommand { get; set; }
 
     #endregion
@@ -149,33 +150,49 @@ public class MainViewModel : ViewModelBase
         {
             await new AlertDialog().ShowDialogAsync("Certain configs are not properly set.");
             InteractSetting();
-            return;
+            goto end;
         }
 
-        //todo: this is pilot-only codes, needs more tweaks
         var resolver = ConfigUtils.GetMinecraftResolver();
-        var mc = resolver.GetMinecraft(VersionName);
-        var process = await mc
-            .WithJava(new MinecraftJava
-            {
-                Executable = new FileInfo("C:\\Program Files\\Eclipse Adoptium\\jre-17.0.11.9-hotspot\\bin\\javaw.exe"),
-                Version = 17
-            })
-            .WithJava(new MinecraftJava
-            {
-                Executable = new FileInfo(@"C:\Program Files\Eclipse Adoptium\jre-21.0.3.9-hotspot\bin\javaw.exe"),
-                Version = 21
-            })
-            .WithAuthentication("AHpx")
-            .WithLauncherName("YAML Pilot")
-            .LaunchAsync();
-
-
-        while (await process.ReadOutputLineAsync() is { } output)
+        if (resolver is null)
         {
-            LaunchingOutput = output;
+            await new AlertDialog().ShowDialogAsync("Certain configs are not properly set.");
+            InteractSetting();
+            goto end;
+
         }
 
+        if (VersionName.IsNullOrEmpty())
+        {
+            await new AlertDialog().ShowDialogAsync("Please select a version to launch.");
+            InteractVersion();
+            goto end;
+
+        }
+
+        //todo: account selection is not completed
+        if (AccountName.IsNullOrEmpty())
+        {
+            await new AlertDialog().ShowDialogAsync("Please select a version to launch.");
+            InteractAccount();
+            goto end;
+        }
+        var javas = ConfigUtils.GetJavas();
+        if (javas.Count == 0)
+        {
+            await new AlertDialog().ShowDialogAsync("Please add java executable files.");
+            InteractSetting();
+            goto end;
+        }
+
+        //our preparation is done
+        //todo: this could be wrong tho
+        var minecraft = resolver.GetMinecraft(VersionName);
+
+        // minecraft
+        //     .WithAuthentication()
+
+        end:
         OnLaunching = false;
         LaunchingOutput = string.Empty; 
     }
@@ -212,15 +229,7 @@ public class MainViewModel : ViewModelBase
 
         OfDefaultAccount();
 
-        MessageBusRoutes.SelectAccount.Subscribe<SelectiveItem>(s =>
-        {
-            AccountAvatar = (Bitmap)s.Avatar;
-            AccountName = s.Title;
-            AccountType = s.Subtitle;
-            AccountActionCommand = ReactiveCommand.Create(InteractAccount);
-
-            MainViewIndex = 0;
-        });
+        MessageBusRoutes.SelectAccount.Subscribe<SelectiveItem>(SelectAccount);
         MessageBusRoutes.RemoveAccount.Subscribe<SelectiveItem>(a =>
         {
             if (AccountName == a.Title)
@@ -236,15 +245,7 @@ public class MainViewModel : ViewModelBase
 
         OfDefaultVersion();
 
-        MessageBusRoutes.SelectVersion.Subscribe<SelectiveItem>(s =>
-        {
-            VersionAvatar = (Bitmap)s.Avatar;
-            VersionName = s.Title;
-            VersionType = s.Subtitle;
-            VersionActionCommand = ReactiveCommand.Create(InteractVersion);
-
-            MainViewIndex = 0;
-        });
+        MessageBusRoutes.SelectVersion.Subscribe<SelectiveItem>(SelectVersion);
         MessageBusRoutes.RemoveVersion.Subscribe<SelectiveItem>(a =>
         {
             if (VersionName == a.Title)
@@ -271,4 +272,25 @@ public class MainViewModel : ViewModelBase
         VersionAvatar = new(AssetLoader.Open(
             new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
     }
+
+    private void SelectAccount(SelectiveItem s)
+    {
+        AccountAvatar = (Bitmap)s.Avatar;
+        AccountName = s.Title;
+        AccountType = s.Subtitle;
+        AccountActionCommand = ReactiveCommand.Create(InteractAccount);
+
+        MainViewIndex = 0;
+    }
+
+    private void SelectVersion(SelectiveItem s)
+    {
+        VersionAvatar = (Bitmap)s.Avatar;
+        VersionName = s.Title;
+        VersionType = s.Subtitle;
+        VersionActionCommand = ReactiveCommand.Create(InteractVersion);
+
+        MainViewIndex = 0;
+    }
+
 }
