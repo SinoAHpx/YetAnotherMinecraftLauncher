@@ -139,6 +139,43 @@ public static class ConfigUtils
         }
     }
 
+    public static int? GetJavaVersion(string executableFilePath)
+    {
+        if (executableFilePath.IsNullOrEmpty() || File.Exists(executableFilePath))
+        {
+            return null;
+        }
+
+        // /bin/javaw.exe
+        var info = new FileInfo(executableFilePath);
+        var javaRoot = info.Directory?.Parent;
+        if (javaRoot == null)
+        {
+            return null;
+        }
+
+        try
+        {
+            var rootName = javaRoot.Name;
+            var version = rootName.Split('-')[1];
+
+            if (version.Contains('.'))
+            {
+                return version.Split('.')[0].ToInt32();
+            }
+
+            return version.ToInt32();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// This is launcher config without authentication info
+    /// </summary>
+    /// <returns></returns>
     public static LauncherConfig? GetLauncherConfig()
     {
         if (ConfigText.IsNullOrEmpty())

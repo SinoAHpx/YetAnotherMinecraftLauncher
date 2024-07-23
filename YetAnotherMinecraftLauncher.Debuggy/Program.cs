@@ -5,6 +5,7 @@ using System;
 using ModuleLauncher.NET.Models.Resources;
 using ModuleLauncher.NET.Resources;
 using ModuleLauncher.NET.Utilities;
+using YetAnotherMinecraftLauncher.Utils;
 
 namespace YetAnotherMinecraftLauncher.Debugy
 {
@@ -12,8 +13,12 @@ namespace YetAnotherMinecraftLauncher.Debugy
     {
         static void Main(string[] args)
         {
-            var resolver = new MinecraftResolver();
-            
+            while (true)
+            {
+                var file = Console.ReadLine();
+                var version = ConfigUtils.GetJavaVersion(file);
+                Console.WriteLine(version);
+            }
         }
     }
 }
