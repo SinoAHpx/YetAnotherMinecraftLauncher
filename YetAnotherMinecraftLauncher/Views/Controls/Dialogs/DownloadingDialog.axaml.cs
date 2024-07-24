@@ -94,6 +94,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
                     Update(progress++);
                 }
                 catch (Exception e)
+
                 {
                     Console.WriteLine(e.Message);
                 }
@@ -101,6 +102,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
             }
 
             MessengerRoutes.UpdateVersions.Knock();
+            DialogHost.Close(null);
         }
 
         public async Task<List<(string, string)>> GetDownloadItemsAsync(MinecraftEntry minecraft)
