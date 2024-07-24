@@ -21,6 +21,7 @@ using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
 using YetAnotherMinecraftLauncher.Views.Controls;
+using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 using AlertDialog = YetAnotherMinecraftLauncher.Views.Controls.Dialogs.AlertDialog;
 
 namespace YetAnotherMinecraftLauncher.ViewModels;
@@ -201,13 +202,17 @@ public class MainViewModel : ViewModelBase
         //todo: authentication segment is not finished
         launchConfig.Authentication = AccountName;
 
-        //todo: this could be wrong tho
+        //todo: this could be wrong tho, waiting for upstream to fix this
         var minecraft = resolver.GetMinecraft(VersionName);
 
         #region Resource completion
 
-        await Utils.DownloaderUtils.DownloadAsync(minecraft);
-
+        var downloadingDialog = new DownloadingDialog();
+        var downloadingItems = await downloadingDialog.GetDownloadItemsAsync(minecraft);
+        if (downloadingItems.Count != 0)
+        {
+            await new DownloadingDialog().DownloadAsync(downloadingItems);
+        }
         #endregion
 
         #region Launching

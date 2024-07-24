@@ -76,7 +76,16 @@ public class DownloaderViewModel : ViewModelBase
         }
         var localMinecraft = await remoteMinecraft.ResolveLocalEntryAsync(resolver);
 
-        await Utils.DownloaderUtils.DownloadAsync(localMinecraft);
+        var downloadingDialog = new DownloadingDialog();
+        var downloadingItems = await downloadingDialog.GetDownloadItemsAsync(localMinecraft);
+        if (downloadingItems.Count != 0)
+        {
+            await new DownloadingDialog().DownloadAsync(downloadingItems);
+        }
+        else
+        {
+            await new AlertDialog().ShowDialogAsync("This version has been already downloaded.");
+        }
     }
 
     private readonly string LocalVersionsManifestPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
@@ -102,7 +111,7 @@ public class DownloaderViewModel : ViewModelBase
 
         Task.Run(async () =>
         {
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            await Task.Delay(TimeSpan.FromSeconds(5));
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 var minecrafts = await DownloaderUtils.GetRemoteMinecraftsAsync(LocalVersionsManifestPath);
@@ -181,8 +190,4 @@ public class DownloaderViewModel : ViewModelBase
 
     }
 
-    #region Sundry
-
-
-    #endregion
 }

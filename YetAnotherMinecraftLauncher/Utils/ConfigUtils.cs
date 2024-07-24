@@ -166,7 +166,7 @@ public static class ConfigUtils
 
             return version.ToInt32();
         }
-        catch (Exception e)
+        catch
         {
             return null;
         }
