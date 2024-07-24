@@ -79,7 +79,7 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
                             {
                                 ShouldHandle = new PredicateBuilder().Handle<Exception>(),
                                 Delay = TimeSpan.FromSeconds(3),
-                                MaxRetryAttempts = int.MaxValue,
+                                MaxRetryAttempts = 10,
                                 BackoffType = DelayBackoffType.Constant
                             })
                             .Build();
@@ -94,7 +94,6 @@ namespace YetAnotherMinecraftLauncher.Views.Controls.Dialogs
                     Update(progress++);
                 }
                 catch (Exception e)
-
                 {
                     Console.WriteLine(e.Message);
                 }
