@@ -7,6 +7,7 @@ using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using DialogHostAvalonia;
 using DynamicData.Binding;
 using Manganese.Number;
 using Manganese.Process;
@@ -192,10 +193,29 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
             var javaPath = pickResult.Single().Path.LocalPath;
 
-            JavaExecutables.Add(new MinecraftJava()
+           var dialog = new InputDialog()
             {
-                Executable = new FileInfo(javaPath),
+                Title = "Java version",
+                Message =
+                    "The TextBox below is the a automatically identified java version, which could be empty, in that case you may specify the version manually otherwise Minecraft won't be able to launch.",
+                Input = ConfigUtils.GetJavaVersion(javaPath).ToString() ?? ""
+            };
+
+            dialog.ConfirmActionCommand = ReactiveCommand.Create(() =>
+            {
+                JavaExecutables.Add(new MinecraftJava()
+                {
+                    Executable = new FileInfo(javaPath),
+                    Version = dialog.Input.ToInt32()
+                });
+                DialogHost.Close(null);
             });
+            dialog.CancelActionCommand = ReactiveCommand.Create(() =>
+            {
+                DialogHost.Close(null);
+            });
+
+            await dialog.ShowDialogAsync();
         }
 
         public void RemoveJava(int index)
@@ -285,13 +305,12 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                 IsFullscreen = ConfigUtils.ReadConfig(nameof(IsFullscreen))?.ToBool() ?? false;
                 var javaJToken = ConfigUtils.ConfigText.FetchJToken(nameof(JavaExecutables));
 
-                //todo; java version is hard-coded here, should be changed
                 JavaExecutables = javaJToken != null
                     ? new ObservableCollection<MinecraftJava>(javaJToken.Select(x =>
                         new MinecraftJava
                         {
                             Executable = new FileInfo(x.Fetch("Executable")),
-                            Version = 21
+                            Version = (x.Fetch("Version") ?? "0").ToInt32()
                         }))
                     : [];
 

@@ -141,7 +141,7 @@ public static class ConfigUtils
 
     public static int? GetJavaVersion(string executableFilePath)
     {
-        if (executableFilePath.IsNullOrEmpty() || File.Exists(executableFilePath))
+        if (executableFilePath.IsNullOrEmpty() || !File.Exists(executableFilePath))
         {
             return null;
         }
@@ -194,10 +194,14 @@ public static class ConfigUtils
                 WindowWidth = ConfigText.Fetch("WindowWidth").ToInt32(),
                 WindowHeight = ConfigText.Fetch("WindowHeight").ToInt32(),
                 Fullscreen = ConfigText.Fetch("IsFullscreen").ToBool(),
-                DirectlyJoinServer = ConfigText.Fetch("DirectlyJoinServer"),
+                DirectlyJoinServer = ConfigText.Fetch("DirectlyJoinServer").IsNullOrEmpty()
+                    ? null
+                    : ConfigText.Fetch("DirectlyJoinServer"),
                 Javas = GetJavas(),
-                MaxMemorySize = ConfigText.Fetch("AllocatedMemorySize").ToInt32()
+                MaxMemorySize = ConfigText.Fetch("AllocatedMemorySize").ToInt32(),
+                LauncherName = "YAML"   
             };
+
 
             return config;
         }
