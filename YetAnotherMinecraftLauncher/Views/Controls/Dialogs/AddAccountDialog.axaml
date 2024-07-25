@@ -13,7 +13,6 @@
         <StackPanel Grid.Row="1">
 			<ComboBox VerticalAlignment="Top"
                       assists:ComboBoxAssist.Label="Authenticator"
-                      Foreground="#586EBC"
                       Theme="{StaticResource MaterialOutlineComboBox}">
 				<ComboBoxItem Name="ComboBoxItem_Microsoft">
                     <StackPanel Orientation="Horizontal">
@@ -33,10 +32,8 @@
                          assists:TextFieldAssist.Label="Offline username"
                          Theme="{StaticResource OutlineTextBox}"
                          VerticalAlignment="Top"
-                         Foreground="#586EBC"
                          TextWrapping="NoWrap"/>
                 <Button Command="{Binding AddOfflineUserCommand}"
-                        Foreground="#586EBC"
                         HorizontalAlignment="Right"
                         Margin="0,10,0,0"
                         Theme="{StaticResource MaterialOutlineButton}"
@@ -44,7 +41,6 @@
 			</StackPanel>
 			<StackPanel IsVisible="{Binding #ComboBoxItem_Microsoft.IsSelected}">
 				<Button Command="{Binding AddMicrosoftUserCommand}"
-                        Foreground="#586EBC"
                         Margin="0,10,0,0"
                         Theme="{StaticResource MaterialOutlineButton}">
                     <StackPanel Orientation="Horizontal">
