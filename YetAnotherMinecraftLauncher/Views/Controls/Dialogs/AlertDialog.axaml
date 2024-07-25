@@ -12,6 +12,7 @@
         <StackPanel HorizontalAlignment="Right" Grid.Row="2" Orientation="Horizontal">
             <Button Classes="Flat"
                     Command="{Binding DismissActionCommand}"
+                    Foreground="{StaticResource MaterialPrimaryMidBrush}"
                     Content="Dismiss"/>
 
         </StackPanel>

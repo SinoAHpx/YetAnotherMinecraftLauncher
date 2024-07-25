@@ -13,8 +13,9 @@
         <StackPanel Grid.Row="1">
 			<ComboBox VerticalAlignment="Top"
                       assists:ComboBoxAssist.Label="Authenticator"
+                      Foreground="{StaticResource MaterialPrimaryMidBrush}"
                       Theme="{StaticResource MaterialOutlineComboBox}">
-				<ComboBoxItem Name="ComboBoxItem_Microsoft">
+				<ComboBoxItem Name="ComboBoxItem_Microsoft" >
                     <StackPanel Orientation="Horizontal">
 						<avalonia:MaterialIcon Kind="Microsoft"/>
                         <TextBlock Text=" Microsoft"/>
