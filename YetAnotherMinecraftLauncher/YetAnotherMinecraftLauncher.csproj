@@ -31,7 +31,6 @@
     <PackageReference Include="ModuleLauncher.Re" Version="4.1.5" />
     <PackageReference Include="morelinq" Version="4.3.0" />
     <PackageReference Include="Polly.Core" Version="8.4.1" />
-    <PackageReference Include="WebViewControl-Avalonia" Version="3.120.3" />
   </ItemGroup>
 
   <ItemGroup>

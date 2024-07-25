@@ -15,7 +15,6 @@ using MoreLinq;
 using Polly.Retry;
 using Polly;
 using ReactiveUI;
-using Xilium.CefGlue;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.ViewModels.Controls.Dialogs;
 

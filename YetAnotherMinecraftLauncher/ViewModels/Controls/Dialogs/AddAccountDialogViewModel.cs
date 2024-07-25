@@ -7,7 +7,6 @@ using DialogHostAvalonia;
 using Manganese.Process;
 using ModuleLauncher.NET.Authentications;
 using ReactiveUI;
-using WebViewControl;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views.Controls;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
@@ -52,31 +51,7 @@ public class AddAccountDialogViewModel : ViewModelBase
     //todo: this is not completed
     public void AddMicrosoftUser()
     {
-        var msAuthenticator = new MicrosoftAuthenticator();
-        var mainWindow = LifetimeUtils.GetMainWindow();
-        var loginWindow = new MicrosoftLoginWindow(msAuthenticator.LoginUrl);
-
-        loginWindow.ShowDialog(mainWindow);
-
-        MessageBus.Current
-            .Listen<string>(nameof(MicrosoftLoginWindowViewModel))
-            .Subscribe(async c =>
-        {
-            loginWindow.Close();
-            msAuthenticator.Code = c;
-            var authResult = await msAuthenticator.AuthenticateAsync();
-            if (authResult != null)
-            {
-                var item = new SelectiveItem
-                {
-                    Avatar = new Bitmap(AssetLoader.Open(
-                        new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png"))),
-                    Title = authResult.Name,
-                    Subtitle = "Offline"
-                };
-                DialogHost.Close(null, item);
-            }
-        });
+        
     }
 
     #endregion
