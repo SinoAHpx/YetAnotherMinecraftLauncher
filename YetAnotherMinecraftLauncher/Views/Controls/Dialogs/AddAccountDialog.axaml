@@ -41,13 +41,16 @@
                         Content="Add"/>
 			</StackPanel>
 			<StackPanel IsVisible="{Binding #ComboBoxItem_Microsoft.IsSelected}">
-				<Button Command="{Binding AddMicrosoftUserCommand}"
+                <Button Command="{Binding AddMicrosoftUserCommand}"
                         Margin="0,10,0,0"
                         Theme="{StaticResource MaterialOutlineButton}">
                     <StackPanel Orientation="Horizontal">
                         <avalonia:MaterialIcon Kind="Microsoft"/>
-                        <TextBlock Text="Sign in with Microsoft"/>
+                        <TextBlock Text=" Sign in with Microsoft"/>
                     </StackPanel>
+                    <ToolTip.Tip>
+                        <TextBlock Text="A code will be automatically copied to clipboard."/>
+                    </ToolTip.Tip>
                 </Button>
             </StackPanel>
 		</StackPanel>

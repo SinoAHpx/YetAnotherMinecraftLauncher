@@ -2,11 +2,17 @@
 using Manganese.Process;
 using ModuleLauncher.NET.Authentications;
 using System;
+using System.Buffers.Text;
+using System.Security.Cryptography;
+using System.Text;
 using ModuleLauncher.NET.Models.Launcher;
 using ModuleLauncher.NET.Models.Resources;
 using ModuleLauncher.NET.Resources;
 using ModuleLauncher.NET.Utilities;
 using YetAnotherMinecraftLauncher.Utils;
+using Manganese.Text;
+using Microsoft.IdentityModel.Tokens;
+using Console = System.Console;
 
 namespace YetAnotherMinecraftLauncher.Debugy
 {
@@ -14,19 +20,28 @@ namespace YetAnotherMinecraftLauncher.Debugy
     {
         static async Task Main(string[] args)
         {
-            var process = await new MinecraftResolver(@"C:\Users\ahpx\AppData\Roaming\.minecraft")
-                .GetMinecraft("1.16.2")
-                .WithAuthentication("AHpx")
-                .WithJavas(Javas)
-                .WithWindowHeight(1080)
-                .WithWindowWidth(1920)
-                .WithDirectServer(null)
-                .LaunchAsync();
+            await AccountUtils.EncryptAsync(File.ReadAllText(
+                @"C:\Codebase\Dotnet\YetAnotherMinecraftLauncher\YetAnotherMinecraftLauncher.Desktop\bin\Debug\net8.0\yaml.json"));
 
-            while (await process.ReadOutputLineAsync() is {} output)
-            {
-                Console.WriteLine(output);
-            }
+            Console.WriteLine(await AccountUtils.DecryptAsync());
+        }
+
+        private static Aes _aes = Aes.Create();
+        private static string _rootDir = @"C:\Users\ahpx\Documents\testground";
+
+        private static async Task Write(string plainText)
+        {
+            _aes.GenerateKey();
+            await File.WriteAllBytesAsync(_rootDir.CombinePath("key"), _aes.Key);
+            _aes.GenerateIV();
+            await File.WriteAllBytesAsync(_rootDir.CombinePath("iv"), _aes.IV);
+            var encryptCfb = _aes.EncryptCfb(Encoding.Default.GetBytes(plainText), _aes.IV);
+            await File.WriteAllBytesAsync(_rootDir.CombinePath("pwd"), encryptCfb);
+        }
+
+        private static void Read()
+        {
+            var key = File.ReadAllText(_rootDir.CombinePath("key"));
         }
 
         private static List<MinecraftJava> Javas =
