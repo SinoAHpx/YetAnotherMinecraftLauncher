@@ -103,34 +103,37 @@ namespace YetAnotherMinecraftLauncher.Utils
             aes.Key = key;
             aes.IV = iv;
 
+            File.Delete(Paths.iv);
+            File.Delete(Paths.key);
+            File.Delete(Paths.value);
             var value = EncryptStringToBytes(plainText, key, iv);
-            var container = new
-            {
-                IV = Convert.ToBase64String(aes.IV),
-                Key = Convert.ToBase64String(aes.Key),
-                Value = Convert.ToBase64String(value)
-            };
-            if (File.Exists(Path))
-            {
-                File.Delete(Path);
-            }
-
-            await File.WriteAllTextAsync(Path, container.ToJsonString());
+            await File.WriteAllBytesAsync(Paths.value, value);
+            await File.WriteAllBytesAsync(Paths.key, key);
+            await File.WriteAllBytesAsync(Paths.iv, iv);
+            File.SetAttributes(Paths.key, FileAttributes.Hidden);
+            File.SetAttributes(Paths.value, FileAttributes.Hidden);
+            File.SetAttributes(Paths.iv, FileAttributes.Hidden);
         }
 
         public static async Task<string?> DecryptAsync()
         {
-            var container = await File.ReadAllTextAsync(Path);
-            var iv = Convert.FromBase64String(container.Fetch("IV")!);
-            var key = Convert.FromBase64String(container.Fetch("Key")!);
-            var value = Convert.FromBase64String(container.Fetch("Value")!);
+            try
+            {
+                var iv = await File.ReadAllBytesAsync(Paths.iv);
+                var key = await File.ReadAllBytesAsync(Paths.key);
+                var value = await File.ReadAllBytesAsync(Paths.value);
 
-            using var aes = Aes.Create();
-            aes.Key = key;
-            aes.IV = iv;
-            var plainText = DecryptStringFromBytes(value, key, iv);
+                using var aes = Aes.Create();
+                aes.Key = key;
+                aes.IV = iv;
+                var plainText = DecryptStringFromBytes(value, key, iv);
 
-            return plainText;
+                return plainText;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public static byte[] EncryptStringToBytes(string plainText, byte[] key, byte[] iv)
@@ -187,7 +190,7 @@ namespace YetAnotherMinecraftLauncher.Utils
             }
         }
 
-        public static string Path => GetPaths().value;
+        private static (string value, string iv, string key) Paths => GetPaths();
 
         private static (string value, string iv, string key) GetPaths()
         {
