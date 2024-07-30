@@ -7,8 +7,10 @@ using Avalonia.Platform;
 using DialogHostAvalonia;
 using Flurl.Http;
 using Manganese.Process;
+using Manganese.Text;
 using ModuleLauncher.NET.Authentications;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views.Controls;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
@@ -35,29 +37,11 @@ public class AddAccountDialogViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> AddMicrosoftUserCommand { get; set; }
 
-    private bool _isCodeShown = false;
-
-    public bool IsCodeShown
-    {
-        get => _isCodeShown;
-        set => this.RaiseAndSetIfChanged(ref _isCodeShown, value);
-    }
-
-    private string _userCode;
-
-    public string UserCode
-    {
-        get => _userCode;
-        set => this.RaiseAndSetIfChanged(ref _userCode, value);
-    }
-
-
-
     #endregion
 
     #region Actual logic
 
-    public void AddOfflineUser()
+    public async void AddOfflineUser()
     {
         var item = new SelectiveItem
         {
@@ -66,15 +50,17 @@ public class AddAccountDialogViewModel : ViewModelBase
             Title = OfflineUsername,
             Subtitle = "Offline"
         };
+        await AccountUtils.WriteAsync(item.Title);
+        MessengerRoutes.UpdateAccounts.Knock();
         DialogHost.Close(null, item);
     }
 
-    //todo: this is not completed
     public async void AddMicrosoftUser()
     {
         var mainWindow = LifetimeUtils.GetMainWindow();
         var ms = new MicrosoftAuthenticator()
         {
+            //What can I say, Client ID out!
             ClientId = "831dc94c-7e4f-4ef6-b2e7-8fc1ec498111"
         };
         var deviceCode = await ms.GetDeviceCodeAsync();
@@ -86,13 +72,13 @@ public class AddAccountDialogViewModel : ViewModelBase
         
         deviceCode.VerificationUrl.OpenUrl();
         await LifetimeUtils.GetMainWindow().Clipboard!.SetTextAsync(deviceCode.UserCode);
-        var accessToken = await ms.PollAuthorizationAsync(deviceCode);
-        if (accessToken is null)
+        var webAuthorization = await ms.PollAuthorizationAsync(deviceCode);
+        if (webAuthorization.accessToken.IsNullOrEmpty() || webAuthorization.refreshToken.IsNullOrEmpty())
         {
             await new AlertDialog { Title = "Failed", Content = "Failed to authorize." }.ShowDialog(mainWindow);
             return;
         }
-        var authenticationResult = await ms.AuthenticateAsync(accessToken);
+        var authenticationResult = await ms.AuthenticateAsync(webAuthorization);
         if (authenticationResult is null)
         {
             await new AlertDialog { Title = "Failed", Content = "Failed to authenticate." }.ShowDialog(mainWindow);
@@ -105,6 +91,9 @@ public class AddAccountDialogViewModel : ViewModelBase
             Title = authenticationResult.Name,
             Subtitle = "Microsoft"
         };
+
+        await AccountUtils.WriteAsync(authenticationResult);
+        MessengerRoutes.UpdateAccounts.Knock();
         DialogHost.Close(null, account);
     }
 

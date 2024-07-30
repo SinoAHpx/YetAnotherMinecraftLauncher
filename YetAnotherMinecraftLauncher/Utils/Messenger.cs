@@ -27,8 +27,13 @@ public static class Messenger
             case MessengerRoutes.UpdateVersions:
                 UpdateVersion();
                 break;
+            case MessengerRoutes.UpdateAccounts:
+                UpdateAccounts();
+                break;
         }
     }
+
+
 
     public static void KnockWithMessage<T>(this MessengerRoutes routes, T message)
     {
@@ -47,6 +52,11 @@ public static class Messenger
                 SelectVersion(message);
                 break;
         }
+    }
+
+    private static void UpdateAccounts()
+    {
+        MessageBus.Current.SendMessage("", MessengerRoutes.UpdateAccounts.ToString());
     }
 
     private static void UpdateVersion()

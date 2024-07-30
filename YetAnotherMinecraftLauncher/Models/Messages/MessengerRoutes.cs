@@ -14,6 +14,7 @@ namespace YetAnotherMinecraftLauncher.Models.Messages
 
         //behavior
         UpdateVersions,
+        UpdateAccounts,
 
         //response
         RemoveAccount, 

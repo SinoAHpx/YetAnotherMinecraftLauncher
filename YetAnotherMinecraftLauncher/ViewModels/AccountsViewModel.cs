@@ -9,8 +9,12 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DialogHostAvalonia;
+using DynamicData;
+using Manganese.Array;
+using Manganese.Text;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Messages;
+using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
 using YetAnotherMinecraftLauncher.Views.Controls;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
@@ -57,22 +61,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         public async void AddAccount()
         {
-            var accountAddingDialog = new AddAccountDialog();
-
-            if (await DialogHost.Show(accountAddingDialog) is not SelectiveItem authResult)
-            {
-                return;
-            }
-            
-            authResult.SelectAction = ReactiveCommand.Create(() =>
-            {
-                SelectAccount(authResult);
-            });
-            authResult.RemoveAction = ReactiveCommand.Create( () =>
-            {
-                RemoveAccount(authResult);
-            });
-            AccountsList.Add(authResult);
+            await DialogHost.Show(new AddAccountDialog());
         }
 
         #endregion
@@ -85,6 +74,43 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             AddAccountCommand = ReactiveCommand.Create(AddAccount);
 
             #endregion
+            UpdateAccounts();
+
+            MessengerRoutes.UpdateAccounts.Subscribe<string>(_ =>
+            {
+                UpdateAccounts();
+            });
+        }
+
+        private async void UpdateAccounts()
+        {
+            var accounts = await AccountUtils.ReadAsync();
+            if (accounts.Count == 0)
+            {
+                return;
+            }
+
+            AccountsList.Clear();
+            foreach (var account in accounts)
+            {
+                var item = new SelectiveItem
+                {
+                    Avatar = new Bitmap(AssetLoader.Open(
+                        new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp"))),
+                    Title = account.Name,
+                    Subtitle = account.RefreshToken.IsNullOrEmpty() ? "Offline" : "Microsoft"
+                };
+                item.SelectAction = ReactiveCommand.Create(() =>
+                {
+                    SelectAccount(item);
+                });
+                item.RemoveAction = ReactiveCommand.Create(() =>
+                {
+                    RemoveAccount(item);
+                });
+
+                AccountsList.Add(item);
+            }
         }
     }
 }
