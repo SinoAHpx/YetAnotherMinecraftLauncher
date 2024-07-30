@@ -17,6 +17,7 @@ using ModuleLauncher.NET.Models.Launcher;
 using ModuleLauncher.NET.Utilities;
 using Polly;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Models.Config;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
@@ -278,7 +279,7 @@ public class MainViewModel : ViewModelBase
 
         #region Versions selection
 
-        OfDefaultVersion();
+        ReadVersion();
 
         MessengerRoutes.SelectVersion.Subscribe<SelectiveItem>(SelectVersion);
         MessengerRoutes.RemoveVersion.Subscribe<SelectiveItem>(a =>
@@ -300,14 +301,6 @@ public class MainViewModel : ViewModelBase
             new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png")));
     }
 
-    private void OfDefaultVersion()
-    {
-        VersionType = "";
-        VersionName = "Please Select";
-        VersionAvatar = new(AssetLoader.Open(
-            new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
-    }
-
     private void SelectAccount(SelectiveItem s)
     {
         AccountAvatar = (Bitmap)s.Avatar;
@@ -318,14 +311,36 @@ public class MainViewModel : ViewModelBase
         MainViewIndex = 0;
     }
 
+    private void OfDefaultVersion()
+    {
+        VersionType = "";
+        VersionName = "Please Select";
+        VersionAvatar = new Bitmap(AssetLoader.Open(
+            new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
+    }
+
+
     private void SelectVersion(SelectiveItem s)
     {
         VersionAvatar = (Bitmap)s.Avatar;
         VersionName = s.Title;
         VersionType = s.Subtitle;
         VersionActionCommand = ReactiveCommand.Create(InteractVersion);
-
-        MainViewIndex = 0;
     }
 
+    private void ReadVersion()
+    {
+        var config = ConfigUtils.ReadConfig("Index", ConfigNodes.Version);
+        if (config.IsNullOrEmpty())
+        {
+            OfDefaultVersion();
+            return;
+        }
+
+        VersionName = ConfigUtils.ReadConfig("Name", ConfigNodes.Version) ?? "Please Select";
+        VersionType = ConfigUtils.ReadConfig("Type", ConfigNodes.Version) ?? "";
+        VersionAvatar = new Bitmap(AssetLoader.Open(
+            new Uri(ConfigUtils.ReadConfig("Avatar") ??
+                    "avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
+    }
 }

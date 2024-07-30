@@ -51,8 +51,24 @@ public static class Messenger
             case MessengerRoutes.SelectVersion:
                 SelectVersion(message);
                 break;
+            // case MessengerRoutes.ReadAccount:
+            //     ReadAccount(message);
+            //     break;
+            // case MessengerRoutes.ReadVersion:
+            //     ReadVersion(message);
+            //     break;
         }
     }
+
+    // private static void ReadVersion<T>(T message)
+    // {
+    //     MessageBus.Current.SendMessage(message, MessengerRoutes.ReadVersion.ToString());
+    // }
+    //
+    // private static void ReadAccount<T>(T message)
+    // {
+    //     MessageBus.Current.SendMessage(message, MessengerRoutes.ReadAccount.ToString());
+    // }
 
     private static void UpdateAccounts()
     {

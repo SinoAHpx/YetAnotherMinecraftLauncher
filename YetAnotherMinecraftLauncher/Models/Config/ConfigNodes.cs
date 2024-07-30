@@ -3,5 +3,6 @@
 public enum ConfigNodes
 {
     Settings,
-    Selected
+    Version,
+    Account
 }

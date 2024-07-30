@@ -8,7 +8,9 @@ using Avalonia.Platform;
 using DialogHostAvalonia;
 using Manganese.Array;
 using Manganese.IO;
+using Manganese.Text;
 using ModuleLauncher.NET.Utilities;
+using YetAnotherMinecraftLauncher.Models.Config;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views.Controls;
@@ -38,6 +40,15 @@ public class VersionsViewModel : ViewModelBase
 
 
     public ReactiveCommand<Unit, Unit> DownloadVersionCommand { get; set; }
+
+    private int _selectedIndex;
+
+    public int SelectedIndex
+    {
+        get => _selectedIndex;
+        set => this.RaiseAndSetIfChanged(ref _selectedIndex, value);
+    }
+
     #region Logic
 
     //ReturnCommand
@@ -53,7 +64,8 @@ public class VersionsViewModel : ViewModelBase
 
     public void SelectVersion(SelectiveItem item)
     {
-        MessengerRoutes.SelectVersion.KnockWithMessage(item);
+        SelectedIndex = VersionsList.IndexOf(item);
+        ReturnToHome();
     }
 
     public async void RemoveVersion(SelectiveItem item)
@@ -63,6 +75,10 @@ public class VersionsViewModel : ViewModelBase
             var resolver = ConfigUtils.GetMinecraftResolver();
 
             VersionsList.Remove(item);
+            if (VersionsList.IndexOf(item) == SelectedIndex)
+            {
+                SelectedIndex = -1;
+            }
             var mc = resolver!.GetMinecraft(item.Title);
             mc.Tree.VersionRoot.Delete(true);
 
@@ -113,6 +129,31 @@ public class VersionsViewModel : ViewModelBase
 
         #endregion
 
+        #region Config
+
+        SelectedIndex = ConfigUtils.ReadConfig("Index", ConfigNodes.Version)?.ToInt32() ?? -1;
+
+        this.WhenAnyValue(x => x.SelectedIndex).Subscribe(async i =>
+        {
+            if (SelectedIndex == -1)
+            {
+                return;
+            }
+
+            var version = VersionsList[i];
+            MessengerRoutes.SelectVersion.KnockWithMessage(version);
+
+            await new
+            {
+                Index = SelectedIndex,
+                Name = version.Title,
+                Type = version.Subtitle,
+                Avatar = "avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp"
+
+            }.WriteConfigAsync(ConfigNodes.Version);
+        });
+
+        #endregion
     }
 
     #region Sundry
