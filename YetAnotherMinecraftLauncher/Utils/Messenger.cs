@@ -25,7 +25,7 @@ public static class Messenger
                 ToDownload();
                 break;
             case MessengerRoutes.UpdateVersions:
-                UpdateVersion();
+                UpdateVersions();
                 break;
             case MessengerRoutes.UpdateAccounts:
                 UpdateAccounts();
@@ -59,7 +59,7 @@ public static class Messenger
         MessageBus.Current.SendMessage("", MessengerRoutes.UpdateAccounts.ToString());
     }
 
-    private static void UpdateVersion()
+    private static void UpdateVersions()
     {
         MessageBus.Current.SendMessage("", MessengerRoutes.UpdateVersions.ToString());
     }

@@ -17,6 +17,7 @@ using Material.Styles.Themes.Base;
 using ModuleLauncher.NET.Models.Launcher;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Attributes;
+using YetAnotherMinecraftLauncher.Models.Config;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 
@@ -303,8 +304,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                 //no null accepted, usually this would not happen except config corrupted
                 CustomMinecraftDirectory = ConfigUtils.ReadConfig(nameof(CustomMinecraftDirectory)) ?? "";
                 IsFullscreen = ConfigUtils.ReadConfig(nameof(IsFullscreen))?.ToBool() ?? false;
-                var javaJToken = ConfigUtils.ConfigText.FetchJToken(nameof(JavaExecutables));
-
+                var javaJToken = ConfigUtils.ReadConfig(nameof(JavaExecutables))?.ToJArray();
                 JavaExecutables = javaJToken != null
                     ? new ObservableCollection<MinecraftJava>(javaJToken.Select(x =>
                         new MinecraftJava
@@ -319,8 +319,6 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                 AfterLaunchAction = ConfigUtils.ReadConfig(nameof(AfterLaunchAction))?.ToInt32() ?? 0;
                 MinecraftDirectoryType = ConfigUtils.ReadConfig(nameof(MinecraftDirectoryType))?.ToInt32() ?? 0;
             }
-
-
 
             //we'd have a configurator here, so the code could be more maintainable
             this.WhenAnyValue(x1 => x1.AllocatedMemorySize,
@@ -355,7 +353,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                     })
                 .Subscribe(async t =>
                 {
-                    await t.WriteConfigAsync();
+                    await t.WriteConfigAsync(ConfigNodes.Settings);
                 });
 
             this.WhenAnyValue(x => x.CustomMinecraftDirectory,
@@ -363,7 +361,6 @@ namespace YetAnotherMinecraftLauncher.ViewModels
                     (x, y) => new { CustomMinecraftDirectory = x, MinecraftDirectoryType = y })
                 .Subscribe(x =>
                 {
-                    //actually we don't 
                     MessengerRoutes.UpdateVersions.Knock();
                 });
 

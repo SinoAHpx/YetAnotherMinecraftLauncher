@@ -12,6 +12,7 @@ using ModuleLauncher.NET.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Models.Config;
 using YetAnotherMinecraftLauncher.ViewModels;
 
 namespace YetAnotherMinecraftLauncher.Utils;
@@ -19,7 +20,7 @@ namespace YetAnotherMinecraftLauncher.Utils;
 public static class ConfigUtils
 {
     public static FileInfo ConfigFile { get; set; } =
-        new (Path.Combine(Directory.GetCurrentDirectory(), "yaml.json"));
+        new(Directory.GetCurrentDirectory().CombinePath("yaml.json"));
 
     static ConfigUtils()
     {
@@ -33,27 +34,42 @@ public static class ConfigUtils
 
     // here we have 2 different configs,
     // one is MinecraftSettings and other is LauncherSettings
-    public static async Task WriteConfigAsync<T>(this T type)
+    public static async Task WriteConfigAsync<T>(this T type, ConfigNodes nodeName)
     {
-        var jsonText = type.ToJsonString();
+        try
+        {
+            if (ConfigText.IsNullOrEmpty())
+            {
+                var container = new JObject { { nodeName.ToString(), type.ToJsonString().ToJObject() } };
+                await ConfigFile.WriteAllTextAsync(container.ToString());
+            }
 
-        await ConfigFile.WriteAllTextAsync(jsonText);
+            var jo = JObject.Parse(ConfigText);
+            jo[nodeName.ToString()] = type.ToJsonString().ToJObject();
+
+            var jsonString = jo.ToString();
+            await ConfigFile.WriteAllTextAsync(jsonString);
+        }
+        catch
+        {
+            ConfigFile.Delete();
+            await WriteConfigAsync(type, nodeName);
+        }
     }
 
     public static string ConfigText;
 
-    public static string? ReadConfig(string key)
+    public static string? ReadConfig(string key, ConfigNodes node = ConfigNodes.Settings)
     {
         ConfigFile
             .WhenAnyValue(x => x.LastWriteTime)
-            .Subscribe(s => ConfigText = ConfigFile.ReadAllText());
-
-        if (ConfigText.IsNullOrEmpty())
+            .Subscribe(_ => ConfigText = ConfigFile.ReadAllText());
+        if (key.IsNullOrEmpty())
         {
-            return null;
+            return ConfigText;
         }
 
-        var configStr = ConfigText.Fetch(key);
+        var configStr = ConfigText.Fetch($"{node.ToString()}.{key}");
         return configStr;
     }
 
@@ -191,15 +207,15 @@ public static class ConfigUtils
         {
             var config = new LauncherConfig
             {
-                WindowWidth = ConfigText.Fetch("WindowWidth").ToInt32(),
-                WindowHeight = ConfigText.Fetch("WindowHeight").ToInt32(),
-                Fullscreen = ConfigText.Fetch("IsFullscreen").ToBool(),
-                DirectlyJoinServer = ConfigText.Fetch("DirectlyJoinServer").IsNullOrEmpty()
+                WindowWidth = ReadConfig("WindowWidth").ToInt32(),
+                WindowHeight = ReadConfig("WindowHeight").ToInt32(),
+                Fullscreen = ReadConfig("IsFullscreen").ToBool(),
+                DirectlyJoinServer = ReadConfig("DirectlyJoinServer").IsNullOrEmpty()
                     ? null
-                    : ConfigText.Fetch("DirectlyJoinServer"),
+                    : ReadConfig("DirectlyJoinServer"),
                 Javas = GetJavas(),
-                MaxMemorySize = ConfigText.Fetch("AllocatedMemorySize").ToInt32(),
-                LauncherName = "YAML"   
+                MaxMemorySize = ReadConfig("AllocatedMemorySize").ToInt32(),
+                LauncherName = "YAML"
             };
 
 
