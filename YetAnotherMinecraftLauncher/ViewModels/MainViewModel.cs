@@ -200,9 +200,7 @@ public class MainViewModel : ViewModelBase
 
         #endregion
 
-
-        //todo: authentication segment is not finished
-        launchConfig.Authentication = AccountName;
+        launchConfig.Authentication = await AccountUtils.GetAccountAsync(AccountName) ?? "Offline";
 
         //todo: this could be wrong tho, waiting for upstream to fix this
         var minecraft = resolver.GetMinecraft(VersionName);
@@ -264,7 +262,7 @@ public class MainViewModel : ViewModelBase
 
         #region Accounts selection
 
-        OfDefaultAccount();
+        ReadAccount();
 
         MessengerRoutes.SelectAccount.Subscribe<SelectiveItem>(SelectAccount);
         MessengerRoutes.RemoveAccount.Subscribe<SelectiveItem>(a =>
@@ -320,11 +318,13 @@ public class MainViewModel : ViewModelBase
             return;
         }
 
-        VersionName = ConfigUtils.ReadConfig("Name", ConfigNodes.Account) ?? "Please Select";
-        VersionType = ConfigUtils.ReadConfig("Type", ConfigNodes.Account) ?? "";
-        VersionAvatar = new Bitmap(AssetLoader.Open(
-            new Uri(ConfigUtils.ReadConfig("Avatar", ConfigNodes.Account) ??
-                    "avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png")));
+        AccountName = ConfigUtils.ReadConfig("Name", ConfigNodes.Account) ?? "Please Select";
+        AccountType = ConfigUtils.ReadConfig("Type", ConfigNodes.Account) ?? "";
+        var avatarPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
+            .CombinePath("YAML", $"{AccountName}.png");
+        AccountAvatar = File.Exists(avatarPath)
+            ? new Bitmap(File.OpenRead(avatarPath))
+            : DefaultAssets.AccountAvatar;
     }
 
     private void OfDefaultVersion()

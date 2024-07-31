@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
+using Manganese.Array;
 using Manganese.Text;
 using ModuleLauncher.NET.Models.Authentication;
 using ReactiveUI;
@@ -30,7 +31,25 @@ namespace YetAnotherMinecraftLauncher.Utils
         public static async Task WriteAsync(AuthenticateResult result)
         {
             var accounts = await ReadAsync();
+            if (accounts.Any(a => a.Name == result.Name))
+            {
+                return;
+            }
+
             accounts.Add(result);
+            var container = new
+            {
+                Accounts = accounts
+            }.ToJsonString();
+
+            await EncryptAsync(container);
+        }
+
+        public static async Task RemoveAsync(string name)
+        {
+            var accounts = await ReadAsync();
+            accounts.RemoveIf(x => x.Name == name);
+
             var container = new
             {
                 Accounts = accounts

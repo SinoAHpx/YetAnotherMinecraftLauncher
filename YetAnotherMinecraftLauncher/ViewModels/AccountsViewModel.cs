@@ -1,6 +1,7 @@
 ﻿ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -13,6 +14,7 @@ using DynamicData;
 using Manganese.Array;
 using Manganese.Text;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Models.Config;
 using YetAnotherMinecraftLauncher.Models.Data;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
@@ -36,6 +38,15 @@ namespace YetAnotherMinecraftLauncher.ViewModels
 
         public ReactiveCommand<Unit, Unit> AddAccountCommand { get; set; }
 
+
+        private int _selectedIndex;
+
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set => this.RaiseAndSetIfChanged(ref _selectedIndex, value);
+        }
+
         #region Actual logics
 
         //ReturnCommand
@@ -49,7 +60,8 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             if (await new ConfirmDialog().ShowDialogAsync("Deletion cannot be undone"))
             {
                 AccountsList.Remove(item);
-                //todo: concrete logic is not finished
+                await AccountUtils.RemoveAsync(item.Title);
+
                 MessengerRoutes.RemoveAccount.KnockWithMessage(item);
             }
 
@@ -58,6 +70,8 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         public void SelectAccount(SelectiveItem item)
         {
             MessengerRoutes.SelectAccount.KnockWithMessage(item);
+
+            SelectedIndex = AccountsList.IndexOf(item);
         }
 
         public async void AddAccount()
@@ -80,6 +94,30 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             MessengerRoutes.UpdateAccounts.Subscribe<string>(_ =>
             {
                 UpdateAccounts();
+            });
+
+            SelectedIndex = ConfigUtils.ReadConfig("Index", ConfigNodes.Account)?.ToInt32() ?? -1;
+
+            this.WhenAnyValue(x => x.SelectedIndex).Subscribe(async i =>
+            {
+                if (SelectedIndex == -1 || AccountsList.Count == 0)
+                {
+                    return;
+                }
+
+                var account = AccountsList[i];
+                MessengerRoutes.SelectAccount.KnockWithMessage(account);
+                var avatarPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
+                    .CombinePath("YAML");
+                Directory.CreateDirectory(avatarPath);
+                avatarPath = avatarPath.CombinePath($"{account.Title}.png");
+                await new
+                {
+                    Index = SelectedIndex,
+                    Name = account.Title,
+                    Type = account.Subtitle,
+                    Avatar = avatarPath
+                }.WriteConfigAsync(ConfigNodes.Account);
             });
         }
 

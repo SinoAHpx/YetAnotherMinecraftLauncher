@@ -84,6 +84,7 @@ public class AddAccountDialogViewModel : ViewModelBase
         }
         catch
         {
+            //todo: optimize these shitty alert dialogs
             await new AlertDialog { Title = "Failed", Content = "Failed to authenticate.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
         }
 
@@ -98,7 +99,7 @@ public class AddAccountDialogViewModel : ViewModelBase
             var avatarPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
                 .CombinePath("YAML");
             Directory.CreateDirectory(avatarPath);
-            avatarPath = avatarPath.CombinePath($"{result.UUID}.png");
+            avatarPath = avatarPath.CombinePath($"{result.Name}.png");
 
             await File.WriteAllBytesAsync(avatarPath, avatarBytes);
         }
