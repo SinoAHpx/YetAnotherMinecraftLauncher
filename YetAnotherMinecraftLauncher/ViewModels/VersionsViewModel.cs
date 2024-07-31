@@ -11,6 +11,7 @@ using Manganese.IO;
 using Manganese.Text;
 using ModuleLauncher.NET.Utilities;
 using YetAnotherMinecraftLauncher.Models.Config;
+using YetAnotherMinecraftLauncher.Models.Data;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views.Controls;
@@ -172,8 +173,7 @@ public class VersionsViewModel : ViewModelBase
             var id = minecraft.Tree.VersionRoot.Name;
             var item = new SelectiveItem
             {
-                Avatar = new Bitmap(AssetLoader.Open(
-                    new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp"))),
+                Avatar = DefaultAssets.VersionAvatar,
                 Title = id,
                 Subtitle = minecraft.GetMinecraftType().ToString(),
 

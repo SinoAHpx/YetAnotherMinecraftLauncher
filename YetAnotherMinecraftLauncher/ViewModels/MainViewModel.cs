@@ -18,6 +18,7 @@ using ModuleLauncher.NET.Utilities;
 using Polly;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Config;
+using YetAnotherMinecraftLauncher.Models.Data;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
@@ -297,8 +298,7 @@ public class MainViewModel : ViewModelBase
     {
         AccountType = "";
         AccountName = "Please Select";
-        AccountAvatar = new(AssetLoader.Open(
-            new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png")));
+        AccountAvatar = DefaultAssets.AccountAvatar;
     }
 
     private void SelectAccount(SelectiveItem s)
@@ -331,8 +331,7 @@ public class MainViewModel : ViewModelBase
     {
         VersionType = "";
         VersionName = "Please Select";
-        VersionAvatar = new Bitmap(AssetLoader.Open(
-            new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
+        VersionAvatar = DefaultAssets.VersionAvatar;
     }
 
 

@@ -6,8 +6,12 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Media.Imaging;
 using Manganese.Text;
 using ModuleLauncher.NET.Models.Authentication;
+using ReactiveUI;
+using YetAnotherMinecraftLauncher.Models.Data;
+using YetAnotherMinecraftLauncher.Views.Controls;
 
 namespace YetAnotherMinecraftLauncher.Utils
 {
@@ -236,6 +240,33 @@ namespace YetAnotherMinecraftLauncher.Utils
             }
 
             return result!;
+        }
+
+        public static SelectiveItem ToSelectiveItem(this AuthenticateResult result, Action select, Action remove)
+        {
+            var item = new SelectiveItem
+            {
+                Title = result.Name,
+                Subtitle = result.RefreshToken.IsNullOrEmpty() ? "Offline" : "Microsoft"
+            };
+
+            if (item.Subtitle == "Offline")
+            {
+                item.Avatar = DefaultAssets.AccountAvatar;
+            }
+            else
+            {
+                var avatarPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
+                    .CombinePath("YAML")
+                    .CombinePath($"{result.UUID}.png");
+
+                item.Avatar = new Bitmap(File.OpenRead(avatarPath));
+            }
+
+            item.SelectAction = ReactiveCommand.Create(select);
+            item.RemoveAction = ReactiveCommand.Create(remove);
+
+            return item;
         }
     }
 }

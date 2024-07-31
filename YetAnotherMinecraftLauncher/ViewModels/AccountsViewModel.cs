@@ -13,6 +13,7 @@ using DynamicData;
 using Manganese.Array;
 using Manganese.Text;
 using ReactiveUI;
+using YetAnotherMinecraftLauncher.Models.Data;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
 using YetAnotherMinecraftLauncher.Views;
@@ -95,8 +96,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             {
                 var item = new SelectiveItem
                 {
-                    Avatar = new Bitmap(AssetLoader.Open(
-                        new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp"))),
+                    Avatar = DefaultAssets.AccountAvatar,
                     Title = account.Name,
                     Subtitle = account.RefreshToken.IsNullOrEmpty() ? "Offline" : "Microsoft"
                 };

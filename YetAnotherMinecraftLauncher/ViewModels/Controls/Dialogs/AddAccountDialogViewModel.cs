@@ -45,20 +45,15 @@ public class AddAccountDialogViewModel : ViewModelBase
 
     public async void AddOfflineUser()
     {
-        var item = new SelectiveItem
-        {
-            Avatar = new Bitmap(AssetLoader.Open(
-                new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png"))),
-            Title = OfflineUsername,
-            Subtitle = "Offline"
-        };
-        await AccountUtils.WriteAsync(item.Title);
+        await AccountUtils.WriteAsync(OfflineUsername);
         MessengerRoutes.UpdateAccounts.Knock();
-        DialogHost.Close(null, item);
+        DialogHost.Close(null);
     }
 
     public async void AddMicrosoftUser()
     {
+        var mainWindow = LifetimeUtils.GetMainWindow();
+
         var authenticationResult = await LoginAsync();
         if (authenticationResult is null)
         {
@@ -71,16 +66,15 @@ public class AddAccountDialogViewModel : ViewModelBase
         
         
         var avatar = new Bitmap(new MemoryStream(avatarBytes));
-        var account = new SelectiveItem
-        {
-            Avatar = avatar,
-            Title = authenticationResult.Name,
-            Subtitle = "Microsoft"
-        };
 
         await AccountUtils.WriteAsync(authenticationResult);
         MessengerRoutes.UpdateAccounts.Knock();
-        DialogHost.Close(null, account);
+        DialogHost.Close(null);
+    }
+
+    private void WriteAvatarAsync(AuthenticateResult result)
+    {
+
     }
 
     /// <summary>
@@ -89,30 +83,37 @@ public class AddAccountDialogViewModel : ViewModelBase
     /// <returns></returns>
     private async Task<AuthenticateResult?> LoginAsync()
     {
-        var mainWindow = LifetimeUtils.GetMainWindow();
-        var ms = new MicrosoftAuthenticator()
+        try
         {
-            //What can I say, Client ID out!
-            ClientId = "831dc94c-7e4f-4ef6-b2e7-8fc1ec498111"
-        };
-        var deviceCode = await ms.GetDeviceCodeAsync();
-        if (deviceCode is null)
+            var mainWindow = LifetimeUtils.GetMainWindow();
+            var ms = new MicrosoftAuthenticator()
+            {
+                //What can I say, Client ID out!
+                ClientId = "831dc94c-7e4f-4ef6-b2e7-8fc1ec498111"
+            };
+            var deviceCode = await ms.GetDeviceCodeAsync();
+            if (deviceCode is null)
+            {
+                await new AlertDialog { Title = "Failed", Content = "Failed to get a device code.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
+                return null;
+            }
+
+            deviceCode.VerificationUrl.OpenUrl();
+            await LifetimeUtils.GetMainWindow().Clipboard!.SetTextAsync(deviceCode.UserCode);
+            var webAuthorization = await ms.PollAuthorizationAsync(deviceCode);
+            if (webAuthorization.accessToken.IsNullOrEmpty() || webAuthorization.refreshToken.IsNullOrEmpty())
+            {
+                await new AlertDialog { Title = "Failed", Content = "Failed to authorize.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
+                return null;
+            }
+            var authenticationResult = await ms.AuthenticateAsync(webAuthorization);
+
+            return authenticationResult;
+        }
+        catch
         {
-            await new AlertDialog { Title = "Failed", Content = "Failed to get a device code.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
             return null;
         }
-
-        deviceCode.VerificationUrl.OpenUrl();
-        await LifetimeUtils.GetMainWindow().Clipboard!.SetTextAsync(deviceCode.UserCode);
-        var webAuthorization = await ms.PollAuthorizationAsync(deviceCode);
-        if (webAuthorization.accessToken.IsNullOrEmpty() || webAuthorization.refreshToken.IsNullOrEmpty())
-        {
-            await new AlertDialog { Title = "Failed", Content = "Failed to authorize.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
-            return null;
-        }
-        var authenticationResult = await ms.AuthenticateAsync(webAuthorization);
-
-        return authenticationResult;
     }
 
     #endregion

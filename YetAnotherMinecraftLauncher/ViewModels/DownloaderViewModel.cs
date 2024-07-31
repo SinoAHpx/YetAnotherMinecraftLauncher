@@ -11,6 +11,7 @@ using YetAnotherMinecraftLauncher.Views.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Manganese.Text;
+using YetAnotherMinecraftLauncher.Models.Data;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 using DownloaderUtils = ModuleLauncher.NET.Utilities.DownloaderUtils;
@@ -115,8 +116,7 @@ public class DownloaderViewModel : ViewModelBase
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 var minecrafts = await DownloaderUtils.GetRemoteMinecraftsAsync(LocalVersionsManifestPath);
-                var avatar = new Bitmap(AssetLoader.Open(
-                    new Uri("avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
+                var avatar = DefaultAssets.VersionAvatar;
 
                 foreach (var minecraft in minecrafts)
                 {
