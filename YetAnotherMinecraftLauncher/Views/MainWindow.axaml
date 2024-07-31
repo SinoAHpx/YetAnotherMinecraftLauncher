@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550" CanResize="False"
         x:Class="YetAnotherMinecraftLauncher.Views.MainWindow" WindowStartupLocation="CenterScreen"
         Width="350" Height="550"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/YAMLIcon.ico"
         Title="YetAnotherMinecraftLauncher">
 	<views:MainView/>
 </Window>
