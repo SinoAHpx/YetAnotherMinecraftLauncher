@@ -66,7 +66,7 @@ public class AddAccountDialogViewModel : ViewModelBase
         var deviceCode = await ms.GetDeviceCodeAsync();
         if (deviceCode is null)
         {
-            await new AlertDialog { Title = "Failed", Content = "Failed to get a device code." }.ShowDialog(mainWindow);
+            await new AlertDialog { Title = "Failed", Content = "Failed to get a device code.", WindowStartupLocation = WindowStartupLocation.CenterOwner}.ShowDialog(mainWindow);
             return;
         }
         
@@ -75,13 +75,13 @@ public class AddAccountDialogViewModel : ViewModelBase
         var webAuthorization = await ms.PollAuthorizationAsync(deviceCode);
         if (webAuthorization.accessToken.IsNullOrEmpty() || webAuthorization.refreshToken.IsNullOrEmpty())
         {
-            await new AlertDialog { Title = "Failed", Content = "Failed to authorize." }.ShowDialog(mainWindow);
+            await new AlertDialog { Title = "Failed", Content = "Failed to authorize.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
             return;
         }
         var authenticationResult = await ms.AuthenticateAsync(webAuthorization);
         if (authenticationResult is null)
         {
-            await new AlertDialog { Title = "Failed", Content = "Failed to authenticate." }.ShowDialog(mainWindow);
+            await new AlertDialog { Title = "Failed", Content = "Failed to authenticate.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
             return;
         }
         var avatar = new Bitmap(new MemoryStream(await $"https://minotar.net/avatar/{authenticationResult.Name}".GetBytesAsync()));

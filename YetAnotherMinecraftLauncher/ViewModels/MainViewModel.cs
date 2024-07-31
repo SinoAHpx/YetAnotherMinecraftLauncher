@@ -311,6 +311,22 @@ public class MainViewModel : ViewModelBase
         MainViewIndex = 0;
     }
 
+    private void ReadAccount()
+    {
+        var config = ConfigUtils.ReadConfig("Index", ConfigNodes.Account);
+        if (config.IsNullOrEmpty())
+        {
+            OfDefaultAccount();
+            return;
+        }
+
+        VersionName = ConfigUtils.ReadConfig("Name", ConfigNodes.Account) ?? "Please Select";
+        VersionType = ConfigUtils.ReadConfig("Type", ConfigNodes.Account) ?? "";
+        VersionAvatar = new Bitmap(AssetLoader.Open(
+            new Uri(ConfigUtils.ReadConfig("Avatar", ConfigNodes.Account) ??
+                    "avares://YetAnotherMinecraftLauncher/Assets/DefaultAccountAvatar.png")));
+    }
+
     private void OfDefaultVersion()
     {
         VersionType = "";
@@ -340,7 +356,7 @@ public class MainViewModel : ViewModelBase
         VersionName = ConfigUtils.ReadConfig("Name", ConfigNodes.Version) ?? "Please Select";
         VersionType = ConfigUtils.ReadConfig("Type", ConfigNodes.Version) ?? "";
         VersionAvatar = new Bitmap(AssetLoader.Open(
-            new Uri(ConfigUtils.ReadConfig("Avatar") ??
+            new Uri(ConfigUtils.ReadConfig("Avatar", ConfigNodes.Version) ??
                     "avares://YetAnotherMinecraftLauncher/Assets/DefaultVersionAvatar.webp")));
     }
 }
