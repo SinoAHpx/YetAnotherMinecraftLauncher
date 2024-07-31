@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reactive;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -9,6 +10,7 @@ using Flurl.Http;
 using Manganese.Process;
 using Manganese.Text;
 using ModuleLauncher.NET.Authentications;
+using ModuleLauncher.NET.Models.Authentication;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
@@ -57,34 +59,18 @@ public class AddAccountDialogViewModel : ViewModelBase
 
     public async void AddMicrosoftUser()
     {
-        var mainWindow = LifetimeUtils.GetMainWindow();
-        var ms = new MicrosoftAuthenticator()
-        {
-            //What can I say, Client ID out!
-            ClientId = "831dc94c-7e4f-4ef6-b2e7-8fc1ec498111"
-        };
-        var deviceCode = await ms.GetDeviceCodeAsync();
-        if (deviceCode is null)
-        {
-            await new AlertDialog { Title = "Failed", Content = "Failed to get a device code.", WindowStartupLocation = WindowStartupLocation.CenterOwner}.ShowDialog(mainWindow);
-            return;
-        }
-        
-        deviceCode.VerificationUrl.OpenUrl();
-        await LifetimeUtils.GetMainWindow().Clipboard!.SetTextAsync(deviceCode.UserCode);
-        var webAuthorization = await ms.PollAuthorizationAsync(deviceCode);
-        if (webAuthorization.accessToken.IsNullOrEmpty() || webAuthorization.refreshToken.IsNullOrEmpty())
-        {
-            await new AlertDialog { Title = "Failed", Content = "Failed to authorize.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
-            return;
-        }
-        var authenticationResult = await ms.AuthenticateAsync(webAuthorization);
+        var authenticationResult = await LoginAsync();
         if (authenticationResult is null)
         {
             await new AlertDialog { Title = "Failed", Content = "Failed to authenticate.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
             return;
         }
-        var avatar = new Bitmap(new MemoryStream(await $"https://minotar.net/avatar/{authenticationResult.Name}".GetBytesAsync()));
+
+        var avatarBytes =
+            await $"https://minotar.net/avatar/{authenticationResult.Name}".GetBytesAsync();
+        
+        
+        var avatar = new Bitmap(new MemoryStream(avatarBytes));
         var account = new SelectiveItem
         {
             Avatar = avatar,
@@ -95,6 +81,38 @@ public class AddAccountDialogViewModel : ViewModelBase
         await AccountUtils.WriteAsync(authenticationResult);
         MessengerRoutes.UpdateAccounts.Knock();
         DialogHost.Close(null, account);
+    }
+
+    /// <summary>
+    /// Perform authentication with Microsoft account
+    /// </summary>
+    /// <returns></returns>
+    private async Task<AuthenticateResult?> LoginAsync()
+    {
+        var mainWindow = LifetimeUtils.GetMainWindow();
+        var ms = new MicrosoftAuthenticator()
+        {
+            //What can I say, Client ID out!
+            ClientId = "831dc94c-7e4f-4ef6-b2e7-8fc1ec498111"
+        };
+        var deviceCode = await ms.GetDeviceCodeAsync();
+        if (deviceCode is null)
+        {
+            await new AlertDialog { Title = "Failed", Content = "Failed to get a device code.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
+            return null;
+        }
+
+        deviceCode.VerificationUrl.OpenUrl();
+        await LifetimeUtils.GetMainWindow().Clipboard!.SetTextAsync(deviceCode.UserCode);
+        var webAuthorization = await ms.PollAuthorizationAsync(deviceCode);
+        if (webAuthorization.accessToken.IsNullOrEmpty() || webAuthorization.refreshToken.IsNullOrEmpty())
+        {
+            await new AlertDialog { Title = "Failed", Content = "Failed to authorize.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
+            return null;
+        }
+        var authenticationResult = await ms.AuthenticateAsync(webAuthorization);
+
+        return authenticationResult;
     }
 
     #endregion

@@ -237,21 +237,5 @@ namespace YetAnotherMinecraftLauncher.Utils
 
             return result!;
         }
-
-        private static byte[] EncodeBase64(this string str)
-        {
-            var bytes = Encoding.UTF8.GetBytes(str);
-            var s = Convert.ToBase64String(bytes);
-
-            return Encoding.UTF8.GetBytes(s);
-        }
-
-        private static string DecodeBase64(this byte[] bytes)
-        {
-            var base64String = Encoding.UTF8.GetString(bytes);
-            var b = Convert.FromBase64String(base64String);
-
-            return Encoding.UTF8.GetString(b);
-        }
     }
 }
