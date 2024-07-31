@@ -13,14 +13,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Config;
+using YetAnotherMinecraftLauncher.Models.Data;
 using YetAnotherMinecraftLauncher.ViewModels;
 
 namespace YetAnotherMinecraftLauncher.Utils;
 
 public static class ConfigUtils
 {
-    public static FileInfo ConfigFile { get; set; } =
-        new(Directory.GetCurrentDirectory().CombinePath("yaml.json"));
+    public static FileInfo ConfigFile { get; set; } = DataPaths.GetConfigFile();
 
     static ConfigUtils()
     {

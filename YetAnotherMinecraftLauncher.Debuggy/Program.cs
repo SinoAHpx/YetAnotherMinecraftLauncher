@@ -4,21 +4,48 @@ using ModuleLauncher.NET.Models.Launcher;
 using Manganese.Text;
 using Console = System.Console;
 using System.Reflection;
+using ReactiveUI;
 using YetAnotherMinecraftLauncher.Utils;
 
 namespace YetAnotherMinecraftLauncher.Debugy
 {
+    class MyClass
+    {
+        public Foo Foo { get; set; }
+
+        public MyClass()
+        {
+            this.WhenAnyValue(x => x.Foo).Subscribe(x =>
+            {
+                Console.WriteLine($"Value changed of Bar: {x?.Bar} IsShit: {x?.IsShit}");
+            });
+        }
+    }
+
+    class Foo
+    {
+        public int Bar { get; set; }
+
+        public bool IsShit { get; set; }
+    }
+
     internal class Program
     {
+
         static async Task Main(string[] args)
         {
-            var name = "Shit";
-            var container = new
+            var mc = new MyClass();
+            mc.Foo = new Foo
             {
-                name = "AHx"
+                IsShit = true,
+                Bar = 114514
             };
 
-            Console.WriteLine(container.ToJsonString());
+            // await Task.Delay(10000);
+            mc.Foo.IsShit = false;
+            mc.Foo.Bar = 1919810;
+
+            Console.Read();
         }
 
         private static string Match(string origin)

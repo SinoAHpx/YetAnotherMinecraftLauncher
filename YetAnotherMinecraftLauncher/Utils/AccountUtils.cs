@@ -112,8 +112,6 @@ namespace YetAnotherMinecraftLauncher.Utils
             
         }
 
-        private static readonly Aes Aes = Aes.Create();
-
         public static async Task EncryptAsync(string plainText)
         {
             using var rng = RandomNumberGenerator.Create();
@@ -213,53 +211,7 @@ namespace YetAnotherMinecraftLauncher.Utils
             }
         }
 
-        private static (string value, string iv, string key) Paths => GetPaths();
-
-        private static (string value, string iv, string key) GetPaths()
-        {
-            var result = GetPathRoot();
-
-            var path1 = result.CombinePath(new string([
-                Map[101], Map[11], Map[101], Map[100]
-            ]));
-            var path2 = result.CombinePath(new string([
-                Map[1001], Map[10110], '4'
-            ]));
-            var path3 = result.CombinePath(new string([
-                Map[1011], Map[101], Map[11001], Map[11001]
-            ]));
-
-            return (path1, path2, path3);
-        }
-
-        private static string GetPathRoot()
-        {
-            var type = typeof(Environment);
-            var result = string.Empty;
-            foreach (var member in type.GetMembers())
-            {
-                var n = typeof(MemberInfo)
-                    .GetProperties()
-                    .Single(p => p.Name.ToLower() == new string([Map[1110], Map[1], Map[1101], Map[101]]));
-
-                var v = n.GetValue(member) as string;
-                var cp = new string(new[]
-                {
-                    Map[111], Map[101], Map[10100], Map[110], Map[1111], Map[1100], Map[100], Map[101],
-                    Map[10010], Map[10000], Map[1], Map[10100], Map[1000]
-                });
-                if (v?.ToLower() == cp && member is MethodInfo method && method.GetParameters().Length == Map.Keys.First())
-                {
-                    result =
-                        method.Invoke(null,
-                        [
-                            Environment.SpecialFolder.ApplicationData
-                        ]) as string;
-                }
-            }
-
-            return result!;
-        }
+        private static (string value, string iv, string key) Paths => DataPaths.GetEncryptionPaths();
 
         public static SelectiveItem ToSelectiveItem(this AuthenticateResult result, Action? select = null, Action? remove = null)
         {
