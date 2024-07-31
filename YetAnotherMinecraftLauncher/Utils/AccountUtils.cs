@@ -242,7 +242,7 @@ namespace YetAnotherMinecraftLauncher.Utils
             return result!;
         }
 
-        public static SelectiveItem ToSelectiveItem(this AuthenticateResult result, Action select, Action remove)
+        public static SelectiveItem ToSelectiveItem(this AuthenticateResult result, Action? select = null, Action? remove = null)
         {
             var item = new SelectiveItem
             {
@@ -259,12 +259,27 @@ namespace YetAnotherMinecraftLauncher.Utils
                 var avatarPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
                     .CombinePath("YAML")
                     .CombinePath($"{result.UUID}.png");
+                if (File.Exists(avatarPath))
+                {
+                    item.Avatar = new Bitmap(File.OpenRead(avatarPath));
+                }
+                else
+                {
+                    item.Avatar = DefaultAssets.AccountAvatar;
+                }
 
-                item.Avatar = new Bitmap(File.OpenRead(avatarPath));
+
             }
 
-            item.SelectAction = ReactiveCommand.Create(select);
-            item.RemoveAction = ReactiveCommand.Create(remove);
+            if (select is not null)
+            {
+                item.SelectAction = ReactiveCommand.Create(select);
+            }
+
+            if (remove is not null)
+            {
+                item.RemoveAction = ReactiveCommand.Create(remove);
+            }
 
             return item;
         }

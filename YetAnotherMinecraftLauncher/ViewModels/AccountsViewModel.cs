@@ -86,6 +86,8 @@ namespace YetAnotherMinecraftLauncher.ViewModels
         private async void UpdateAccounts()
         {
             var accounts = await AccountUtils.ReadAsync();
+            //shout we use refresh token here?
+
             if (accounts.Count == 0)
             {
                 return;
@@ -94,12 +96,7 @@ namespace YetAnotherMinecraftLauncher.ViewModels
             AccountsList.Clear();
             foreach (var account in accounts)
             {
-                var item = new SelectiveItem
-                {
-                    Avatar = DefaultAssets.AccountAvatar,
-                    Title = account.Name,
-                    Subtitle = account.RefreshToken.IsNullOrEmpty() ? "Offline" : "Microsoft"
-                };
+                var item = account.ToSelectiveItem();
                 item.SelectAction = ReactiveCommand.Create(() =>
                 {
                     SelectAccount(item);

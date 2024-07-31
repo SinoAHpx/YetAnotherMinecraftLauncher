@@ -43,6 +43,7 @@
 			<StackPanel IsVisible="{Binding #ComboBoxItem_Microsoft.IsSelected}">
                 <Button Command="{Binding AddMicrosoftUserCommand}"
                         Margin="0,10,0,0"
+                        IsEnabled="{Binding !IsAuthenticating}"
                         Theme="{StaticResource MaterialOutlineButton}">
                     <StackPanel Orientation="Horizontal">
                         <avalonia:MaterialIcon Kind="Microsoft"/>
@@ -52,7 +53,8 @@
                         <TextBlock Text="A code will be automatically copied to clipboard."/>
                     </ToolTip.Tip>
                 </Button>
-            </StackPanel>
+                <ProgressBar IsIndeterminate="True" Margin="0,10,0,0" IsVisible="{Binding IsAuthenticating}"/>
+			</StackPanel>
 		</StackPanel>
 	</Grid>
 </UserControl>

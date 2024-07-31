@@ -14,6 +14,7 @@ using ModuleLauncher.NET.Models.Authentication;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
+using YetAnotherMinecraftLauncher.Views;
 using YetAnotherMinecraftLauncher.Views.Controls;
 using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 using AlertDialog = Material.Dialog.Views.AlertDialog;
@@ -39,6 +40,14 @@ public class AddAccountDialogViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> AddMicrosoftUserCommand { get; set; }
 
+    private bool _isAuthenticating;
+
+    public bool IsAuthenticating
+    {
+        get => _isAuthenticating;
+        set => this.RaiseAndSetIfChanged(ref _isAuthenticating, value);
+    }
+
     #endregion
 
     #region Actual logic
@@ -54,27 +63,50 @@ public class AddAccountDialogViewModel : ViewModelBase
     {
         var mainWindow = LifetimeUtils.GetMainWindow();
 
-        var authenticationResult = await LoginAsync();
-        if (authenticationResult is null)
+        try
+        {
+            IsAuthenticating = true;
+
+
+            var authenticationResult = await LoginAsync();
+            if (authenticationResult is null)
+            {
+                await new AlertDialog { Title = "Failed", Content = "Failed to authenticate.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
+                return;
+            }
+
+            await AccountUtils.WriteAsync(authenticationResult);
+            await WriteAvatarAsync(authenticationResult);
+            MessengerRoutes.UpdateAccounts.Knock();
+
+            IsAuthenticating = false;
+            DialogHost.Close(null);
+        }
+        catch
         {
             await new AlertDialog { Title = "Failed", Content = "Failed to authenticate.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
-            return;
         }
 
-        var avatarBytes =
-            await $"https://minotar.net/avatar/{authenticationResult.Name}".GetBytesAsync();
-        
-        
-        var avatar = new Bitmap(new MemoryStream(avatarBytes));
-
-        await AccountUtils.WriteAsync(authenticationResult);
-        MessengerRoutes.UpdateAccounts.Knock();
-        DialogHost.Close(null);
     }
 
-    private void WriteAvatarAsync(AuthenticateResult result)
+    private async Task WriteAvatarAsync(AuthenticateResult result)
     {
+        try
+        {
+            var avatarBytes =
+                await $"https://minotar.net/avatar/{result.Name}".GetBytesAsync();
+            var avatarPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
+                .CombinePath("YAML");
+            Directory.CreateDirectory(avatarPath);
+            avatarPath = avatarPath.CombinePath($"{result.UUID}.png");
 
+            await File.WriteAllBytesAsync(avatarPath, avatarBytes);
+        }
+        catch
+        {
+            //then? we just do nothing!
+        }
+        
     }
 
     /// <summary>
