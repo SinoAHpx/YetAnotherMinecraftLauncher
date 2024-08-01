@@ -4,21 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="YetAnotherMinecraftLauncher.Views.Controls.Dialogs.ConfirmDialog">
-	<Grid Name="Grid" RowDefinitions="1*,8*, 1*" Margin="10" MinHeight="80" MinWidth="120">
-		<TextBlock FontSize="26"
+    <Grid Name="Grid" RowDefinitions="1*,8*, 1*" Margin="10" MinHeight="80" MinWidth="120">
+        <TextBlock FontSize="26"
                    FontWeight="Bold"
-                   Text="Confirmation"/>
-		<TextBlock Grid.Row="1" Text="{Binding Message}" TextWrapping="Wrap"/>
-		<StackPanel HorizontalAlignment="Right" Grid.Row="2" Orientation="Horizontal">
-			<Button Classes="Flat"
+                   Text="Confirmation" />
+        <TextBlock Grid.Row="1" Text="{Binding Message}" TextWrapping="Wrap" />
+        <StackPanel HorizontalAlignment="Right" Grid.Row="2" Orientation="Horizontal">
+            <Button Classes="Flat"
                     Content="Cancel"
                     Command="{Binding CancelActionCommand}"
-                    Margin="0,0,10,0"/>
-			<Button Classes="Flat"
+                    Margin="0,0,10,0" />
+            <Button Classes="Flat"
                     Command="{Binding ConfirmActionCommand}"
                     Foreground="{StaticResource MaterialPrimaryMidBrush}"
-                    Content="Confirm"/>
+                    Content="Confirm" />
 
-		</StackPanel>
-	</Grid>
+        </StackPanel>
+    </Grid>
 </UserControl>

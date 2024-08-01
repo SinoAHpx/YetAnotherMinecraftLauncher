@@ -3,38 +3,36 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:controls="clr-namespace:YetAnotherMinecraftLauncher.Views.Controls"
              xmlns:controls1="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
-             xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.AccountsView">
-	<Grid RowDefinitions="1.5*, 8*">
-		<StackPanel Margin="10">
-			<Button Command="{Binding ReturnCommand}" HorizontalAlignment="Left" Classes="Flat">
-				<StackPanel Orientation="Horizontal">
-					<avalonia:MaterialIcon Kind="ChevronLeft"
+    <Grid RowDefinitions="1.5*, 8*">
+        <StackPanel Margin="10">
+            <Button Command="{Binding ReturnCommand}" HorizontalAlignment="Left" Classes="Flat">
+                <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="ChevronLeft"
                                            Width="30" Height="30"
-                                           VerticalAlignment="Center"/>
-					<TextBlock Text="Accounts" FontSize="30"
-                               VerticalAlignment="Center"/>
-				</StackPanel>
-			</Button>
-			<TextBlock Foreground="Gray" Margin="45,0,10,0">
-				<Run Text="{Binding #AccountsItemsControl.ItemCount}"/>
-				<Run Text="Accounts"/>
-			</TextBlock>
-		</StackPanel>
-		<ScrollViewer Grid.Row="1">
-			<ItemsControl Name="AccountsItemsControl" ItemsSource="{Binding AccountsList}"/>
-		</ScrollViewer>
-		<controls1:FloatingButton Grid.Row="1" Margin="20"
+                                           VerticalAlignment="Center" />
+                    <TextBlock Text="Accounts" FontSize="30"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <TextBlock Foreground="Gray" Margin="45,0,10,0">
+                <Run Text="{Binding #AccountsItemsControl.ItemCount}" />
+                <Run Text="Accounts" />
+            </TextBlock>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl Name="AccountsItemsControl" ItemsSource="{Binding AccountsList}" />
+        </ScrollViewer>
+        <controls1:FloatingButton Grid.Row="1" Margin="20"
                                   HorizontalAlignment="Right"
                                   Width="60" Height="60"
                                   Command="{Binding AddAccountCommand}"
                                   VerticalAlignment="Bottom">
-			<avalonia:MaterialIcon Kind="Add"/>
-		</controls1:FloatingButton>
+            <avalonia:MaterialIcon Kind="Add" />
+        </controls1:FloatingButton>
 
-	</Grid>
+    </Grid>
 
 </UserControl>

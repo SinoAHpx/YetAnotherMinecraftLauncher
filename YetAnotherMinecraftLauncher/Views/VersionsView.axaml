@@ -13,24 +13,24 @@
                 <StackPanel Orientation="Horizontal">
                     <avalonia:MaterialIcon Kind="ChevronLeft"
                                            Width="30" Height="30"
-                                           VerticalAlignment="Center"/>
+                                           VerticalAlignment="Center" />
                     <TextBlock Text="Versions" FontSize="30"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <TextBox Text="{Binding SearchTerm}"
                      Theme="{StaticResource OutlineTextBox}"
-                     assists:TextFieldAssist.Label="Search"/>
+                     assists:TextFieldAssist.Label="Search" />
         </StackPanel>
-        <ScrollViewer Grid.Row="1"  Margin="0,0,0,10">
-            <ItemsControl Name="VersionsItemsControl" ItemsSource="{Binding VersionsList}"/>
+        <ScrollViewer Grid.Row="1" Margin="0,0,0,10">
+            <ItemsControl Name="VersionsItemsControl" ItemsSource="{Binding VersionsList}" />
         </ScrollViewer>
         <controls:FloatingButton Grid.Row="1" Margin="20"
                                  HorizontalAlignment="Right"
                                  Width="60" Height="60"
                                  Command="{Binding DownloadVersionCommand}"
                                  VerticalAlignment="Bottom">
-            <avalonia:MaterialIcon Kind="Download"/>
+            <avalonia:MaterialIcon Kind="Download" />
         </controls:FloatingButton>
     </Grid>
 </UserControl>

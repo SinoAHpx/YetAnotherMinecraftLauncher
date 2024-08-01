@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace YetAnotherMinecraftLauncher.Models.Messages;
 
-namespace YetAnotherMinecraftLauncher.Models.Messages
+public enum MessengerRoutes
 {
-    public enum MessengerRoutes
-    {
-        //navigation
-        ReturnToHome,
-        ToDownload,
+    //navigation
+    ReturnToHome,
+    ToDownload,
 
-        //behavior
-        UpdateVersions,
-        UpdateAccounts,
+    //behavior
+    UpdateVersions,
+    UpdateAccounts,
 
-        //response
-        RemoveAccount, 
-        SelectAccount, 
-        RemoveVersion, 
-        SelectVersion, 
-    }
+    //response
+    RemoveAccount,
+    SelectAccount,
+    RemoveVersion,
+    SelectVersion
 }

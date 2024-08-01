@@ -3,8 +3,6 @@ using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using DialogHostAvalonia;
 using Flurl.Http;
 using Manganese.Process;
@@ -14,18 +12,26 @@ using ModuleLauncher.NET.Models.Authentication;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Messages;
 using YetAnotherMinecraftLauncher.Utils;
-using YetAnotherMinecraftLauncher.Views;
-using YetAnotherMinecraftLauncher.Views.Controls;
-using YetAnotherMinecraftLauncher.Views.Controls.Dialogs;
 using AlertDialog = Material.Dialog.Views.AlertDialog;
 
 namespace YetAnotherMinecraftLauncher.ViewModels.Controls.Dialogs;
 
 public class AddAccountDialogViewModel : ViewModelBase
 {
+    public AddAccountDialogViewModel()
+    {
+        #region Reg cmd
+
+        AddOfflineUserCommand = ReactiveCommand.Create(AddOfflineUser);
+        AddMicrosoftUserCommand = ReactiveCommand.Create(AddMicrosoftUser);
+
+        #endregion
+    }
+
     #region Offline username
 
     private string _offlineUsername;
+
     public string OfflineUsername
     {
         get => _offlineUsername;
@@ -71,7 +77,11 @@ public class AddAccountDialogViewModel : ViewModelBase
             var authenticationResult = await LoginAsync();
             if (authenticationResult is null)
             {
-                await new AlertDialog { Title = "Failed", Content = "Failed to authenticate.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
+                await new AlertDialog
+                {
+                    Title = "Failed", Content = "Failed to authenticate.",
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                }.ShowDialog(mainWindow);
                 return;
             }
 
@@ -85,9 +95,12 @@ public class AddAccountDialogViewModel : ViewModelBase
         catch
         {
             //todo: optimize these shitty alert dialogs
-            await new AlertDialog { Title = "Failed", Content = "Failed to authenticate.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
+            await new AlertDialog
+            {
+                Title = "Failed", Content = "Failed to authenticate.",
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            }.ShowDialog(mainWindow);
         }
-
     }
 
     private async Task WriteAvatarAsync(AuthenticateResult result)
@@ -107,11 +120,10 @@ public class AddAccountDialogViewModel : ViewModelBase
         {
             //then? we just do nothing!
         }
-        
     }
 
     /// <summary>
-    /// Perform authentication with Microsoft account
+    ///     Perform authentication with Microsoft account
     /// </summary>
     /// <returns></returns>
     private async Task<AuthenticateResult?> LoginAsync()
@@ -119,7 +131,7 @@ public class AddAccountDialogViewModel : ViewModelBase
         try
         {
             var mainWindow = LifetimeUtils.GetMainWindow();
-            var ms = new MicrosoftAuthenticator()
+            var ms = new MicrosoftAuthenticator
             {
                 //What can I say, Client ID out!
                 ClientId = "831dc94c-7e4f-4ef6-b2e7-8fc1ec498111"
@@ -127,7 +139,11 @@ public class AddAccountDialogViewModel : ViewModelBase
             var deviceCode = await ms.GetDeviceCodeAsync();
             if (deviceCode is null)
             {
-                await new AlertDialog { Title = "Failed", Content = "Failed to get a device code.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
+                await new AlertDialog
+                {
+                    Title = "Failed", Content = "Failed to get a device code.",
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                }.ShowDialog(mainWindow);
                 return null;
             }
 
@@ -136,9 +152,14 @@ public class AddAccountDialogViewModel : ViewModelBase
             var webAuthorization = await ms.PollAuthorizationAsync(deviceCode);
             if (webAuthorization.accessToken.IsNullOrEmpty() || webAuthorization.refreshToken.IsNullOrEmpty())
             {
-                await new AlertDialog { Title = "Failed", Content = "Failed to authorize.", WindowStartupLocation = WindowStartupLocation.CenterOwner }.ShowDialog(mainWindow);
+                await new AlertDialog
+                {
+                    Title = "Failed", Content = "Failed to authorize.",
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                }.ShowDialog(mainWindow);
                 return null;
             }
+
             var authenticationResult = await ms.AuthenticateAsync(webAuthorization);
 
             return authenticationResult;
@@ -150,14 +171,4 @@ public class AddAccountDialogViewModel : ViewModelBase
     }
 
     #endregion
-
-    public AddAccountDialogViewModel()
-    {
-        #region Reg cmd
-
-        AddOfflineUserCommand = ReactiveCommand.Create(AddOfflineUser);
-        AddMicrosoftUserCommand = ReactiveCommand.Create(AddMicrosoftUser);
-
-        #endregion
-    }
 }

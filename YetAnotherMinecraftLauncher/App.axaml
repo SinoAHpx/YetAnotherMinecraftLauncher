@@ -5,15 +5,15 @@
              xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
              x:Class="YetAnotherMinecraftLauncher.App"
              RequestedThemeVariant="Default">
-	<Application.Styles >
+    <Application.Styles>
         <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Red" SecondaryColor="Lime" />
-		<avalonia:MaterialIconStyles />
-		<dialogHostAvalonia:DialogHostStyles />
-		<Style Selector="Button.circle">
-			<Setter Property="Foreground" Value="White"/>
-			<Setter Property="Width" Value="40"/>
-			<Setter Property="Height" Value="40"/>
-			<Setter Property="CornerRadius" Value="100"/>
-		</Style>
-	</Application.Styles>
+        <avalonia:MaterialIconStyles />
+        <dialogHostAvalonia:DialogHostStyles />
+        <Style Selector="Button.circle">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="CornerRadius" Value="100" />
+        </Style>
+    </Application.Styles>
 </Application>

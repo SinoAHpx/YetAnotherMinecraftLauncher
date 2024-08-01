@@ -2,105 +2,105 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-xmlns:assists="using:Material.Styles.Assists"
+             xmlns:assists="using:Material.Styles.Assists"
              xmlns:viewModels="clr-namespace:YetAnotherMinecraftLauncher.ViewModels"
              xmlns:converters="clr-namespace:YetAnotherMinecraftLauncher.Models.Converters"
-             mc:Ignorable="d"  d:DesignWidth="350" d:DesignHeight="1550"
+             mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="1550"
              x:Class="YetAnotherMinecraftLauncher.Views.SettingsView">
     <Design.DataContext>
-        <viewModels:SettingsViewModel/>
+        <viewModels:SettingsViewModel />
     </Design.DataContext>
     <UserControl.Resources>
-		<converters:ZeroToInvisibilityConverter x:Key="ZeroToInvisibilityConverter"/>
+        <converters:ZeroToInvisibilityConverter x:Key="ZeroToInvisibilityConverter" />
     </UserControl.Resources>
     <Grid RowDefinitions="1*, 9*">
-		<StackPanel Margin="10">
-			<Button Command="{Binding ReturnCommand}" HorizontalAlignment="Left" Classes="Flat">
-				<StackPanel Orientation="Horizontal">
-					<avalonia:MaterialIcon Kind="ChevronLeft"
+        <StackPanel Margin="10">
+            <Button Command="{Binding ReturnCommand}" HorizontalAlignment="Left" Classes="Flat">
+                <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="ChevronLeft"
                                            Width="30" Height="30"
-                                           VerticalAlignment="Center"/>
-					<TextBlock Text="Settings" FontSize="30"
-                               VerticalAlignment="Center"/>
-				</StackPanel>
-			</Button>
-		</StackPanel>
-		<ScrollViewer Grid.Row="1" Margin="0,0,0,10">
+                                           VerticalAlignment="Center" />
+                    <TextBlock Text="Settings" FontSize="30"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" Margin="0,0,0,10">
             <StackPanel Margin="10">
-                <Expander Header="Minecraft Settings" 
+                <Expander Header="Minecraft Settings"
                           IsExpanded="True"
                           Margin="0,0,0,10">
-			        <StackPanel Margin="10">
-                    <ComboBox ItemsSource="{Binding JavaExecutables}"
-                              Name="ComboBox_JavaExecutables"
-                              Theme="{StaticResource MaterialOutlineComboBox}"
-                              assists:ComboBoxAssist.Label="Java Executable">
-                        <ToolTip.Tip>
-                            <TextBlock Text="This is not a selection but a display, java executable files will be chosen automatically."/>
-                        </ToolTip.Tip>
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Executable.FullName}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-
-				    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-						<Button Command="{Binding RemoveJavaCommand}"
-                                CommandParameter="{Binding #ComboBox_JavaExecutables.SelectedIndex}"
-                                Content="Remove"  Width="100"
-                                Theme="{StaticResource MaterialOutlineButton}"
-                                HorizontalAlignment="Right"
-                                Margin="0,10,10,0">
+                    <StackPanel Margin="10">
+                        <ComboBox ItemsSource="{Binding JavaExecutables}"
+                                  Name="ComboBox_JavaExecutables"
+                                  Theme="{StaticResource MaterialOutlineComboBox}"
+                                  assists:ComboBoxAssist.Label="Java Executable">
                             <ToolTip.Tip>
-                                <TextBlock Text="Your executable file will not be deleted on file system."/>
+                                <TextBlock
+                                    Text="This is not a selection but a display, java executable files will be chosen automatically." />
                             </ToolTip.Tip>
-                        </Button>
-                        <Button Command="{Binding BrowseJavaCommand}"
-                                Content="Add"  Width="100"
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Executable.FullName}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding RemoveJavaCommand}"
+                                    CommandParameter="{Binding #ComboBox_JavaExecutables.SelectedIndex}"
+                                    Content="Remove" Width="100"
+                                    Theme="{StaticResource MaterialOutlineButton}"
+                                    HorizontalAlignment="Right"
+                                    Margin="0,10,10,0">
+                                <ToolTip.Tip>
+                                    <TextBlock Text="Your executable file will not be deleted on file system." />
+                                </ToolTip.Tip>
+                            </Button>
+                            <Button Command="{Binding BrowseJavaCommand}"
+                                    Content="Add" Width="100"
+                                    Theme="{StaticResource MaterialOutlineButton}"
+                                    HorizontalAlignment="Right"
+                                    Margin="0,10,0,0" />
+                        </StackPanel>
+
+
+                        <TextBox Text="{Binding AllocatedMemorySize}"
+                                 Theme="{StaticResource OutlineTextBox}"
+                                 assists:TextFieldAssist.Label="Allocated Memory Size"
+                                 Margin="0,10,0,0" />
+                        <Button Command="{Binding AutoMemoryCommand}"
+                                Content="Auto" Width="100"
                                 Theme="{StaticResource MaterialOutlineButton}"
                                 HorizontalAlignment="Right"
-                                Margin="0,10,0,0"/>
+                                Margin="0,10,0,0" />
+
+                        <Grid ColumnDefinitions="*,*" Margin="0,10,0,0">
+                            <TextBox Grid.Column="0"
+                                     Text="{Binding WindowHeight}"
+                                     Margin="0,0,5,0"
+                                     Theme="{StaticResource OutlineTextBox}"
+                                     IsEnabled="{Binding !#CheckBox_Fullscreen.IsChecked}"
+                                     assists:TextFieldAssist.Label="Window Height" />
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding WindowWidth}"
+                                     Margin="5,0,0,0"
+                                     Theme="{StaticResource OutlineTextBox}"
+                                     IsEnabled="{Binding !#CheckBox_Fullscreen.IsChecked}"
+                                     assists:TextFieldAssist.Label="Window Width" />
+                        </Grid>
+                        <CheckBox Content="Enable Full Screen"
+                                  IsChecked="{Binding IsFullscreen}"
+                                  HorizontalAlignment="Right"
+                                  Name="CheckBox_Fullscreen"
+                                  Margin="0,10,0,0" />
+
+                        <TextBox Text="{Binding DirectlyJoinServer}"
+                                 Theme="{StaticResource OutlineTextBox}"
+                                 assists:TextFieldAssist.Label="Directly Join Server"
+                                 Margin="0,10,0,0" />
                     </StackPanel>
-                    
-
-                    <TextBox Text="{Binding AllocatedMemorySize}"
-                             Theme="{StaticResource OutlineTextBox}"
-                             assists:TextFieldAssist.Label="Allocated Memory Size"
-                             Margin="0,10,0,0"/>
-                    <Button Command="{Binding AutoMemoryCommand}"
-                            Content="Auto" Width="100"
-                            Theme="{StaticResource MaterialOutlineButton}"
-                            HorizontalAlignment="Right"
-                            Margin="0,10,0,0"/>
-
-                    <Grid ColumnDefinitions="*,*" Margin="0,10,0,0">
-                        <TextBox Grid.Column="0"
-                                 Text="{Binding WindowHeight}"
-                                 Margin="0,0,5,0"
-                                 Theme="{StaticResource OutlineTextBox}"
-                                 IsEnabled="{Binding !#CheckBox_Fullscreen.IsChecked}"
-                                 assists:TextFieldAssist.Label="Window Height"/>
-                        <TextBox Grid.Column="1" 
-                                 Text="{Binding WindowWidth}"
-                                 Margin="5,0,0,0"
-                                 Theme="{StaticResource OutlineTextBox}"
-                                 IsEnabled="{Binding !#CheckBox_Fullscreen.IsChecked}"
-                                 assists:TextFieldAssist.Label="Window Width"/>
-                    </Grid>
-                    <CheckBox Content="Enable Full Screen" 
-                              IsChecked="{Binding IsFullscreen}"
-                              HorizontalAlignment="Right"
-                              Name="CheckBox_Fullscreen"
-                              Margin="0,10,0,0"/>
-
-                    <TextBox Text="{Binding DirectlyJoinServer}"
-                             Theme="{StaticResource OutlineTextBox}"
-                             assists:TextFieldAssist.Label="Directly Join Server"
-                             Margin="0,10,0,0"/>
-                </StackPanel>
                 </Expander>
                 <Expander Header="Launcher Settings" IsExpanded="True">
                     <StackPanel Margin="10">
@@ -108,42 +108,43 @@ xmlns:assists="using:Material.Styles.Assists"
                                   assists:ComboBoxAssist.Label="After Launch"
                                   SelectedIndex="{Binding AfterLaunchAction}"
                                   Margin="0,0,0,10">
-                            <ComboBoxItem Content="Keep launcher"/>
-                            <ComboBoxItem Content="Hide launcher"/>
-                            <ComboBoxItem Content="Close launcher"/>
+                            <ComboBoxItem Content="Keep launcher" />
+                            <ComboBoxItem Content="Hide launcher" />
+                            <ComboBoxItem Content="Close launcher" />
                         </ComboBox>
                         <ComboBox Theme="{StaticResource MaterialOutlineComboBox}"
                                   assists:ComboBoxAssist.Label="Color Theme"
                                   ItemsSource="{Binding Colors}"
                                   SelectedIndex="{Binding ColorIndex}"
-                                  Margin="0,0,0,10"/>
-                        <CheckBox Content="Dark Theme" 
+                                  Margin="0,0,0,10" />
+                        <CheckBox Content="Dark Theme"
                                   IsChecked="{Binding IsDarkTheme}"
-                                  HorizontalAlignment="Right"/>
+                                  HorizontalAlignment="Right" />
 
-						<ComboBox Theme="{StaticResource MaterialOutlineComboBox}"
+                        <ComboBox Theme="{StaticResource MaterialOutlineComboBox}"
                                   assists:ComboBoxAssist.Label="Minecraft Directory"
                                   SelectedIndex="{Binding MinecraftDirectoryType}"
                                   Name="ComboBox_MinecraftDir"
                                   Margin="0,0,0,10">
-                            <ComboBoxItem Content="Default (./.minecraft)" IsSelected="True"/>
-                            <ComboBoxItem Content="Custom"/>
+                            <ComboBoxItem Content="Default (./.minecraft)" IsSelected="True" />
+                            <ComboBoxItem Content="Custom" />
                         </ComboBox>
-                        <StackPanel IsEnabled="{Binding #ComboBox_MinecraftDir.SelectedIndex, Converter={StaticResource ZeroToInvisibilityConverter}}">
+                        <StackPanel
+                            IsEnabled="{Binding #ComboBox_MinecraftDir.SelectedIndex, Converter={StaticResource ZeroToInvisibilityConverter}}">
                             <TextBox Text="{Binding CustomMinecraftDirectory}"
                                      Theme="{StaticResource OutlineTextBox}"
                                      assists:TextFieldAssist.Label="Minecraft Directory"
-                                     Margin="0,10,0,0"/>
+                                     Margin="0,10,0,0" />
                             <Button Command="{Binding BrowseMinecraftDirectoryCommand}"
                                     Content="Browse" Width="100"
                                     Theme="{StaticResource MaterialOutlineButton}"
                                     HorizontalAlignment="Right"
-                                    Margin="0,10,0,0"/>
+                                    Margin="0,10,0,0" />
                         </StackPanel>
                     </StackPanel>
                 </Expander>
             </StackPanel>
         </ScrollViewer>
-	</Grid>
+    </Grid>
 
 </UserControl>

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Models.Messages;
 
 /// <summary>
-/// MessageBus deliver
+///     MessageBus deliver
 /// </summary>
 public static class Messenger
 {
@@ -32,7 +31,6 @@ public static class Messenger
                 break;
         }
     }
-
 
 
     public static void KnockWithMessage<T>(this MessengerRoutes routes, T message)
@@ -87,7 +85,7 @@ public static class Messenger
 
     private static void ToDownload()
     {
-        MessageBus.Current.SendMessage("",MessengerRoutes.ToDownload.ToString());
+        MessageBus.Current.SendMessage("", MessengerRoutes.ToDownload.ToString());
     }
 
     private static void RemoveAccount<T>(T message)

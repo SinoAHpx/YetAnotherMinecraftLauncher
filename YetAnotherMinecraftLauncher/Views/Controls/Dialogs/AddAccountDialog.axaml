@@ -9,52 +9,52 @@
     <Grid Name="Grid" RowDefinitions="1*, 9*" Margin="10" MinHeight="80" MinWidth="120">
         <TextBlock FontSize="26"
                    FontWeight="Bold"
-                   Text="Add an account"/>
+                   Text="Add an account" />
         <StackPanel Grid.Row="1">
-			<ComboBox VerticalAlignment="Top"
+            <ComboBox VerticalAlignment="Top"
                       assists:ComboBoxAssist.Label="Authenticator"
                       Foreground="{StaticResource MaterialPrimaryMidBrush}"
                       Theme="{StaticResource MaterialOutlineComboBox}">
-				<ComboBoxItem Name="ComboBoxItem_Microsoft" >
+                <ComboBoxItem Name="ComboBoxItem_Microsoft">
                     <StackPanel Orientation="Horizontal">
-						<avalonia:MaterialIcon Kind="Microsoft"/>
-                        <TextBlock Text=" Microsoft"/>
+                        <avalonia:MaterialIcon Kind="Microsoft" />
+                        <TextBlock Text=" Microsoft" />
                     </StackPanel>
                 </ComboBoxItem>
-				<ComboBoxItem Name="ComboBoxItem_Offline">
+                <ComboBoxItem Name="ComboBoxItem_Offline">
                     <StackPanel Orientation="Horizontal">
-                        <avalonia:MaterialIcon Kind="Offline"/>
-                        <TextBlock Text=" Offline"/>
+                        <avalonia:MaterialIcon Kind="Offline" />
+                        <TextBlock Text=" Offline" />
                     </StackPanel>
-				</ComboBoxItem>
+                </ComboBoxItem>
             </ComboBox>
             <StackPanel IsVisible="{Binding #ComboBoxItem_Offline.IsSelected}">
                 <TextBox Text="{Binding OfflineUsername}"
                          assists:TextFieldAssist.Label="Offline username"
                          Theme="{StaticResource OutlineTextBox}"
                          VerticalAlignment="Top"
-                         TextWrapping="NoWrap"/>
+                         TextWrapping="NoWrap" />
                 <Button Command="{Binding AddOfflineUserCommand}"
                         HorizontalAlignment="Right"
                         Margin="0,10,0,0"
                         Theme="{StaticResource MaterialOutlineButton}"
-                        Content="Add"/>
-			</StackPanel>
-			<StackPanel IsVisible="{Binding #ComboBoxItem_Microsoft.IsSelected}">
+                        Content="Add" />
+            </StackPanel>
+            <StackPanel IsVisible="{Binding #ComboBoxItem_Microsoft.IsSelected}">
                 <Button Command="{Binding AddMicrosoftUserCommand}"
                         Margin="0,10,0,0"
                         IsEnabled="{Binding !IsAuthenticating}"
                         Theme="{StaticResource MaterialOutlineButton}">
                     <StackPanel Orientation="Horizontal">
-                        <avalonia:MaterialIcon Kind="Microsoft"/>
-                        <TextBlock Text=" Sign in with Microsoft"/>
+                        <avalonia:MaterialIcon Kind="Microsoft" />
+                        <TextBlock Text=" Sign in with Microsoft" />
                     </StackPanel>
                     <ToolTip.Tip>
-                        <TextBlock Text="A code will be automatically copied to clipboard."/>
+                        <TextBlock Text="A code will be automatically copied to clipboard." />
                     </ToolTip.Tip>
                 </Button>
-                <ProgressBar IsIndeterminate="True" Margin="0,10,0,0" IsVisible="{Binding IsAuthenticating}"/>
-			</StackPanel>
-		</StackPanel>
-	</Grid>
+                <ProgressBar IsIndeterminate="True" Margin="0,10,0,0" IsVisible="{Binding IsAuthenticating}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
 </UserControl>

@@ -2,14 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              xmlns:converters="clr-namespace:YetAnotherMinecraftLauncher.Models.Converters"
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="550"
              x:Class="YetAnotherMinecraftLauncher.Views.DownloaderView">
     <UserControl.Resources>
-		<converters:ZeroToVisibilityConverter x:Key="ItemCountToVisibilityConverter"/>
+        <converters:ZeroToVisibilityConverter x:Key="ItemCountToVisibilityConverter" />
     </UserControl.Resources>
     <Grid RowDefinitions="2.5*, 7.5*">
         <StackPanel Margin="10">
@@ -17,27 +16,29 @@
                 <StackPanel Orientation="Horizontal">
                     <avalonia:MaterialIcon Kind="ChevronLeft"
                                            Width="30" Height="30"
-                                           VerticalAlignment="Center"/>
+                                           VerticalAlignment="Center" />
                     <TextBlock Text="Downloader" FontSize="30"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <TextBox Text="{Binding SearchTerm}"
                      Theme="{StaticResource OutlineTextBox}"
                      assists:TextFieldAssist.Label="Search"
-                     Margin="0,0,0,10"/>
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <CheckBox IsChecked="{Binding ShowRelease}" Content="Release" Margin="10,0,0,0"/>
-                <CheckBox IsChecked="{Binding ShowSnapshot}" Content="Snapshot" Margin="10,0,0,0"/>
-                <CheckBox IsChecked="{Binding ShowAncient}" Content="Ancient" Margin="10,0,0,0"/>
-				<Button Classes="circle flat" Margin="10,0,0,0" Command="{Binding RefreshVersionsCommand}">
-                    <avalonia:MaterialIcon Kind="Refresh"/>
+                     Margin="0,0,0,10" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <CheckBox IsChecked="{Binding ShowRelease}" Content="Release" Margin="10,0,0,0" />
+                <CheckBox IsChecked="{Binding ShowSnapshot}" Content="Snapshot" Margin="10,0,0,0" />
+                <CheckBox IsChecked="{Binding ShowAncient}" Content="Ancient" Margin="10,0,0,0" />
+                <Button Classes="circle flat" Margin="10,0,0,0" Command="{Binding RefreshVersionsCommand}">
+                    <avalonia:MaterialIcon Kind="Refresh" />
                 </Button>
-			</StackPanel>
+            </StackPanel>
         </StackPanel>
         <ScrollViewer Grid.Row="1" Margin="0,0,0,20">
             <ItemsControl Name="ItemsControl_DownloadableVersions" ItemsSource="{Binding DownloadableVersions}" />
         </ScrollViewer>
-        <ProgressBar IsVisible="{Binding #ItemsControl_DownloadableVersions.ItemCount, Converter={StaticResource ItemCountToVisibilityConverter}}" Grid.Row="1" Classes="circular" IsIndeterminate="True" Width="80" Height="80"/>
+        <ProgressBar
+            IsVisible="{Binding #ItemsControl_DownloadableVersions.ItemCount, Converter={StaticResource ItemCountToVisibilityConverter}}"
+            Grid.Row="1" Classes="circular" IsIndeterminate="True" Width="80" Height="80" />
     </Grid>
 </UserControl>

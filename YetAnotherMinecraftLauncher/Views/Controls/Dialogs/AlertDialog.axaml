@@ -7,13 +7,13 @@
     <Grid Name="Grid" RowDefinitions="1*,8*, 1*" Margin="10" MinHeight="80" MinWidth="120">
         <TextBlock FontSize="26"
                    FontWeight="Bold"
-                   Text="Alert"/>
-        <TextBlock Grid.Row="1" Text="{Binding Message}" TextWrapping="Wrap"/>
+                   Text="Alert" />
+        <TextBlock Grid.Row="1" Text="{Binding Message}" TextWrapping="Wrap" />
         <StackPanel HorizontalAlignment="Right" Grid.Row="2" Orientation="Horizontal">
             <Button Classes="Flat"
                     Command="{Binding DismissActionCommand}"
                     Foreground="{StaticResource MaterialPrimaryMidBrush}"
-                    Content="Dismiss"/>
+                    Content="Dismiss" />
 
         </StackPanel>
     </Grid>

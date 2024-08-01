@@ -1,55 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
 using ReactiveUI;
 
-namespace YetAnotherMinecraftLauncher.ViewModels.Controls.Dialogs
+namespace YetAnotherMinecraftLauncher.ViewModels.Controls.Dialogs;
+
+internal class DownloadingDialogViewModel : ViewModelBase
 {
-    internal class DownloadingDialogViewModel : ViewModelBase
+    private ReactiveCommand<Unit, Unit> _cancelCommand;
+    private int _currentProgress;
+
+
+    private bool _isSingleFile;
+
+    private int _totalProgress;
+
+    public DownloadingDialogViewModel()
     {
-        private int _currentProgress;
+        this.WhenAnyValue(x => x.TotalProgress).Subscribe(x => { IsSingleFile = x == 1; });
+    }
 
-        public int CurrentProgress
-        {
-            get => _currentProgress;
-            set => this.RaiseAndSetIfChanged(ref _currentProgress, value);
-        }
+    public int CurrentProgress
+    {
+        get => _currentProgress;
+        set => this.RaiseAndSetIfChanged(ref _currentProgress, value);
+    }
 
-        private int _totalProgress;
+    public int TotalProgress
+    {
+        get => _totalProgress;
+        set => this.RaiseAndSetIfChanged(ref _totalProgress, value);
+    }
 
-        public int TotalProgress
-        {
-            get => _totalProgress;
-            set => this.RaiseAndSetIfChanged(ref _totalProgress, value);
-        }
+    public ReactiveCommand<Unit, Unit> CancelCommand
+    {
+        get => _cancelCommand;
+        set => this.RaiseAndSetIfChanged(ref _cancelCommand, value);
+    }
 
-
-        private ReactiveCommand<Unit, Unit> _cancelCommand;
-
-        public ReactiveCommand<Unit, Unit> CancelCommand
-        {
-            get => _cancelCommand;
-            set => this.RaiseAndSetIfChanged(ref _cancelCommand, value);
-        }
-
-
-        private bool _isSingleFile;
-
-        public bool IsSingleFile
-        {
-            get => _isSingleFile;
-            set => this.RaiseAndSetIfChanged(ref _isSingleFile, value);
-        }
-
-        public DownloadingDialogViewModel()
-        {
-            this.WhenAnyValue(x => x.TotalProgress).Subscribe(x =>
-            {
-                IsSingleFile = x == 1;
-            });
-        }
+    public bool IsSingleFile
+    {
+        get => _isSingleFile;
+        set => this.RaiseAndSetIfChanged(ref _isSingleFile, value);
     }
 }
