@@ -4,6 +4,7 @@ using ModuleLauncher.NET.Models.Launcher;
 using Manganese.Text;
 using Console = System.Console;
 using System.Reflection;
+using Manganese.Array;
 using ReactiveUI;
 using YetAnotherMinecraftLauncher.Utils;
 
@@ -34,18 +35,8 @@ namespace YetAnotherMinecraftLauncher.Debugy
 
         static async Task Main(string[] args)
         {
-            var mc = new MyClass();
-            mc.Foo = new Foo
-            {
-                IsShit = true,
-                Bar = 114514
-            };
-
-            // await Task.Delay(10000);
-            mc.Foo.IsShit = false;
-            mc.Foo.Bar = 1919810;
-
-            Console.Read();
+            Console.WriteLine(Environment
+                .GetFolderPath(Environment.SpecialFolder.ApplicationData));
         }
 
         private static string Match(string origin)

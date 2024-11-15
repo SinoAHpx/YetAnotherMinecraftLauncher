@@ -40,7 +40,6 @@ public class DownloaderViewModel : ViewModelBase
 
         Task.Run(async () =>
         {
-            await Task.Delay(TimeSpan.FromSeconds(5));
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 var minecrafts = await DownloaderUtils.GetRemoteMinecraftsAsync(LocalVersionsManifestPath);

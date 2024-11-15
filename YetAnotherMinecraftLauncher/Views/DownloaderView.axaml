@@ -34,11 +34,12 @@
                 </Button>
             </StackPanel>
         </StackPanel>
+        
         <ScrollViewer Grid.Row="1" Margin="0,0,0,20">
-            <ItemsControl Name="ItemsControl_DownloadableVersions" ItemsSource="{Binding DownloadableVersions}" />
+            <ItemsRepeater Name="ItemsControl_DownloadableVersions" ItemsSource="{Binding DownloadableVersions}" />
         </ScrollViewer>
-        <ProgressBar
-            IsVisible="{Binding #ItemsControl_DownloadableVersions.ItemCount, Converter={StaticResource ItemCountToVisibilityConverter}}"
-            Grid.Row="1" Classes="circular" IsIndeterminate="True" Width="80" Height="80" />
+        <!-- <ProgressBar -->
+        <!--     IsVisible="{Binding #ItemsControl_DownloadableVersions.ItemCount, Converter={StaticResource ItemCountToVisibilityConverter}}" -->
+        <!--     Grid.Row="1" Classes="circular" IsIndeterminate="True" Width="80" Height="80" /> -->
     </Grid>
 </UserControl>
