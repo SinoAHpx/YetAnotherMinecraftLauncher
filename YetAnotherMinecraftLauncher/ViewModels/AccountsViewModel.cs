@@ -33,7 +33,11 @@ internal class AccountsViewModel : ViewModelBase
 
         MessengerRoutes.UpdateAccounts.Subscribe<string>(_ => { UpdateAccounts(); });
 
-        SelectedIndex = ConfigUtils.ReadConfig("Index", ConfigNodes.Account)?.ToInt32() ?? -1;
+        if (ConfigUtils.ReadConfig("Index", ConfigNodes.Account) is {} index)
+        {
+            SelectedIndex = index.ToInt32();
+        }
+        // SelectedIndex = ?.ToInt32() ?? -1;
 
         this.WhenAnyValue(x => x.SelectedIndex).Subscribe(async i =>
         {

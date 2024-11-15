@@ -26,6 +26,7 @@ public static class ConfigUtils
         if (!ConfigFile.Exists)
         {
             using var _ = ConfigFile.Create();
+            // ConfigFile.WriteAllText("{}");
         }
 
         ConfigText = ConfigFile.ReadAllText();
@@ -65,7 +66,13 @@ public static class ConfigUtils
             .Subscribe(_ => ConfigText = ConfigFile.ReadAllText());
         if (key.IsNullOrEmpty()) return ConfigText;
 
-        var configStr = ConfigText.Fetch($"{node.ToString()}.{key}");
+        var json = node.ToString();
+        if (!json.IsValidJson())
+        {
+            return null;
+        }
+        
+        var configStr = ConfigText.Fetch($"{json}.{key}");
         return configStr;
     }
 
